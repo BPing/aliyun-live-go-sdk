@@ -1,33 +1,45 @@
 # aliyun-live-go-sdk
     阿里云直播 golang SDK
 
-# Quick Start
+# 快速开始
 
 ```go
-    package main
-    
-    import (
+package main
+
+import (
     "aliyun-live-go-sdk/client"
     "aliyun-live-go-sdk/device/live"
     "aliyun-live-go-sdk/util"
     "time"
     "fmt"
-    )
-    
-    const (
+)
+
+const (
     AccessKeyId = "<Yours' Id>"
     AccessKeySecret = "<...>"
-    
-    )
-    
-    func main(){
+)
+
+func main() {
     cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
     live := live.NewLive(cert, "<Yours' CDN>", "app-name").SetDebug(true)
     resp := make(map[string]interface{})
     live.StreamsPublishList(util.NewISO6801Time(time.Now().Add(-time.Hour * 12).UTC()), util.NewISO6801Time(time.Now().UTC()), &resp)
     fmt.Println(resp)
-    }
+}
 ```
  
-# References
-The GO API design of Live refer the implementation from https://github.com/denverdino/aliyungo
+# 构建安装
+
+go get:
+
+```sh
+go get github.com/BPing/aliyun-live-go-sdk
+```
+
+# 贡献参与者
+
+# License
+这个项目是采用 [Apache License, Version 2.0](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt)许可证授权原则。
+ 
+# 参考文献
+参考项目： https://github.com/denverdino/aliyungo
