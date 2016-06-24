@@ -37,6 +37,7 @@ go get github.com/BPing/aliyun-live-go-sdk
 ```
 
 # 贡献参与者
+* cbping(452775680@qq.com)
 
 # License
 这个项目是采用 [Apache License, Version 2.0](https://github.com/denverdino/aliyungo/blob/master/LICENSE.txt)许可证授权原则。
