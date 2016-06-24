@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	AccessKeyId = "Pvu6bYlDPNkpAZJs"
-	AccessKeySecret = "ENHXIhHhFZcD9cxAOn3sY72xQ9XueL"
+	AccessKeyId = ""
+	AccessKeySecret = ""
 )
 
 func LiveExample(){
