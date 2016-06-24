@@ -1,8 +1,25 @@
+//
+//  阿里云直播API
+//  文档信息：https://help.aliyun.com/document_detail/27191.html?spm=0.0.0.0.60u2Ny
+//  @author cbping
+//
 package live
 
 import (
 	"aliyun-live-go-sdk/util"
 	"aliyun-live-go-sdk/client"
+)
+
+const (
+//action
+	DescribeLiveStreamsPublishListAction = "DescribeLiveStreamsPublishList"
+	DescribeLiveStreamsOnlineListAction = "DescribeLiveStreamsOnlineList"
+	DescribeLiveStreamsBlockListAction = "DescribeLiveStreamsBlockList"
+	DescribeLiveStreamsControlHistoryAction = "DescribeLiveStreamsControlHistory"
+	DescribeLiveStreamOnlineUserNumAction = "DescribeLiveStreamOnlineUserNum"
+	ForbidLiveStreamAction = "ForbidLiveStream"
+	ResumeLiveStreamAction = "ResumeLiveStream"
+	SetLiveStreamsNotifyUrlConfigAction = "SetLiveStreamsNotifyUrlConfig"
 )
 
 type Live struct {
@@ -11,6 +28,8 @@ type Live struct {
 	debug   bool
 }
 
+//@param domainName 加速域名
+//@param appname    应用名字
 func NewLive(cert *client.Credentials, domainName, appname string) *Live {
 	return &Live{client.NewClient(cert), NewLiveRequest("", domainName, appname), false}
 }
@@ -36,46 +55,51 @@ func (l *Live)SetDebug(debug bool) *Live {
 }
 
 func (l *Live) StreamsPublishList(startTime, endTime util.ISO6801Time, resp interface{}) (err error) {
-	req := l.SetAction("DescribeLiveStreamsPublishList").LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamsPublishListAction).LiveReq.Clone().(*LiveRequest)
 	req.SetArgs("StartTime", startTime.String())
 	req.SetArgs("EndTime", endTime.String())
 	err = l.Rpc.Query(req, &resp)
 	return
 }
 
+//获取在显流
 func (l *Live) StreamsOnlineList(resp interface{}) (err error) {
-	req := l.SetAction("DescribeLiveStreamsOnlineList").LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamsOnlineListAction).LiveReq.Clone().(*LiveRequest)
 	err = l.Rpc.Query(req, &resp)
 	return
 }
 
+//获取黑名单
 func (l *Live) StreamsBlockList(resp interface{}) (err error) {
-	req := l.SetAction("DescribeLiveStreamsBlockList").LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamsBlockListAction).LiveReq.Clone().(*LiveRequest)
 	req.AppName = ""
 	err = l.Rpc.Query(req, &resp)
 	return
 }
 
+//获取控制历史
 func (l *Live) StreamsControlHistory(startTime, endTime util.ISO6801Time, resp interface{}) (err error) {
-	req := l.SetAction("DescribeLiveStreamsControlHistory").LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamsControlHistoryAction).LiveReq.Clone().(*LiveRequest)
 	req.SetArgs("StartTime", startTime.String())
 	req.SetArgs("EndTime", endTime.String())
 	err = l.Rpc.Query(req, &resp)
 	return
 }
 
+//或者在线人数
 func (l *Live) StreamOnlineUserNum(streamName string, resp interface{}) (err error) {
-	req := l.SetAction("DescribeLiveStreamOnlineUserNum").LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamOnlineUserNumAction).LiveReq.Clone().(*LiveRequest)
 	req.SetArgs("StreamName", streamName)
 	err = l.Rpc.Query(req, &resp)
 	return
 }
 
+// 禁止流
 //StreamName	String	是	流名称
 //LiveStreamType	String	是	用于指定主播推流还是客户端拉流, 目前支持"publisher" (主播推送)
 //ResumeTime	String	否	恢复流的时间 UTC时间 格式：2015-12-01T17:37:00Z
 func (l *Live) ForbidLiveStream(streamName string, liveStreamType string, resumeTime *util.ISO6801Time, resp interface{}) (err error) {
-	req := l.SetAction("ForbidLiveStream").LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(ForbidLiveStreamAction).LiveReq.Clone().(*LiveRequest)
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("LiveStreamType", liveStreamType)
 	if (nil != resumeTime) {
@@ -89,8 +113,9 @@ func (l *Live) ForbidLiveStreamWithPublisher(streamName string, resumeTime *util
 	return l.ForbidLiveStream(streamName, "publisher", resumeTime, resp)
 }
 
+//恢复流
 func (l *Live) ResumeLiveStream(streamName string, liveStreamType string, resp interface{}) (err error) {
-	req := l.SetAction("ResumeLiveStream").LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(ResumeLiveStreamAction).LiveReq.Clone().(*LiveRequest)
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("LiveStreamType", liveStreamType)
 	err = l.Rpc.Query(req, &resp)
@@ -101,11 +126,12 @@ func (l *Live) ResumeLiveStreamWithPublisher(streamName string, resp interface{}
 	return l.ResumeLiveStream(streamName, "publisher", resp)
 }
 
+//设置回调链接
 //Action	String	是	操作接口名，系统规定参数，取值：SetLiveStreamsNotifyUrlConfig
-//DomaiName	String	是	您的加速域名
+//DomainName	String	是	您的加速域名
 //NotifyUrl	String	是	设置直播流信息推送到的URL地址，必须以http://开头；
 func (l *Live) SetStreamsNotifyUrlConfig(notifyUrl string, resp interface{}) (err error) {
-	req := l.SetAction("SetLiveStreamsNotifyUrlConfig").LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(SetLiveStreamsNotifyUrlConfigAction).LiveReq.Clone().(*LiveRequest)
 	req.SetArgs("NotifyUrl", notifyUrl)
 	err = l.Rpc.Query(req, &resp)
 	return
