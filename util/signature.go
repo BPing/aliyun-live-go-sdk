@@ -6,6 +6,10 @@ import (
 	"encoding/base64"
 	"net/url"
 	"strings"
+	"time"
+	"crypto/md5"
+	"fmt"
+	"encoding/hex"
 )
 
 //CreateSignature creates signature for string following Aliyun rules
@@ -37,4 +41,19 @@ func CreateSignatureForRequest(method string, values *url.Values, accessKeySecre
 	stringToSign := method + "&%2F&" + url.QueryEscape(canonicalizedQueryString)
 
 	return CreateSignature(stringToSign, accessKeySecret)
+}
+
+// CreateSignatureForStreamUrlWithA creates signature for Url string whit method A
+func CreateSignatureForStreamUrlWithA(uri, rand, uid, privateKey string, timeout time.Duration) (authKey string, timestamp int64) {
+	//timestamp for timeout
+	timestamp = time.Now().Add(timeout).Unix()
+	//Signature string
+	sstring := fmt.Sprintf("%s-%d-%s-%s-%s", uri, timestamp, rand, uid, privateKey)
+	//Crypto by HMAC-MD5
+	md5Ctx := md5.New()
+	md5Ctx.Write([]byte(sstring))
+	// Encode to Hex
+	hashValue := hex.EncodeToString(md5Ctx.Sum(nil))
+	authKey = fmt.Sprintf("%d-%s-%s-%s", timestamp, rand, uid, hashValue)
+	return
 }

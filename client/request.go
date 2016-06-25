@@ -15,8 +15,6 @@ const (
 	JSONResponseFormat = "JSON"
 	XMLResponseFormat = "XML"
 	ECSRequestMethod = "GET"
-
-	FormatISO8601 = "2006-01-02T15:04:05Z"
 )
 
 type Request interface {

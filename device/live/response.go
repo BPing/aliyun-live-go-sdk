@@ -1,7 +1,18 @@
 package live
 
-type OnlineInfo struct {
-	LiveStreamOnlineInfo []LiveStreamOnlineInfo
+import "aliyun-live-go-sdk/client"
+
+// 在线
+// -------------------------------------------------------------------------------
+
+type OnlineInfoResponse struct {
+	client.Response
+	OnlineUserInfo  OnlineUserInfo
+	TotalUserNumber int64
+}
+
+type OnlineUserInfo struct {
+	LiveStreamOnlineUserNumInfo []LiveStreamOnlineInfo
 }
 
 type LiveStreamOnlineInfo struct {
@@ -12,6 +23,8 @@ type LiveStreamOnlineInfo struct {
 	PublishUrl  string //
 }
 
+//
+// -------------------------------------------------------------------------------
 type StreamList struct {
 	DomainName string   //流所属加速域名
 	StreamUrls []string //	流完整URL地址

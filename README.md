@@ -23,7 +23,7 @@ func main() {
     cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
     live := live.NewLive(cert, "<Yours' CDN>", "app-name").SetDebug(true)
     resp := make(map[string]interface{})
-    live.StreamsPublishList(util.NewISO6801Time(time.Now().Add(-time.Hour * 12).UTC()), util.NewISO6801Time(time.Now().UTC()), &resp)
+    live.StreamsPublishList(time.Now().Add(-time.Hour * 12), time.Now(), &resp)
     fmt.Println(resp)
 }
 ```

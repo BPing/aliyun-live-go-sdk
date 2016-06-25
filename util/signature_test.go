@@ -2,6 +2,7 @@ package util
 
 import (
 	"testing"
+	"time"
 )
 
 func TestCreateSignature(t *testing.T) {
@@ -11,4 +12,6 @@ func TestCreateSignature(t *testing.T) {
 	signature := CreateSignature(str, "testsecret")
 
 	t.Log(signature)
+
+	t.Log((CreateSignatureForStreamUrlWithA("/app-name/video-name", "0", "0", "dreamTT", time.Duration(3600))))
 }
