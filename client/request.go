@@ -82,7 +82,7 @@ type CDNRequest struct {
 
 //CDNRequest的必要字段转成参数
 func (Cdn *CDNRequest)StructToArgs() {
-	//Cdn.SignatureNonce = util.CreateRandomString()
+	Cdn.SignatureNonce = util.CreateRandomString()
 	//Cdn.Timestamp = util.NewISO6801Time(time.Now().UTC())
 	Cdn.Args.Set("Format", Cdn.Format)
 	Cdn.Args.Set("Version", Cdn.Version)

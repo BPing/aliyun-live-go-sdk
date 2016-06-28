@@ -20,8 +20,8 @@
 package live
 
 import (
-	"aliyun-live-go-sdk/util"
 	"aliyun-live-go-sdk/client"
+	"aliyun-live-go-sdk/util"
 	"time"
 )
 
@@ -37,15 +37,12 @@ const (
 	SetLiveStreamsNotifyUrlConfigAction = "SetLiveStreamsNotifyUrlConfig"
 )
 
-
-//
-//
-// 直播
+// Live 直播接口控制器
 // @author cbping
 // @describe 方法名以"WithApp"结尾代表可以更改请求中  "应用名字（AppName）"，否则按默认的(初始化时设置的AppName)。如果为空，代表忽略参数AppName
 type Live struct {
-	Rpc        *client.Client
-	LiveReq    *LiveRequest
+	rpc        *client.Client
+	liveReq    *LiveRequest
 
 	//鉴权凭证
 	//如果为nil，则代表不开启直播流推流鉴权
@@ -53,196 +50,209 @@ type Live struct {
 
 	debug      bool
 }
-
-//@param cert  请求凭证
-//@param domainName 加速域名
-//@param appname    应用名字
-//@param streamCert  直播流推流凭证
+// 新建"直播接口控制器"
+// @param cert  请求凭证
+// @param domainName 加速域名
+// @param appname    应用名字
+// @param streamCert  直播流推流凭证
 func NewLive(cert *client.Credentials, domainName, appname string, streamCert *StreamCredentials) *Live {
 	return &Live{
-		Rpc:client.NewClient(cert),
-		LiveReq:NewLiveRequest("", domainName, appname),
-		debug:false,
-		streamCert:streamCert,
+		rpc:        client.NewClient(cert),
+		liveReq:    NewLiveRequest("", domainName, appname),
+		debug:      false,
+		streamCert: streamCert,
 	}
 }
 
-//获取直播流
-func (l *Live)GetStream(streamName string) *Stream {
-	if ("" == streamName) {
+// GetStream 获取直播流
+// @describe 每一次都生成新的流实例，不检查流名的唯一性，并且同一个名字会生成不同的实例的，
+//          所以，使用时候，请自行确保流名的唯一性
+func (l *Live) GetStream(streamName string) *Stream {
+	if "" == streamName {
 		return nil
 	}
 
 	var credentials *StreamCredentials
-	if (nil != l.streamCert) {
+	if nil != l.streamCert {
 		credentials = l.streamCert.Clone()
 	}
 
 	return &Stream{
-		DomainName:l.LiveReq.DomainName,
-		AppName:l.LiveReq.AppName,
-		StreamName:streamName,
-		credentials:credentials,
-		signOn:(nil != l.streamCert),
-		live:l,
+		DomainName:  l.liveReq.DomainName,
+		AppName:     l.liveReq.AppName,
+		StreamName:  streamName,
+		credentials: credentials,
+		signOn:      (nil != l.streamCert),
+		live:        l,
 	}
 }
 
+// @see StreamsPublishListWithApp
 func (l *Live) StreamsPublishList(startTime, endTime time.Time, resp interface{}) (err error) {
-	err = l.StreamsPublishListWithApp(l.LiveReq.AppName, startTime, endTime, resp)
+	err = l.StreamsPublishListWithApp(l.liveReq.AppName, startTime, endTime, resp)
 	return
 }
 
-//@appname 应用名 为空时，忽略此参数
-//@startTime 开始时间
-//@endTime   结束时间
+// StreamsPublishListWithApp 获取推流列表
+// @appname 应用名 为空时，忽略此参数
+// @startTime 开始时间
+// @endTime   结束时间
+// @link https://help.aliyun.com/document_detail/27191.html?spm=0.0.0.0.Dm58D2
 func (l *Live) StreamsPublishListWithApp(appname string, startTime, endTime time.Time, resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamsPublishListAction).LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamsPublishListAction).liveReq.Clone().(*LiveRequest)
 	req.AppName = appname
 	req.SetArgs("StartTime", util.GetISO8601TimeStamp(startTime))
 	req.SetArgs("EndTime", util.GetISO8601TimeStamp(endTime))
-	err = l.Rpc.Query(req, resp)
+	err = l.rpc.Query(req, resp)
 	return
 }
 
-//获取在线流
+// @see StreamsOnlineListWithApp
 func (l *Live) StreamsOnlineList(resp interface{}) (err error) {
-	err = l.StreamsOnlineListWithApp(l.LiveReq.AppName, resp)
+	err = l.StreamsOnlineListWithApp(l.liveReq.AppName, resp)
 	return
 }
 
-//@appname 应用名 为空时，忽略此参数
+// StreamsOnlineListWithApp 获取在线流
+// @appname 应用名 为空时，忽略此参数
+// @link  https://help.aliyun.com/document_detail/27192.html?spm=0.0.0.0.7uWhjM
 func (l *Live) StreamsOnlineListWithApp(appname string, resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamsOnlineListAction).LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamsOnlineListAction).liveReq.Clone().(*LiveRequest)
 	req.AppName = appname
-	err = l.Rpc.Query(req, resp)
+	err = l.rpc.Query(req, resp)
 	return
 }
 
-
-//获取黑名单
+// StreamsBlockList 获取黑名单
+// @link https://help.aliyun.com/document_detail/27193.html?spm=0.0.0.0.96SCaE
 func (l *Live) StreamsBlockList(resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamsBlockListAction).LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamsBlockListAction).liveReq.Clone().(*LiveRequest)
 	req.AppName = ""
-	err = l.Rpc.Query(req, resp)
+	err = l.rpc.Query(req, resp)
 	return
 }
 
-//获取控制历史
+// @see StreamsControlHistoryWithApp
 func (l *Live) StreamsControlHistory(startTime, endTime time.Time, resp interface{}) (err error) {
-	err = l.StreamsControlHistoryWithApp(l.LiveReq.AppName, startTime, endTime, resp)
+	err = l.StreamsControlHistoryWithApp(l.liveReq.AppName, startTime, endTime, resp)
 	return
 }
 
-//@appname 应用名 为空时，忽略此参数
+// StreamsControlHistoryWithApp 获取控制历史
+// @appname 应用名 为空时，忽略此参数
+// @link  https://help.aliyun.com/document_detail/27194.html?spm=0.0.0.0.4DUTT7
 func (l *Live) StreamsControlHistoryWithApp(appname string, startTime, endTime time.Time, resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamsControlHistoryAction).LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamsControlHistoryAction).liveReq.Clone().(*LiveRequest)
 	req.AppName = appname
 	req.SetArgs("StartTime", util.GetISO8601TimeStamp(startTime))
 	req.SetArgs("EndTime", util.GetISO8601TimeStamp(endTime))
-	err = l.Rpc.Query(req, resp)
+	err = l.rpc.Query(req, resp)
 	return
 }
 
-//或者在线人数
+// @see StreamOnlineUserNumWithApp
 func (l *Live) StreamOnlineUserNum(streamName string, resp interface{}) (err error) {
-	err = l.StreamOnlineUserNumWithApp(l.LiveReq.AppName, streamName, resp)
+	err = l.StreamOnlineUserNumWithApp(l.liveReq.AppName, streamName, resp)
 	return
 }
 
-//@appname 应用名 为空时，忽略此参数
+// StreamOnlineUserNumWithApp 获取在线人数
+// @appname 应用名 为空时，忽略此参数
+// @link https://help.aliyun.com/document_detail/27195.html?spm=0.0.0.0.n6eAJJ
 func (l *Live) StreamOnlineUserNumWithApp(appname string, streamName string, resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamOnlineUserNumAction).LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(DescribeLiveStreamOnlineUserNumAction).liveReq.Clone().(*LiveRequest)
 	req.AppName = appname
-	if ("" != streamName) {
+	if "" != streamName {
 		req.SetArgs("StreamName", streamName)
 	}
-	err = l.Rpc.Query(req, resp)
+	err = l.rpc.Query(req, resp)
 	return
 }
 
-
-// 禁止流
-//StreamName	String	是	流名称
-//LiveStreamType	String	是	用于指定主播推流还是客户端拉流, 目前支持"publisher" (主播推送)
-//ResumeTime	String	否	恢复流的时间 UTC时间 格式：2015-12-01T17:37:00Z
+// ForbidLiveStream 禁止流
+// StreamName	String	是	流名称
+// LiveStreamType	String	是	用于指定主播推流还是客户端拉流, 目前支持"publisher" (主播推送)
+// ResumeTime	String	否	恢复流的时间 UTC时间 格式：2015-12-01T17:37:00Z
 func (l *Live) ForbidLiveStream(streamName string, liveStreamType string, resumeTime *time.Time, resp interface{}) (err error) {
-	req := l.SetAction(ForbidLiveStreamAction).LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(ForbidLiveStreamAction).liveReq.Clone().(*LiveRequest)
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("LiveStreamType", liveStreamType)
-	if (nil != resumeTime) {
+	if nil != resumeTime {
 		req.SetArgs("ResumeTime", util.GetISO8601TimeStamp(*resumeTime))
 	}
-	err = l.Rpc.Query(req, resp)
+	err = l.rpc.Query(req, resp)
 	return
 }
 
+// @see ForbidLiveStream
 func (l *Live) ForbidLiveStreamWithPublisher(streamName string, resumeTime *time.Time, resp interface{}) (err error) {
 	return l.ForbidLiveStream(streamName, "publisher", resumeTime, resp)
 }
 
-//恢复流
+// ResumeLiveStream 恢复流
 func (l *Live) ResumeLiveStream(streamName string, liveStreamType string, resp interface{}) (err error) {
-	req := l.SetAction(ResumeLiveStreamAction).LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(ResumeLiveStreamAction).liveReq.Clone().(*LiveRequest)
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("LiveStreamType", liveStreamType)
-	err = l.Rpc.Query(req, resp)
+	err = l.rpc.Query(req, resp)
 	return
 }
 
+// @see ResumeLiveStream
 func (l *Live) ResumeLiveStreamWithPublisher(streamName string, resp interface{}) (err error) {
 	return l.ResumeLiveStream(streamName, "publisher", resp)
 }
 
-//设置回调链接
-//Action	String	是	操作接口名，系统规定参数，取值：SetLiveStreamsNotifyUrlConfig
-//DomainName	String	是	您的加速域名
-//NotifyUrl	String	是	设置直播流信息推送到的URL地址，必须以http://开头；
+// SetStreamsNotifyUrlConfig 设置回调链接
+// Action	String	是	操作接口名，系统规定参数，取值：SetLiveStreamsNotifyUrlConfig
+// DomainName	String	是	您的加速域名
+// NotifyUrl	String	是	设置直播流信息推送到的URL地址，必须以http://开头；
 func (l *Live) SetStreamsNotifyUrlConfig(notifyUrl string, resp interface{}) (err error) {
-	req := l.SetAction(SetLiveStreamsNotifyUrlConfigAction).LiveReq.Clone().(*LiveRequest)
+	req := l.SetAction(SetLiveStreamsNotifyUrlConfigAction).liveReq.Clone().(*LiveRequest)
 	req.AppName = ""
 	req.SetArgs("NotifyUrl", notifyUrl)
-	err = l.Rpc.Query(req, resp)
+	err = l.rpc.Query(req, resp)
 	return
 }
 
 // GET 和 SET
 // -------------------------------------------------------------------------------
 
-func (l *Live)SetDomainName(domainName string) *Live {
-	l.LiveReq.DomainName = domainName
+// 修改默认或者说全局  domainName（加速域名）
+func (l *Live) SetDomainName(domainName string) *Live {
+	l.liveReq.DomainName = domainName
 	return l
 }
 
-//修改默认或者说全局  domainName（加速域名）
-func (l *Live)GetDomainName() (domainName string) {
-	domainName = l.LiveReq.DomainName
+func (l *Live) GetDomainName() (domainName string) {
+	domainName = l.liveReq.DomainName
 	return
 }
 
-func (l *Live)SetStreamCredentials(streamCert *StreamCredentials) *Live {
+//修改默认或者说全局  StreamCredentials（流签名凭证）
+func (l *Live) SetStreamCredentials(streamCert *StreamCredentials) *Live {
 	l.streamCert = streamCert
 	return l
 }
 
-//修改默认或者说全局 appname（应用名）
-func (l *Live)SetAppName(appname string) *Live {
-	l.LiveReq.AppName = appname
+// 修改默认或者说全局 appname（应用名）
+func (l *Live) SetAppName(appname string) *Live {
+	l.liveReq.AppName = appname
 	return l
 }
 
-func (l *Live)GetAppName() (appname string) {
-	appname = l.LiveReq.AppName
+func (l *Live) GetAppName() (appname string) {
+	appname = l.liveReq.AppName
 	return
 }
 
-func (l *Live)SetAction(action string) *Live {
-	l.LiveReq.Action = action
+// 修改默认或者说全局 action（操作名称类别）
+func (l *Live) SetAction(action string) *Live {
+	l.liveReq.Action = action
 	return l
 }
-func (l *Live)SetDebug(debug bool) *Live {
+func (l *Live) SetDebug(debug bool) *Live {
 	l.debug = debug
-	l.Rpc.SetDebug(debug)
+	l.rpc.SetDebug(debug)
 	return l
 }
-

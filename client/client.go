@@ -112,6 +112,10 @@ func (c *Client)Query(req Request, resp interface{}) error {
 		return clientError(err)
 	}
 
+	if c.debug {
+		log.Printf("body of response:%s", string(body))
+	}
+
 	respUnmarshal := c.responseUnmarshal(req)
 	//失败响应处理
 	if httpResp.StatusCode >= 400 && httpResp.StatusCode <= 599 {
