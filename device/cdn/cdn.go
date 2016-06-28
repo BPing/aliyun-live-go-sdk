@@ -18,7 +18,7 @@ package cdn
 
 import (
 	"aliyun-live-go-sdk/client"
-	"qiniupkg.com/x/errors.v7"
+	"errors"
 	"aliyun-live-go-sdk/util/global"
 	"fmt"
 )
@@ -35,6 +35,35 @@ const (
 	DescribeUserDomainsAction = "DescribeUserDomains"
 	DescribeCdnDomainDetailAction = "DescribeCdnDomainDetail"
 	ModifyCdnDomainAction = "ModifyCdnDomain"
+	StartCdnDomainAction = "StartCdnDomain"
+	StopCdnDomainAction = "StopCdnDomain"
+
+	RefreshObjectCachesAction = "RefreshObjectCaches"
+	PushObjectCacheAction = "PushObjectCache"
+	DescribeRefreshTasksAction = "DescribeRefreshTasks"
+	DescribeRefreshQuotaAction = "DescribeRefreshQuota"
+
+	DescribeDomainConfigsAction = "DescribeDomainConfigs"
+	SetOptimizeConfigAction = "SetOptimizeConfig"
+	SetPageCompressConfigAction = "SetPageCompressConfig"
+	SetIgnoreQueryStringConfigAction = "SetIgnoreQueryStringConfig"
+	SetRangeConfigAction = "SetRangeConfig"
+	SetVideoSeekConfigAction = "SetVideoSeekConfig"
+	SetSourceHostConfigAction = "SetSourceHostConfig"
+	SetErrorPageConfigAction = "SetErrorPageConfig"
+	SetForceRedirectConfigAction = "SetForceRedirectConfig"
+	SetReferConfigAction = "SetReferConfig"
+	SetFileCacheExpiredConfigAction = "SetFileCacheExpiredConfig"
+	SetPathCacheExpiredConfigAction = "SetPathCacheExpiredConfig"
+	ModifyFileCacheExpiredConfigAction = "ModifyFileCacheExpiredConfig"
+	ModifyPathCacheExpiredConfigAction = "ModifyPathCacheExpiredConfig"
+	DeleteCacheExpiredConfigAction = "DeleteCacheExpiredConfig"
+	SetReqAuthConfigAction = "SetReqAuthConfig"
+	SetHttpHeaderConfigAction = "SetHttpHeaderConfig"
+	ModifyHttpHeaderConfigAction = "ModifyHttpHeaderConfig"
+	DeleteHttpHeaderConfigAction = "DeleteHttpHeaderConfig"
+	SetCcConfigAction = "SetCcConfig"
+	SetWafConfigAction = "SetWafConfig"
 )
 
 //
@@ -61,60 +90,6 @@ func (c *CDN)SetDebug(debug bool) *CDN {
 	c.debug = debug
 	c.rpc.SetDebug(debug)
 	return c
-}
-
-
-//服务操作接口
-// -------------------------------------------------------------------------------
-
-//开通服务的计费类型
-type CdnPayType string
-
-const (
-	PayByTrafficType CdnPayType = "PayByTraffic" //按流量
-	PayByBandwidthType CdnPayType = "PayByBandwidth" //按带宽峰值
-	PayNullType CdnPayType = "" //空值，默认采用 PayByTrafficType
-)
-
-// OpenCdnService 开通CDN服务
-// @param  internetChargeType 开通服务的计费类型(默认按流量) 按流量(PayByTraffic)、按带宽峰值(PayByBandwidth)。
-//                            常量  PayByTrafficType(PayByTraffic)和PayByBandwidthType(PayByBandwidth)
-// @link https://help.aliyun.com/document_detail/27157.html?spm=0.0.0.0.t6wFRF
-func (c *CDN)OpenCdnService(internetChargeType CdnPayType, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
-	req.Action = OpenCdnServiceAction
-	if (PayNullType == internetChargeType) {
-		internetChargeType = PayByTrafficType
-	}
-	req.SetArgs("InternetChargeType", string(internetChargeType))
-	err = c.rpc.Query(req, resp)
-	return
-}
-
-// ScanCdnService 查询CDN服务状态。包括：当前计费类型，服务开通时间，下次生效的计费类型，当前业务状态等。
-//
-// @link https://help.aliyun.com/document_detail/27158.html?spm=0.0.0.0.2RRuSQ
-func (c *CDN)ScanCdnService(resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
-	req.Action = DescribeCdnServiceAction
-	err = c.rpc.Query(req, resp)
-	return
-}
-
-//  ModifyCdnServicePayType 变更CDN服务的计费类型.
-//  @param  internetChargeType 开通服务的计费类型(默认按流量) 按流量(PayByTraffic)、按带宽峰值(PayByBandwidth)。
-//                            常量  PayByTrafficType(PayByTraffic)和PayByBandwidthType(PayByBandwidth)
-// @link https://help.aliyun.com/document_detail/27159.html?spm=0.0.0.0.AuPm7B
-func (c *CDN)ModifyCdnServicePayType(internetChargeType CdnPayType, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
-	req.Action = ModifyCdnServiceAction
-	if (PayNullType == internetChargeType) {
-		err = errors.New("internetChargeType should not be empty")
-		return
-	}
-	req.SetArgs("InternetChargeType", string(internetChargeType))
-	err = c.rpc.Query(req, resp)
-	return
 }
 
 
@@ -196,11 +171,11 @@ func (c *CDN)ReadUserDomains(domainName string, pageSize, pageNumber int64, doma
 	}
 
 	if (pageSize >= 1) {
-		req.SetArgs("DomainStatus", fmt.Sprintf("%d", pageSize))
+		req.SetArgs("PageSize", fmt.Sprintf("%d", pageSize))
 	}
 
 	if (pageNumber >= 1) {
-		req.SetArgs("DomainStatus", fmt.Sprintf("%d", pageNumber))
+		req.SetArgs("PageNumber", fmt.Sprintf("%d", pageNumber))
 	}
 
 	if (global.EmptyString != domainSearchType) {
@@ -213,6 +188,7 @@ func (c *CDN)ReadUserDomains(domainName string, pageSize, pageNumber int64, doma
 
 
 // CdnDomainDetail 获取指定加速域名配置的基本信息
+//
 // @link https://help.aliyun.com/document_detail/27162.html?spm=0.0.0.0.COpoXo
 func (c *CDN)CdnDomainDetail(domainName string, resp interface{}) (err error) {
 	req := c.cdnReq.Clone().(*client.CDNRequest)
@@ -224,6 +200,7 @@ func (c *CDN)CdnDomainDetail(domainName string, resp interface{}) (err error) {
 }
 
 // ModifyCdnDomain 修改加速域名，目前支持修改源站
+//
 // @link https://help.aliyun.com/document_detail/27164.html?spm=0.0.0.0.rOMSJ4
 func (c *CDN)ModifyCdnDomain(domainInfo DomainInfo, resp interface{}) (err error) {
 	if (global.EmptyString == domainInfo.SourceType || global.EmptyString == domainInfo.DomainName) {
@@ -237,7 +214,7 @@ func (c *CDN)ModifyCdnDomain(domainInfo DomainInfo, resp interface{}) (err error
 	req := c.cdnReq.Clone().(*client.CDNRequest)
 	req.Action = ModifyCdnDomainAction
 	req.SetArgs("DomainName", domainInfo.DomainName)
-	req.SetArgs("SourceType", domainInfo.SourceType)
+	req.SetArgs("SourceType", string(domainInfo.SourceType))
 
 	if (0 != domainInfo.SourcePort) {
 		req.SetArgs("SourcePort", fmt.Sprintf("%d", domainInfo.SourcePort))
@@ -250,3 +227,27 @@ func (c *CDN)ModifyCdnDomain(domainInfo DomainInfo, resp interface{}) (err error
 	err = c.rpc.Query(req, resp)
 	return
 }
+
+//  StartCdnDomain 启用状态为“停用”的加速域名，将DomainStatus变更为online
+//
+//  @link https://help.aliyun.com/document_detail/27165.html?spm=0.0.0.0.8cQhXd
+func (c *CDN)StartCdnDomain(domainName string, resp interface{}) (err error) {
+	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req.Action = StartCdnDomainAction
+	req.SetArgs("DomainName", domainName)
+	err = c.rpc.Query(req, resp)
+	return
+}
+
+//  StopCdnDomain 停用某个加速域名，将DomainStatus变更为offline
+//
+//  @link https://help.aliyun.com/document_detail/27166.html?spm=0.0.0.0.JcQVpK
+func (c *CDN)StopCdnDomain(domainName string, resp interface{}) (err error) {
+	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req.Action = StopCdnDomainAction
+	req.SetArgs("DomainName", domainName)
+	err = c.rpc.Query(req, resp)
+	return
+}
+
+
