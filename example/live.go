@@ -7,13 +7,6 @@ import (
 	"fmt"
 )
 
-const (
-	AccessKeyId = ""
-	AccessKeySecret = ""
-	DomainName = ""
-	AppName = "app-name"
-	PrivateKey = ""
-)
 
 func LiveExample() {
 	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)

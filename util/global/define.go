@@ -1,0 +1,5 @@
+package global
+
+const (
+	EmptyString = ""
+)
