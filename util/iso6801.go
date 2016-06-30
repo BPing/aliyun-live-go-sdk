@@ -75,5 +75,5 @@ func (it *ISO6801Time) UnmarshalJSON(data []byte) error {
 }
 // String returns the time in ISO6801Time format
 func (it ISO6801Time) String() string {
-	return time.Time(it).Format(formatISO8601)
+	return time.Time(it).Format(FormatISO8601)
 }
