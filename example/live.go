@@ -9,8 +9,9 @@ import (
 
 
 func LiveExample() {
+
 	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
-	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(true)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 	resp := make(map[string]interface{})
 	liveM.StreamsPublishList(time.Now().Add(-time.Hour * 12), time.Now(), &resp)
 	fmt.Println(resp)
@@ -44,7 +45,7 @@ func LiveExample() {
 func StreamExample() {
 	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
 	streamCert := live.NewStreamCredentials(PrivateKey, live.DefualtStreamTimeout)
-	liveM := live.NewLive(cert, DomainName, AppName, streamCert).SetDebug(true)
+	liveM := live.NewLive(cert, DomainName, AppName, streamCert).SetDebug(false)
 	stream := liveM.GetStream("video-name")
 	stream.RtmpPublishUrl()
 

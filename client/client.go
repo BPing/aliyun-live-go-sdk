@@ -13,8 +13,8 @@
 //limitations under the License
 
 //
+// 核心处理器
 // @author cbping
-//
 package client
 
 import (
@@ -49,7 +49,7 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-//初始化
+// 初始化
 func (c *Client) Init() *Client {
 	if (c.ConnectTimeout <= 0) {
 		c.httpClient = &http.Client{}
@@ -68,7 +68,7 @@ func (c *Client) Init() *Client {
 
 type Unmarshal func(data []byte, v interface{}) error
 
-//默认json解析
+// 默认json解析
 func (c *Client)responseUnmarshal(req Request) (u Unmarshal) {
 	if (req.ResponseFormat() == XMLResponseFormat) {
 		u = xml.Unmarshal
@@ -78,7 +78,7 @@ func (c *Client)responseUnmarshal(req Request) (u Unmarshal) {
 	return
 }
 
-//处理请求
+// 处理请求
 func (c *Client)Query(req Request, resp interface{}) error {
 	if (nil == c.httpClient) {
 		return clientError(errors.New("httpClient is nil"))

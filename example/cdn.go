@@ -37,4 +37,10 @@ func CDNExample() {
 	resp = make(map[string]interface{})
 	err = cdnM.CdnDomainDetail(DomainName, &resp)
 	fmt.Println(err, resp)
+
+
+	//config
+	resp = make(map[string]interface{})
+	err = cdnM.DomainConfigs(DomainName, &resp, cdn.ReqAuthConfig)
+	fmt.Println(err, resp)
 }

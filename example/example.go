@@ -1,3 +1,6 @@
+
+// 例子
+// @author cbping
 package example
 
 const (

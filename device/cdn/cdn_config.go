@@ -53,18 +53,17 @@ func (c *CDN)enabledConfig(action, domainName string, enable bool, resp interfac
 	return
 }
 
-//  SetOptimizeConfig 设置页面优化功能，开启后可以删除 html ，
-//                    内嵌 javascript 和 css 中的注释以及重复的空白符；这样可以有效地去除页面的冗余内容，减小文件体积，提高加速分发效率
-//
-//  @link https://help.aliyun.com/document_detail/27170.html?spm=0.0.0.0.w21KyD
+// SetOptimizeConfig 设置页面优化功能，开启后可以删除 html ，<br>
+//                    内嵌 javascript 和 css 中的注释以及重复的空白符；这样可以有效地去除页面的冗余内容，减小文件体积，提高加速分发效率<br>
+// @link https://help.aliyun.com/document_detail/27170.html?spm=0.0.0.0.w21KyD
 func (c *CDN)SetOptimizeConfig(domainName string, enable bool, resp interface{}) (err error) {
 	err = c.enabledConfig(SetOptimizeConfigAction, domainName, enable, resp)
 	return
 }
 
-//  SetPageCompressConfig 设置智能压缩功能
+// SetPageCompressConfig 设置智能压缩功能
 //
-//  @link https://help.aliyun.com/document_detail/27170.html?spm=0.0.0.0.w21KyD
+// @link https://help.aliyun.com/document_detail/27170.html?spm=0.0.0.0.w21KyD
 func (c *CDN)SetPageCompressConfig(domainName string, enable bool, resp interface{}) (err error) {
 	err = c.enabledConfig(SetPageCompressConfigAction, domainName, enable, resp)
 	return
@@ -180,8 +179,8 @@ func (c *CDN)SetForceRedirectConfig(domainName string, redirectType RedirectType
 	return
 }
 
-//  SetReferConfig 设置加速域名的Refer防盗链功能
-//  @param allowEmpty bool 是否允许空refer访问
+//  SetReferConfig 设置加速域名的Refer防盗链功能 <br>
+//  @param allowEmpty bool 是否允许空refer访问 <br>
 //  @link https://help.aliyun.com/document_detail/27178.html?spm=0.0.0.0.11Tr6z
 func (c *CDN)SetReferConfig(domainName, referList string, referType ReferType, allowEmpty bool, resp interface{}) (err error) {
 	if (global.EmptyString == domainName || global.EmptyString == referType) {
@@ -203,8 +202,8 @@ func (c *CDN)SetReferConfig(domainName, referList string, referType ReferType, a
 	return
 }
 
-//  SetFileCacheExpiredConfig 设置文件过期配置
-//  Qparam ttl 	缓存时间设置，单位为秒
+//  SetFileCacheExpiredConfig 设置文件过期配置 <br>
+//  Qparam ttl 	缓存时间设置，单位为秒 <br>
 //  @link https://help.aliyun.com/document_detail/27179.html?spm=0.0.0.0.PrOMF2
 func (c *CDN)SetFileCacheExpiredConfig(domainName, cacheContent string, ttl, weight int64, resp interface{}) (err error) {
 	if (global.EmptyString == domainName || global.EmptyString == cacheContent || ttl < 0) {
@@ -223,8 +222,8 @@ func (c *CDN)SetFileCacheExpiredConfig(domainName, cacheContent string, ttl, wei
 	return
 }
 
-//  SetPathCacheExpiredConfig 修改目录过期配置
-//  Qparam ttl 	缓存时间设置，单位为秒
+//  SetPathCacheExpiredConfig 修改目录过期配置 <br>
+//  Qparam ttl 	缓存时间设置，单位为秒 <br>
 //  @link https://help.aliyun.com/document_detail/27179.html?spm=0.0.0.0.PrOMF2
 func (c *CDN)SetPathCacheExpiredConfig(domainName, cacheContent string, ttl, weight int64, resp interface{}) (err error) {
 	if (global.EmptyString == domainName || global.EmptyString == cacheContent || ttl < 0) {
@@ -243,8 +242,8 @@ func (c *CDN)SetPathCacheExpiredConfig(domainName, cacheContent string, ttl, wei
 	return
 }
 
-//  ModifyFileCacheExpiredConfig 修改文件过期配置
-//  Qparam ttl 	缓存时间设置，单位为秒
+//  ModifyFileCacheExpiredConfig 修改文件过期配置 <br>
+//  Qparam ttl 	缓存时间设置，单位为秒 <br>
 //  @link https://help.aliyun.com/document_detail/27179.html?spm=0.0.0.0.PrOMF2
 func (c *CDN)ModifyFileCacheExpiredConfig(domainName, configID, cacheContent string, ttl, weight int64, resp interface{}) (err error) {
 	if (global.EmptyString == domainName || global.EmptyString == cacheContent || global.EmptyString == configID || ttl < 0) {
