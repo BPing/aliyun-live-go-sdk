@@ -1,7 +1,7 @@
 package cdn
 
 import (
-	"aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/client"
 	"errors"
 )
 

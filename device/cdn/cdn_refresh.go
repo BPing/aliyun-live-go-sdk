@@ -1,9 +1,9 @@
 package cdn
 
 import (
-	"aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/client"
 	"fmt"
-	"aliyun-live-go-sdk/util/global"
+	"github.com/BPing/aliyun-live-go-sdk/util/global"
 	"errors"
 )
 

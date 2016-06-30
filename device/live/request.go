@@ -1,7 +1,7 @@
 package live
 
 import (
-	"aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/client"
 )
 
 // LiveRequest 直播请求信息

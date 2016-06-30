@@ -1,8 +1,8 @@
 package cdn
 
 import (
-	"aliyun-live-go-sdk/util/global"
-	"aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/util/global"
+	"github.com/BPing/aliyun-live-go-sdk/client"
 )
 
 // 加速域名的业务类型

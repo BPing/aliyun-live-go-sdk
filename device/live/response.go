@@ -1,6 +1,6 @@
 package live
 
-import "aliyun-live-go-sdk/client"
+import "github.com/BPing/aliyun-live-go-sdk/client"
 
 // 在线
 // -------------------------------------------------------------------------------

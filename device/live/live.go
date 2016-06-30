@@ -19,8 +19,8 @@
 package live
 
 import (
-	"aliyun-live-go-sdk/client"
-	"aliyun-live-go-sdk/util"
+	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/util"
 	"time"
 )
 
