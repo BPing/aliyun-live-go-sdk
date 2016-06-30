@@ -31,6 +31,11 @@ func (b *TestRequest)String() string {
 	return ""
 }
 
+func (b *TestRequest)Clone() interface{} {
+
+	return nil
+}
+
 type youdao struct {
 	errorCode int  `xml:"errorCode"`
 	query     string  `xml:"query"`
