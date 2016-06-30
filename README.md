@@ -37,7 +37,7 @@ go get github.com/BPing/aliyun-live-go-sdk
 ```
 
 # 文档
-[![GoDoc](https://godoc.org/github.com/BPing/aliyun-live-go-sdk?status.svg)](https://godoc.org/github.com/BPing/aliyun-live-go-sdk)
+sdk:https://godoc.org/github.com/BPing/aliyun-live-go-sdk[![GoDoc](https://godoc.org/github.com/BPing/aliyun-live-go-sdk?status.svg)](https://godoc.org/github.com/BPing/aliyun-live-go-sdk)
 
 # Example
 * [example](https://github.com/BPing/aliyun-live-go-sdk/tree/master/example)
