@@ -8,8 +8,8 @@ install:
   - go get github.com/mattn/goveralls
 
 script:
-  - go test -v aliyun-live-go-sdk/client -covermode=count -coverprofile=clientcoverage.out
+  - go test -v $TEST_PATH/client -covermode=count -coverprofile=clientcoverage.out
   - $HOME/gopath/bin/goveralls -coverprofile=clientcoverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
-  - go test -v aliyun-live-go-sdk/util -covermode=count -coverprofile=utilcoverage.out
+  - go test -v $TEST_PATH/util -covermode=count -coverprofile=utilcoverage.out
   - $HOME/gopath/bin/goveralls -coverprofile=utilcoverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
 
