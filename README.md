@@ -1,4 +1,4 @@
-# aliyun-live-go-sdk
+# aliyun-live-go-sdk [![Build Status](https://travis-ci.org/BPing/aliyun-live-go-sdk.svg?branch=master)](https://travis-ci.org/BPing/aliyun-live-go-sdk)
     阿里云直播 golang SDK
 
 # 快速开始
