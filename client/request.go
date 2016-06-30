@@ -17,6 +17,10 @@ const (
 	ECSRequestMethod = "GET"
 )
 
+//
+//  请求接口
+//    所有请求对象继承的接口，也是Client接受处理的请求接口
+//    签名方式和必要参数信息。
 type Request interface {
 	//签名
 	Sign(*Credentials)
@@ -52,15 +56,19 @@ type Request interface {
 //}
 
 
+//
+//  cdn 请求对象。实现 Request 接口
+//
+//
 //名称	类型	是否必须	描述
-//Format	String	否	返回值的类型，支持JSON与XML。默认为XML
-//Version	String	是	API版本号，为日期形式：YYYY-MM-DD，本版本对应为2014-11-11
-//AccessKeyId	String	是	阿里云颁发给用户的访问服务所用的密钥ID
-//Signature	String	是	签名结果串，关于签名的计算方法，请参见签名机制。
-//SignatureMethod	String	是	签名方式，目前支持HMAC-SHA1
-//Timestamp	String	是	请求的时间戳。日期格式按照ISO8601标准表示，并需要使用UTC时间。格式为：YYYY-MM-DDThh:mm:ssZ。例如，2014-11-11T12:00:00Z（为北京时间2014年11月11日20点0分0秒）
-//SignatureVersion	String	是	签名算法版本，目前版本是1.0
-//SignatureNonce	String	是	唯一随机数，用于防止网络重放攻击。用户在不同请求间要使用不同的随机数值
+//Format	String	否	返回值的类型，支持JSON与XML。默认为XML \n
+//Version	String	是	API版本号，为日期形式：YYYY-MM-DD，本版本对应为2014-11-11 \n
+//AccessKeyId	String	是	阿里云颁发给用户的访问服务所用的密钥ID \n
+//Signature	String	是	签名结果串，关于签名的计算方法，请参见签名机制。\n
+//SignatureMethod	String	是	签名方式，目前支持HMAC-SHA1 \n
+//Timestamp	String	是	请求的时间戳。日期格式按照ISO8601标准表示，并需要使用UTC时间。格式为：YYYY-MM-DDThh:mm:ssZ。例如，2014-11-11T12:00:00Z（为北京时间2014年11月11日20点0分0秒）\n
+//SignatureVersion	String	是	签名算法版本，目前版本是1.0 \n
+//SignatureNonce	String	是	唯一随机数，用于防止网络重放攻击。用户在不同请求间要使用不同的随机数值 \n
 type CDNRequest struct {
 	Format           string
 	Version          string
@@ -94,6 +102,7 @@ func (Cdn *CDNRequest)StructToArgs() {
 	Cdn.Args.Set("Action", Cdn.Action)
 }
 
+//签名
 func (Cdn *CDNRequest)Sign(cert *Credentials) {
 	Cdn.AccessKeyId = cert.AccessKeyId
 	Cdn.StructToArgs()
@@ -101,6 +110,7 @@ func (Cdn *CDNRequest)Sign(cert *Credentials) {
 	Cdn.Signature = util.CreateSignatureForRequest(Cdn.Method, &Cdn.Args, cert.AccessKeySecret + "&")
 
 }
+
 
 func (Cdn *CDNRequest)HttpRequestInstance() (httpReq *http.Request, err error) {
 	//生成请求url

@@ -1,6 +1,6 @@
 package client
 
-//凭证
+//Api请求凭证
 type Credentials struct {
 	//Access Key Id
 	AccessKeyId     string

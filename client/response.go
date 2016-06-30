@@ -6,6 +6,7 @@ type Response struct {
 	RequestId string
 }
 
+//错误信息结构体
 type ErrorResponse struct {
 	RequestId string
 	HostId    string

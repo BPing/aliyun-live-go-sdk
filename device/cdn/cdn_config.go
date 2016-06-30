@@ -13,14 +13,23 @@ import (
 // -------------------------------------------------------------------------------
 
 //  DomainConfigs 获取指定加速域名的配置
-//
+//  @configList 为空时代表查询所有
 //  @link https://help.aliyun.com/document_detail/27169.html?spm=0.0.0.0.fewJpA
-func (c *CDN)DomainConfigs(domainName string, resp interface{}, ConfigList...ConfigName) (err error) {
+func (c *CDN)DomainConfigs(domainName string, resp interface{}, configList...ConfigName) (err error) {
+	config := []string{}
+	for _, val := range configList {
+		config = append(config, string(val))
+	}
+	err = c.domainConfigs(domainName, resp, config ...)
+	return
+}
+
+func (c *CDN)domainConfigs(domainName string, resp interface{}, configList...string) (err error) {
 	req := c.cdnReq.Clone().(*client.CDNRequest)
 	req.Action = DescribeDomainConfigsAction
 	req.SetArgs("DomainName", domainName)
-	if (len(ConfigList) > 0) {
-		req.SetArgs("ConfigList", strings.Join(interface{}(ConfigList).([]string), ","))
+	if (len(configList) > 0) {
+		req.SetArgs("ConfigList", strings.Join(configList, ","))
 	}
 	err = c.rpc.Query(req, resp)
 	return

@@ -11,6 +11,10 @@
 //WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //See the License for the specific language governing permissions and
 //limitations under the License
+
+//
+// @author cbping
+//
 package client
 
 import (
@@ -25,6 +29,9 @@ import (
 	"log"
 )
 
+//
+//  客户端
+//  处理http请求
 type Client struct {
 	*Credentials
 	//ConnectTimeout小于或等于零时，
