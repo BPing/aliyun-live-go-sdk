@@ -37,9 +37,9 @@ go get github.com/BPing/aliyun-live-go-sdk
 ```
 
 # 文档
-Sdk:https://godoc.org/github.com/BPing/aliyun-live-go-sdk [![GoDoc](https://godoc.org/github.com/BPing/aliyun-live-go-sdk?status.svg)](https://godoc.org/github.com/BPing/aliyun-live-go-sdk)
-CDN:https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/cdn   [![GoDoc](https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/cdn?status.svg)](https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/cdn)
-Live:https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/live [![GoDoc](https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/live?status.svg)](https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/live)
+* Sdk:https://godoc.org/github.com/BPing/aliyun-live-go-sdk [![GoDoc](https://godoc.org/github.com/BPing/aliyun-live-go-sdk?status.svg)](https://godoc.org/github.com/BPing/aliyun-live-go-sdk)
+* CDN:https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/cdn   [![GoDoc](https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/cdn?status.svg)](https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/cdn)
+* Live:https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/live [![GoDoc](https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/live?status.svg)](https://godoc.org/github.com/BPing/aliyun-live-go-sdk/device/live)
 
 # Example
 * [example](https://github.com/BPing/aliyun-live-go-sdk/tree/master/example)
