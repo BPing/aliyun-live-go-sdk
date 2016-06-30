@@ -12,8 +12,9 @@
 //See the License for the specific language governing permissions and
 //limitations under the License
 
-//
-// 核心处理器
+// client 包 核心代码包，请求相关代码，
+// 如：client request response
+// 其中也包括整个sdk的一下基本信息
 // @author cbping
 package client
 
