@@ -12,8 +12,8 @@ func GetISO8601TimeStamp(ts time.Time) string {
 	return fmt.Sprintf("%04d-%02d-%02dT%02d:%02d:%02dZ", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
 }
 
-const formatISO8601 = "2006-01-02T15:04:05Z"
-const jsonFormatISO8601 = `"` + formatISO8601 + `"`
+const FormatISO8601 = "2006-01-02T15:04:05Z"
+const jsonFormatISO8601 = `"` + FormatISO8601 + `"`
 const formatISO8601withoutSeconds = "2006-01-02T15:04Z"
 const jsonFormatISO8601withoutSeconds = `"` + formatISO8601withoutSeconds + `"`
 
