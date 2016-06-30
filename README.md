@@ -7,9 +7,9 @@
 package main
 
 import (
-    "aliyun-live-go-sdk/client"
-    "aliyun-live-go-sdk/device/live"
-    "aliyun-live-go-sdk/util"
+    "github.com/BPing/aliyun-live-go-sdk/client"
+    "github.com/BPing/aliyun-live-go-sdk/device/live"
+    "github.com/BPing/aliyun-live-go-sdk/util"
     "time"
     "fmt"
 )
@@ -46,7 +46,7 @@ go get github.com/BPing/aliyun-live-go-sdk
 
 ## 直播(Live)
 
-        方法名以"WithApp"结尾代表可以更改请求中  "应用名字（AppName）"，否则按默认的(初始化时设置的AppName)。<br>
+        方法名以"WithApp"结尾代表可以更改请求中  "应用名字（AppName）"，否则按默认的(初始化时设置的AppName)。
         如果为空，代表忽略参数AppName
 
 ```go
