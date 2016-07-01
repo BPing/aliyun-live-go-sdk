@@ -1,8 +1,8 @@
 package example
 
 import (
-	"aliyun-live-go-sdk/client"
-	"aliyun-live-go-sdk/device/cdn"
+	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/device/cdn"
 	"fmt"
 )
 
@@ -41,6 +41,6 @@ func CDNExample() {
 
 	//config
 	resp = make(map[string]interface{})
-	err = cdnM.DomainConfigs(DomainName, &resp, cdn.ReqAuthConfig)
+	err = cdnM.DomainConfigs(DomainName, &resp)
 	fmt.Println(err, resp)
 }

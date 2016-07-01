@@ -32,15 +32,23 @@ func NewStreamCredentials(privateKey string, timeout time.Duration) *StreamCrede
 //
 // Stream 直播流
 // 包括推流地址，流的播放地址，流的在线状态和在线人数等基本信息
-// @author cbping
 //
+// 推流地址：rtmp://video-center.alivecdn.com/appName/streamName?vhost=CDN
+// video-center.alivecdn.com是直播中心服务器，允许自定义，
+// 例如您的域名是live.yourcompany.com，可以设置DNS，将您的域名CNAME指向video-center.alivecdn.com即可；
+// AppName是应用名称，支持自定义，可以更改；
+// StreamName是流名称，支持自定义，可以更改；
+// vhost参数是最终在边缘节点播放的域名，即你的加速域名。
+//
+// @author cbping
 type Stream struct {
 	live            *Live
-	DomainName      string
-	AppName         string //app-name
+	domainName      string
+	videoCenterDns  string
+	appName         string //app-name
 	StreamName      string //video-name
 
-	credentials     *StreamCredentials
+	streamCert      *StreamCredentials
 	signOn          bool   //是否启用签名
 
 	expireTimestamp int64  //过期时间戳
@@ -61,7 +69,7 @@ func (s *Stream) InitOrUpdate() {
 // -------------------------------------------------------------------------------
 func (s *Stream) Online() bool {
 	resp := OnlineInfoResponse{}
-	s.live.StreamOnlineUserNum(s.StreamName, &resp)
+	s.live.StreamOnlineUserNumWithApp(s.appName, s.StreamName, &resp)
 	if len(resp.OnlineUserInfo.LiveStreamOnlineUserNumInfo) > 0 {
 		return true
 	}
@@ -73,7 +81,7 @@ func (s *Stream) Online() bool {
 // -------------------------------------------------------------------------------
 func (s *Stream) OnlineUserNum() (num int64) {
 	resp := OnlineInfoResponse{}
-	s.live.StreamOnlineUserNum(s.StreamName, &resp)
+	s.live.StreamOnlineUserNumWithApp(s.appName, s.StreamName, &resp)
 	num = resp.TotalUserNumber
 	return
 }
@@ -81,37 +89,40 @@ func (s *Stream) OnlineUserNum() (num int64) {
 // ForbidPush 禁止推流
 // -------------------------------------------------------------------------------
 func (s *Stream) ForbidPush() (err error) {
-	err = s.live.ForbidLiveStreamWithPublisher(s.StreamName, nil, nil)
+	err = s.live.ForbidLiveStreamWithPublisherWithApp(s.appName, s.StreamName, nil, nil)
 	return
 }
 
 // ResumePush 恢复推流
 // -------------------------------------------------------------------------------
 func (s *Stream) ResumePush() (err error) {
-	err = s.live.ResumeLiveStreamWithPublisher(s.StreamName, nil)
+	err = s.live.ResumeLiveStreamWithPublisherWithApp(s.appName, s.StreamName, nil)
 	return
 }
 
 // -------------------------------------------------------------------------------
 func (s *Stream) baseUrl() (url string) {
-	url = fmt.Sprintf("%s/%s/%s", s.DomainName, s.AppName, s.StreamName)
+	url = fmt.Sprintf("%s/%s/%s", s.domainName, s.appName, s.StreamName)
 	return
 }
 
-//
+func (s *Stream) basePushUrl() (url string) {
+	url = fmt.Sprintf("%s/%s/%s", s.videoCenterDns, s.appName, s.StreamName)
+	return
+}
+
 // 启动鉴权才可以使用签名
-//
 func (s *Stream) sign() {
-	s.authKey, s.expireTimestamp = util.CreateSignatureForStreamUrlWithA("/" + s.AppName + "/" + s.StreamName, "0", "0", s.credentials.PrivateKey, s.credentials.Timeout)
+	s.authKey, s.expireTimestamp = util.CreateSignatureForStreamUrlWithA("/" + s.appName + "/" + s.StreamName, "0", "0", s.streamCert.PrivateKey, s.streamCert.Timeout)
 	return
 }
 
 // generateAllUrls 生成所有基本地址链接
 func (s *Stream) generateAllUrls() {
-	if s.signOn && nil != s.credentials {
+	if s.signOn && nil != s.streamCert {
 		s.sign()
 		//rtmp://cdn/app-name/video-name?vhost=cdn&auth_key=timestamp-rand-uid-sign
-		s.rtmpPublishUrl = fmt.Sprintf("rtmp://%s?vhost=%s&auth_key=%s", s.baseUrl(), s.DomainName, s.authKey)
+		s.rtmpPublishUrl = fmt.Sprintf("rtmp://%s?vhost=%s&auth_key=%s", s.basePushUrl(), s.domainName, s.authKey)
 		//rtmp://cdn/app-name/video-name?auth_key=timestamp-rand-uid-sign
 		s.rtmpLiveUrls = fmt.Sprintf("rtmp://%s?auth_key=%s", s.baseUrl(), s.authKey)
 		//http://cdn/app-name/video-name.m3u8?auth_key=timestamp-rand-uid-sign
@@ -120,7 +131,7 @@ func (s *Stream) generateAllUrls() {
 		s.httpFlvLiveUrls = fmt.Sprintf("http://%s.flv?auth_key=%s", s.baseUrl(), s.authKey)
 	} else {
 		//rtmp://cdn/app-name/video-name?vhost=cdn
-		s.rtmpPublishUrl = fmt.Sprintf("rtmp://%s?vhost=%s", s.baseUrl(), s.DomainName)
+		s.rtmpPublishUrl = fmt.Sprintf("rtmp://%s?vhost=%s", s.baseUrl(), s.domainName)
 		//rtmp://cdn/app-name/video-name
 		s.rtmpLiveUrls = fmt.Sprintf("rtmp://%s", s.baseUrl())
 		//http://cdn/app-name/video-name.m3u8

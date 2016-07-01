@@ -22,6 +22,8 @@ import (
 	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/util"
 	"time"
+	"github.com/BPing/aliyun-live-go-sdk/util/global"
+	"errors"
 )
 
 const (
@@ -34,32 +36,45 @@ const (
 	ForbidLiveStreamAction = "ForbidLiveStream"
 	ResumeLiveStreamAction = "ResumeLiveStream"
 	SetLiveStreamsNotifyUrlConfigAction = "SetLiveStreamsNotifyUrlConfig"
+
+//直播中心服务器域名
+	DefaultVideoCenter = "video-center.alivecdn.com"
 )
 
 // Live 直播接口控制器
+//      每一个实例都固定对应一个Cdn，并且无法更改。
+//
+//      方法名以"WithApp"结尾代表可以更改请求中  "应用名字（AppName）"，否则按默认的(初始化时设置的AppName)。
+//      如果为空，代表忽略参数AppName
 // @author cbping
-// @describe 方法名以"WithApp"结尾代表可以更改请求中  "应用名字（AppName）"，否则按默认的(初始化时设置的AppName)。如果为空，代表忽略参数AppName
 type Live struct {
-	rpc        *client.Client
-	liveReq    *LiveRequest
+	rpc            *client.Client
+	liveReq        *LiveRequest
 
 	//鉴权凭证
 	//如果为nil，则代表不开启直播流推流鉴权
-	streamCert *StreamCredentials
+	streamCert     *StreamCredentials
 
-	debug      bool
+	// 推流地址：rtmp://video-center.alivecdn.com/AppName/StreamName?vhost=CDN
+	// video-center.alivecdn.com是直播中心服务器，允许自定义，
+	// 例如您的域名是live.yourcompany.com，可以设置DNS，将您的域名CNAME指向video-center.alivecdn.com即可；
+	// 直播中心服务器或者自定义域名
+	videoCenterDns string
+
+	debug          bool
 }
 // 新建"直播接口控制器"
 // @param cert  请求凭证
 // @param domainName 加速域名
 // @param appname    应用名字
 // @param streamCert  直播流推流凭证
-func NewLive(cert *client.Credentials, domainName, appname string, streamCert *StreamCredentials) *Live {
+func NewLive(cert *client.Credentials, domainName, appName string, streamCert *StreamCredentials) *Live {
 	return &Live{
 		rpc:        client.NewClient(cert),
-		liveReq:    NewLiveRequest("", domainName, appname),
+		liveReq:    NewLiveRequest("", domainName, appName),
 		debug:      false,
 		streamCert: streamCert,
+		videoCenterDns: DefaultVideoCenter, //默认
 	}
 }
 
@@ -77,10 +92,11 @@ func (l *Live) GetStream(streamName string) *Stream {
 	}
 
 	return &Stream{
-		DomainName:  l.liveReq.DomainName,
-		AppName:     l.liveReq.AppName,
+		domainName:  l.liveReq.DomainName,
+		appName:     l.liveReq.AppName,
 		StreamName:  streamName,
-		credentials: credentials,
+		videoCenterDns:  l.videoCenterDns,
+		streamCert: credentials,
 		signOn:      (nil != l.streamCert),
 		live:        l,
 	}
@@ -172,8 +188,12 @@ func (l *Live) StreamOnlineUserNumWithApp(appname string, streamName string, res
 // StreamName	String	是	流名称
 // LiveStreamType	String	是	用于指定主播推流还是客户端拉流, 目前支持"publisher" (主播推送)
 // ResumeTime	String	否	恢复流的时间 UTC时间 格式：2015-12-01T17:37:00Z
-func (l *Live) ForbidLiveStream(streamName string, liveStreamType string, resumeTime *time.Time, resp interface{}) (err error) {
+func (l *Live) ForbidLiveStream(appName, streamName string, liveStreamType string, resumeTime *time.Time, resp interface{}) (err error) {
+	if (global.EmptyString == appName) {
+		return errors.New("appName should not to be empty")
+	}
 	req := l.SetAction(ForbidLiveStreamAction).liveReq.Clone().(*LiveRequest)
+	req.AppName = appName
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("LiveStreamType", liveStreamType)
 	if nil != resumeTime {
@@ -185,11 +205,19 @@ func (l *Live) ForbidLiveStream(streamName string, liveStreamType string, resume
 
 // @see ForbidLiveStream
 func (l *Live) ForbidLiveStreamWithPublisher(streamName string, resumeTime *time.Time, resp interface{}) (err error) {
-	return l.ForbidLiveStream(streamName, "publisher", resumeTime, resp)
+	return l.ForbidLiveStream(l.liveReq.AppName, streamName, "publisher", resumeTime, resp)
+}
+
+// @see ForbidLiveStream
+func (l *Live) ForbidLiveStreamWithPublisherWithApp(appName, streamName string, resumeTime *time.Time, resp interface{}) (err error) {
+	return l.ForbidLiveStream(appName, streamName, "publisher", resumeTime, resp)
 }
 
 // ResumeLiveStream 恢复流
-func (l *Live) ResumeLiveStream(streamName string, liveStreamType string, resp interface{}) (err error) {
+func (l *Live) ResumeLiveStream(appName, streamName string, liveStreamType string, resp interface{}) (err error) {
+	if (global.EmptyString == appName) {
+		return errors.New("appName should not to be empty")
+	}
 	req := l.SetAction(ResumeLiveStreamAction).liveReq.Clone().(*LiveRequest)
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("LiveStreamType", liveStreamType)
@@ -199,7 +227,12 @@ func (l *Live) ResumeLiveStream(streamName string, liveStreamType string, resp i
 
 // @see ResumeLiveStream
 func (l *Live) ResumeLiveStreamWithPublisher(streamName string, resp interface{}) (err error) {
-	return l.ResumeLiveStream(streamName, "publisher", resp)
+	return l.ResumeLiveStream(l.liveReq.AppName, streamName, "publisher", resp)
+}
+
+// @see ResumeLiveStream
+func (l *Live) ResumeLiveStreamWithPublisherWithApp(appName, streamName string, resp interface{}) (err error) {
+	return l.ResumeLiveStream(appName, streamName, "publisher", resp)
 }
 
 // SetStreamsNotifyUrlConfig 设置回调链接
@@ -217,11 +250,11 @@ func (l *Live) SetStreamsNotifyUrlConfig(notifyUrl string, resp interface{}) (er
 // GET 和 SET
 // -------------------------------------------------------------------------------
 
-// 修改默认或者说全局  domainName（加速域名）
+/*// 修改默认或者说全局  domainName（加速域名）
 func (l *Live) SetDomainName(domainName string) *Live {
 	l.liveReq.DomainName = domainName
 	return l
-}
+}*/
 
 func (l *Live) GetDomainName() (domainName string) {
 	domainName = l.liveReq.DomainName
@@ -253,5 +286,11 @@ func (l *Live) SetAction(action string) *Live {
 func (l *Live) SetDebug(debug bool) *Live {
 	l.debug = debug
 	l.rpc.SetDebug(debug)
+	return l
+}
+
+// 修改默认或者说全局 videoCenterDns（对应的直播推流域名）
+func (l *Live) SetVideoCenter(videoCenterDns string) *Live {
+	l.videoCenterDns = videoCenterDns
 	return l
 }
