@@ -25,9 +25,14 @@ type LiveStreamOnlineInfo struct {
 
 //
 // -------------------------------------------------------------------------------
-type StreamList struct {
-	DomainName string   //流所属加速域名
-	StreamUrls []string //	流完整URL地址
+type StreamListResponse struct {
+	client.Response
+	DomainName string     //流所属加速域名
+	StreamUrls StreamUrls //	流完整URL地址
+}
+
+type StreamUrls struct {
+	StreamUrl []string
 }
 
 //直播流的操作记录

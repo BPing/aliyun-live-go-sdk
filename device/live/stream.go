@@ -85,6 +85,19 @@ func (s *Stream) OnlineUserNum() (num int64) {
 	num = resp.TotalUserNumber
 	return
 }
+// Blocked 是否在黑名单中
+// -------------------------------------------------------------------------------
+func (s *Stream) Blocked() (bool) {
+	resp := StreamListResponse{}
+	s.live.StreamsBlockList(&resp)
+	for _, val := range resp.StreamUrls.StreamUrl {
+		//遍历判断此流是否存在黑名单中
+		if (val == s.baseUrl()) {
+			return true
+		}
+	}
+	return false
+}
 
 // ForbidPush 禁止推流
 // -------------------------------------------------------------------------------
