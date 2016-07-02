@@ -11,6 +11,7 @@ script:
   - go build  github.com/BPing/aliyun-live-go-sdk/client
   - go build  github.com/BPing/aliyun-live-go-sdk/device/cdn
   - go build  github.com/BPing/aliyun-live-go-sdk/device/live
+  - go build  github.com/BPing/aliyun-live-go-sdk/device/util
   - go test -v github.com/BPing/aliyun-live-go-sdk/client -covermode=count -coverprofile=clientcoverage.out
   - $HOME/gopath/bin/goveralls -coverprofile=clientcoverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
   - go test -v github.com/BPing/aliyun-live-go-sdk/util -covermode=count -coverprofile=utilcoverage.out
