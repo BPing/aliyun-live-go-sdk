@@ -149,6 +149,12 @@ go get github.com/BPing/aliyun-live-go-sdk
     isOnline:=stream.Online()
 ```
 
+* 是否被禁止
+```go
+    isBlocked:=stream.Blocked()
+```
+
+
 # 贡献参与者
 * cbping(452775680@qq.com)
 
