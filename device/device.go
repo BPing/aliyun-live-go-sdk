@@ -4,7 +4,7 @@ import (
 	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
 	"github.com/BPing/aliyun-live-go-sdk/device/cdn"
-	"qiniupkg.com/x/errors.v7"
+	"errors"
 )
 
 type DevType string
@@ -32,7 +32,7 @@ func GetDevice(devType DevType, config Config) (instance interface{}, err error)
 	case CdnDevice:
 		instance = cdn.NewCDN(config.Credentials)
 	case LiveDevice:
-		if ("" == config.DomainName || "" ==config.AppName) {
+		if ("" == config.DomainName || "" == config.AppName) {
 			err = errors.New("live dev: domainname and appname should not be empty ")
 			return
 		}
