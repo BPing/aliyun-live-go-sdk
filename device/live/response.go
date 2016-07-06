@@ -23,7 +23,7 @@ type LiveStreamOnlineInfo struct {
 	PublishUrl  string //
 }
 
-//
+// 黑名单
 // -------------------------------------------------------------------------------
 type StreamListResponse struct {
 	client.Response
@@ -34,6 +34,7 @@ type StreamListResponse struct {
 type StreamUrls struct {
 	StreamUrl []string
 }
+
 
 //直播流的操作记录
 type LiveStreamControlInfo struct {

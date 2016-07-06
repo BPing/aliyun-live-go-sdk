@@ -37,6 +37,15 @@ const (
 	ResumeLiveStreamAction = "ResumeLiveStream"
 	SetLiveStreamsNotifyUrlConfigAction = "SetLiveStreamsNotifyUrlConfig"
 
+	AddLiveAppRecordConfigAction = "AddLiveAppRecordConfig"
+	CreateLiveStreamRecordIndexFilesAction = "CreateLiveStreamRecordIndexFiles"
+	DeleteLiveAppRecordConfigAction = "DeleteLiveAppRecordConfig"
+	DescribeLiveAppRecordConfigAction = "DescribeLiveAppRecordConfig"
+	DescribeLiveRecordConfigAction = "DescribeLiveRecordConfig"
+	DescribeLiveStreamRecordContentAction = "DescribeLiveStreamRecordContent"
+	DescribeLiveStreamRecordIndexFileAction = "DescribeLiveStreamRecordIndexFile"
+	DescribeLiveStreamRecordIndexFilesAction = "DescribeLiveStreamRecordIndexFiles"
+
 //直播中心服务器域名
 	DefaultVideoCenter = "video-center.alivecdn.com"
 )
@@ -102,6 +111,11 @@ func (l *Live) GetStream(streamName string) *Stream {
 	}
 }
 
+func (l *Live)cloneRequest(action string) (req *LiveRequest) {
+	req = l.SetAction(action).liveReq.Clone().(*LiveRequest)
+	return
+}
+
 // @see StreamsPublishListWithApp
 func (l *Live) StreamsPublishList(startTime, endTime time.Time, resp interface{}) (err error) {
 	err = l.StreamsPublishListWithApp(l.liveReq.AppName, startTime, endTime, resp)
@@ -114,7 +128,7 @@ func (l *Live) StreamsPublishList(startTime, endTime time.Time, resp interface{}
 // @endTime   结束时间
 // @link https://help.aliyun.com/document_detail/27191.html?spm=0.0.0.0.Dm58D2
 func (l *Live) StreamsPublishListWithApp(appname string, startTime, endTime time.Time, resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamsPublishListAction).liveReq.Clone().(*LiveRequest)
+	req := l.cloneRequest(DescribeLiveStreamsPublishListAction)
 	req.AppName = appname
 	req.SetArgs("StartTime", util.GetISO8601TimeStamp(startTime))
 	req.SetArgs("EndTime", util.GetISO8601TimeStamp(endTime))
@@ -132,7 +146,7 @@ func (l *Live) StreamsOnlineList(resp interface{}) (err error) {
 // @appname 应用名 为空时，忽略此参数
 // @link  https://help.aliyun.com/document_detail/27192.html?spm=0.0.0.0.7uWhjM
 func (l *Live) StreamsOnlineListWithApp(appname string, resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamsOnlineListAction).liveReq.Clone().(*LiveRequest)
+	req := l.cloneRequest(DescribeLiveStreamsOnlineListAction)
 	req.AppName = appname
 	err = l.rpc.Query(req, resp)
 	return
@@ -141,7 +155,7 @@ func (l *Live) StreamsOnlineListWithApp(appname string, resp interface{}) (err e
 // StreamsBlockList 获取黑名单
 // @link https://help.aliyun.com/document_detail/27193.html?spm=0.0.0.0.96SCaE
 func (l *Live) StreamsBlockList(resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamsBlockListAction).liveReq.Clone().(*LiveRequest)
+	req := l.cloneRequest(DescribeLiveStreamsBlockListAction)
 	req.AppName = ""
 	err = l.rpc.Query(req, resp)
 	return
@@ -157,7 +171,7 @@ func (l *Live) StreamsControlHistory(startTime, endTime time.Time, resp interfac
 // @appname 应用名 为空时，忽略此参数
 // @link  https://help.aliyun.com/document_detail/27194.html?spm=0.0.0.0.4DUTT7
 func (l *Live) StreamsControlHistoryWithApp(appname string, startTime, endTime time.Time, resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamsControlHistoryAction).liveReq.Clone().(*LiveRequest)
+	req := l.cloneRequest(DescribeLiveStreamsControlHistoryAction)
 	req.AppName = appname
 	req.SetArgs("StartTime", util.GetISO8601TimeStamp(startTime))
 	req.SetArgs("EndTime", util.GetISO8601TimeStamp(endTime))
@@ -175,7 +189,7 @@ func (l *Live) StreamOnlineUserNum(streamName string, resp interface{}) (err err
 // @appname 应用名 为空时，忽略此参数
 // @link https://help.aliyun.com/document_detail/27195.html?spm=0.0.0.0.n6eAJJ
 func (l *Live) StreamOnlineUserNumWithApp(appname string, streamName string, resp interface{}) (err error) {
-	req := l.SetAction(DescribeLiveStreamOnlineUserNumAction).liveReq.Clone().(*LiveRequest)
+	req := l.cloneRequest(DescribeLiveStreamOnlineUserNumAction)
 	req.AppName = appname
 	if "" != streamName {
 		req.SetArgs("StreamName", streamName)
@@ -192,7 +206,7 @@ func (l *Live) ForbidLiveStream(appName, streamName string, liveStreamType strin
 	if (global.EmptyString == appName) {
 		return errors.New("appName should not to be empty")
 	}
-	req := l.SetAction(ForbidLiveStreamAction).liveReq.Clone().(*LiveRequest)
+	req := l.cloneRequest(ForbidLiveStreamAction)
 	req.AppName = appName
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("LiveStreamType", liveStreamType)
@@ -218,7 +232,7 @@ func (l *Live) ResumeLiveStream(appName, streamName string, liveStreamType strin
 	if (global.EmptyString == appName) {
 		return errors.New("appName should not to be empty")
 	}
-	req := l.SetAction(ResumeLiveStreamAction).liveReq.Clone().(*LiveRequest)
+	req := l.cloneRequest(ResumeLiveStreamAction)
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("LiveStreamType", liveStreamType)
 	err = l.rpc.Query(req, resp)
@@ -236,16 +250,74 @@ func (l *Live) ResumeLiveStreamWithPublisherWithApp(appName, streamName string, 
 }
 
 // SetStreamsNotifyUrlConfig 设置回调链接
-// Action	String	是	操作接口名，系统规定参数，取值：SetLiveStreamsNotifyUrlConfig
-// DomainName	String	是	您的加速域名
 // NotifyUrl	String	是	设置直播流信息推送到的URL地址，必须以http://开头；
 func (l *Live) SetStreamsNotifyUrlConfig(notifyUrl string, resp interface{}) (err error) {
-	req := l.SetAction(SetLiveStreamsNotifyUrlConfigAction).liveReq.Clone().(*LiveRequest)
+	req := l.cloneRequest(SetLiveStreamsNotifyUrlConfigAction)
 	req.AppName = ""
 	req.SetArgs("NotifyUrl", notifyUrl)
 	err = l.rpc.Query(req, resp)
 	return
 }
+
+// 录制视频
+// -------------------------------------------------------------------------------
+
+// AddLiveAppRecordConfig 配置APP录制，输出内容保存到OSS中
+//
+// https://help.aliyun.com/document_detail/35231.html?spm=5176.doc27193.6.221.xU2Kqb
+func (l *Live) AddLiveAppRecordConfigWithApp(appName, ossEndpoint, ossBucket, ossObjectPrefix string, resp interface{}) (err error) {
+	if (global.EmptyString == appName || ossEndpoint == global.EmptyString || ossBucket == global.EmptyString || ossObjectPrefix == global.EmptyString) {
+		return errors.New(" appName|ossEndpoint|ossBucket|ossObjectPrefix should not to be empty")
+	}
+	req := l.cloneRequest(AddLiveAppRecordConfigAction)
+	req.AppName = appName
+	req.SetArgs("OssEndpoint", ossEndpoint)
+	req.SetArgs("OssBucket", ossBucket)
+	req.SetArgs("OssObjectPrefix", ossObjectPrefix)
+	err = l.rpc.Query(req, resp)
+	return
+}
+
+// @see AddLiveAppRecordConfigWithApp
+func (l *Live) AddLiveAppRecordConfig(ossEndpoint, ossBucket, ossObjectPrefix string, resp interface{}) (err error) {
+	err = l.AddLiveAppRecordConfigWithApp(l.liveReq.AppName, ossEndpoint, ossBucket, ossObjectPrefix, resp)
+	return
+}
+
+// DeleteLiveAppRecordConfigWithApp 解除录制配置
+//
+// https://help.aliyun.com/document_detail/35234.html?spm=5176.doc35239.6.223.4J6IYq
+func (l *Live) DeleteLiveAppRecordConfigWithApp(appName string, resp interface{}) (err error) {
+	req := l.cloneRequest(DeleteLiveAppRecordConfigAction)
+	req.AppName = appName
+	err = l.rpc.Query(req, resp)
+	return
+
+}
+
+// @see DeleteLiveAppRecordConfigWithApp
+func (l *Live) DeleteLiveAppRecordConfig(resp interface{}) (err error) {
+	err = l.DeleteLiveAppRecordConfigWithApp(l.liveReq.AppName, resp)
+	return
+}
+
+// DescribeLiveAppRecordConfigWithApp 查询域名下指定App录制配置
+//
+// https://help.aliyun.com/document_detail/35239.html?spm=5176.doc35234.6.224.iCk6RL
+func (l *Live) DescribeLiveAppRecordConfigWithApp(appName string, resp interface{}) (err error) {
+	req := l.cloneRequest(DescribeLiveAppRecordConfigAction)
+	req.AppName = appName
+	err = l.rpc.Query(req, resp)
+	return
+
+}
+
+// @see DescribeLiveAppRecordConfigWithApp
+func (l *Live) DescribeLiveAppRecordConfig(resp interface{}) (err error) {
+	err = l.DescribeLiveAppRecordConfigWithApp(l.liveReq.AppName, resp)
+	return
+}
+
 
 // GET 和 SET
 // -------------------------------------------------------------------------------
