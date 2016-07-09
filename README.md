@@ -154,7 +154,7 @@ go get github.com/BPing/aliyun-live-go-sdk
     isBlocked:=stream.Blocked()
 ```
 
-## 录制（待完成）
+## 录制（请看文档）
 
 # 贡献参与者
 * cbping(452775680@qq.com)

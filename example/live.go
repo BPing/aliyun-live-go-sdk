@@ -12,10 +12,11 @@ func LiveExample() {
 	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 	resp := make(map[string]interface{})
-	liveM.StreamsPublishList(time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err := liveM.StreamsPublishList(time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
 	fmt.Println(resp)
+
 	resp1 := live.OnlineInfoResponse{}
-	err := liveM.StreamOnlineUserNum("test-video-name", &resp1)
+	err = liveM.StreamOnlineUserNum("test-video-name", &resp1)
 	fmt.Println(err, resp1)
 
 	resp2 := live.StreamListResponse{}
@@ -38,6 +39,39 @@ func LiveExample() {
 	fmt.Println(stream.RtmpPublishUrl())
 	fmt.Println(stream.String())
 
+	// 录制
+
+	oss := live.OssInfo{
+		OssBucket:OssBucket,
+		OssEndpoint:OssEndpoint,
+		OssObject:OssObject,
+		OssObjectPrefix:OssObjectPrefix,
+	}
+
+	resp = make(map[string]interface{})
+	err = liveM.AddLiveAppRecordConfig(oss, &resp)
+	fmt.Println(err, resp)
+
+	resp = make(map[string]interface{})
+	err = liveM.CreateLiveStreamRecordIndexFiles("test-video-name", oss, time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	fmt.Println(err, resp)
+
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveRecordConfig(&resp)
+	fmt.Println(err, resp)
+
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveStreamRecordContent("test-video-name", time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	fmt.Println(err, resp)
+
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveStreamRecordIndexFiles("test-video-name", time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	fmt.Println(err, resp)
+
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveStreamsFrameRateAndBitRateData("test-video-name", &resp)
+	fmt.Println(err, resp)
+
 	StreamExample()
 }
 
@@ -54,4 +88,20 @@ func StreamExample() {
 
 	stream1 := liveM.GetStream("test-video-name1")
 	fmt.Println("Blocked", stream1.Blocked())
+
+	oss := live.OssInfo{
+		OssBucket:OssBucket,
+		OssEndpoint:OssEndpoint,
+		OssObject:OssObject,
+		OssObjectPrefix:OssObjectPrefix,
+	}
+
+	//录制
+	fmt.Println(stream1.CreateRecordIndexFiles(oss, time.Now().Add(-time.Hour * 24 * 10), time.Now()))
+
+	fmt.Println(stream1.RecordContent(time.Now().Add(-time.Hour * 24 * 20), time.Now()))
+
+	fmt.Println(stream1.RecordIndexFiles(time.Now().Add(-time.Hour * 24 * 20), time.Now()))
+
+	fmt.Println(stream1.FrameRateAndBitRateData())
 }

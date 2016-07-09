@@ -205,3 +205,56 @@ func (s *Stream) String() (str string) {
 		s.OnlineUserNum(),
 	)
 }
+
+
+// 录制 ----------------------------------------------------------------------------------------------------------------
+
+// 创建直播流录制索引文件
+func (s *Stream) CreateRecordIndexFiles(ossInfo OssInfo, startTime, endTime time.Time) (info RecordInfo, err error) {
+	resp := &RecordInfoResponse{}
+	err = s.live.CreateLiveStreamRecordIndexFilesWithApp(s.appName, s.StreamName, ossInfo, startTime, endTime, resp)
+	if (err == nil) {
+		info = resp.RecordInfo
+	}
+	return
+}
+
+// 查询某路直播流录制内容
+func (s *Stream) RecordContent(startTime, endTime time.Time) (list RecordContentInfoList, err error) {
+	resp := &RecordContentInfoListResponse{}
+	err = s.live.DescribeLiveStreamRecordContentWithApp(s.appName, s.StreamName, startTime, endTime, resp)
+	if (err == nil) {
+		list = resp.RecordContentInfoList
+	}
+	return
+}
+
+// 查询直播流录制索引文件
+func (s *Stream) RecordIndexFiles(startTime, endTime time.Time) (list RecordIndexInfoList, err error) {
+	resp := &RecordIndexInfoListResponse{}
+	err = s.live.DescribeLiveStreamRecordIndexFilesWithApp(s.appName, s.StreamName, startTime, endTime, resp)
+	if (err == nil) {
+		list = resp.RecordIndexInfoList
+	}
+	return
+}
+
+// 查询直播流单个录制索引文件
+func (s *Stream) RecordIndexFile(recordId string) (info RecordIndexInfo, err error) {
+	resp := &RecordIndexInfoResponse{}
+	err = s.live.DescribeLiveStreamRecordIndexFileWithApp(s.appName, s.StreamName, recordId, resp)
+	if (err == nil) {
+		info = resp.RecordIndexInfo
+	}
+	return
+}
+
+// 获取直播流的帧率和码率
+func (s *Stream) FrameRateAndBitRateData() (info FrameRateAndBitRateInfos, err error) {
+	resp := &FrameRateAndBitRateInfosResponse{}
+	err = s.live.DescribeLiveStreamsFrameRateAndBitRateDataWithApp(s.appName, s.StreamName, resp)
+	if (err == nil) {
+		info = resp.FrameRateAndBitRateInfos
+	}
+	return
+}
