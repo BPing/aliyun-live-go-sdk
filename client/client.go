@@ -60,7 +60,9 @@ func (c *Client) Init() *Client {
 				Proxy: http.ProxyFromEnvironment,
 				Dial: (&net.Dialer{
 					Timeout:   c.ConnectTimeout,
+					KeepAlive: 30 * time.Second,
 				}).Dial,
+				DisableKeepAlives:false,
 			},
 		}
 	}
