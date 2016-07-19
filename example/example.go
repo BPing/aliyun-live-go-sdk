@@ -3,8 +3,8 @@
 package example
 
 const (
-	AccessKeyId = "lip0m05AFVkOapgX"
-	AccessKeySecret = "Ok2DfF68K0pe827UV9FDIoit2gD5DC"
+	AccessKeyId = ""
+	AccessKeySecret = ""
 
 	DomainName = "cbping.live.com"
 	AppName = "dream_live"
