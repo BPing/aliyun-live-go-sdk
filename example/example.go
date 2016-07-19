@@ -3,9 +3,15 @@
 package example
 
 const (
-	AccessKeyId = "Pvu6bYlDPNkpAZJs"
-	AccessKeySecret = "ENHXIhHhFZcD9cxAOn3sY72xQ9XueL"
-	DomainName = "alilive.strongwind.cn"
+	AccessKeyId = "lip0m05AFVkOapgX"
+	AccessKeySecret = "Ok2DfF68K0pe827UV9FDIoit2gD5DC"
+
+	DomainName = "cbping.live.com"
 	AppName = "dream_live"
 	PrivateKey = "dreamTT"
+
+	OssEndpoint = "oss-cn-qingdao.aliyuncs.com"
+	OssBucket = "cbping"
+	OssObjectPrefix = "recordFile"
+	OssObject = "recordFile"
 )
