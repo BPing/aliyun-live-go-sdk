@@ -3,8 +3,8 @@
 package example
 
 const (
-	AccessKeyId = "Pvu6bYlDPNkpAZJs"
-	AccessKeySecret = "ENHXIhHhFZcD9cxAOn3sY72xQ9XueL"
+	AccessKeyId = ""
+	AccessKeySecret = ""
 	DomainName = "alilive.strongwind.cn"
 	AppName = "dream_live"
 	PrivateKey = "dreamTT"
