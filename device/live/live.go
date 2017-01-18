@@ -20,7 +20,6 @@ package live
 
 import (
 	"errors"
-	"fmt"
 	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/util"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
