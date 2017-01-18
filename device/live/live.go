@@ -55,7 +55,6 @@ const (
 	AddLiveStreamTranscodeAction                     = "AddLiveStreamTranscode"
 	DeleteLiveStreamTranscodeAction                  = "DeleteLiveStreamTranscode"
 	DescribeLiveSnapshotConfigAction                 = "DescribeLiveSnapshotConfig"
-	DescribeLiveStreamsFrameRateAndBitRateDataAction = "DescribeLiveStreamsFrameRateAndBitRateData"
 	DescribeLiveStreamSnapshotInfoAction             = "DescribeLiveStreamSnapshotInfo"
 	DescribeLiveStreamTranscodeInfoAction            = "DescribeLiveStreamTranscodeInfo"
 
