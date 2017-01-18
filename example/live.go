@@ -1,10 +1,10 @@
 package example
 
 import (
+	"fmt"
 	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
 	"time"
-	"fmt"
 )
 
 func LiveExample() {
@@ -12,7 +12,7 @@ func LiveExample() {
 	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 	resp := make(map[string]interface{})
-	err := liveM.StreamsPublishList(time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err := liveM.StreamsPublishList(time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
 	fmt.Println(resp)
 
 	resp1 := live.OnlineInfoResponse{}
@@ -24,7 +24,7 @@ func LiveExample() {
 	fmt.Println(err, resp2)
 
 	resp = make(map[string]interface{})
-	err = liveM.StreamsControlHistory(time.Now().Add(-time.Hour * 12), time.Now(), &resp)
+	err = liveM.StreamsControlHistory(time.Now().Add(-time.Hour*12), time.Now(), &resp)
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
@@ -42,10 +42,10 @@ func LiveExample() {
 	// 录制
 
 	oss := live.OssInfo{
-		OssBucket:OssBucket,
-		OssEndpoint:OssEndpoint,
-		OssObject:OssObject,
-		OssObjectPrefix:OssObjectPrefix,
+		OssBucket:       OssBucket,
+		OssEndpoint:     OssEndpoint,
+		OssObject:       OssObject,
+		OssObjectPrefix: OssObjectPrefix,
 	}
 
 	resp = make(map[string]interface{})
@@ -53,7 +53,7 @@ func LiveExample() {
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
-	err = liveM.CreateLiveStreamRecordIndexFiles("test-video-name", oss, time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err = liveM.CreateLiveStreamRecordIndexFiles("test-video-name", oss, time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
@@ -61,11 +61,11 @@ func LiveExample() {
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
-	err = liveM.DescribeLiveStreamRecordContent("test-video-name", time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err = liveM.DescribeLiveStreamRecordContent("test-video-name", time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
-	err = liveM.DescribeLiveStreamRecordIndexFiles("test-video-name", time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err = liveM.DescribeLiveStreamRecordIndexFiles("test-video-name", time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
@@ -90,18 +90,18 @@ func StreamExample() {
 	fmt.Println("Blocked", stream1.Blocked())
 
 	oss := live.OssInfo{
-		OssBucket:OssBucket,
-		OssEndpoint:OssEndpoint,
-		OssObject:OssObject,
-		OssObjectPrefix:OssObjectPrefix,
+		OssBucket:       OssBucket,
+		OssEndpoint:     OssEndpoint,
+		OssObject:       OssObject,
+		OssObjectPrefix: OssObjectPrefix,
 	}
 
 	//录制
-	fmt.Println(stream1.CreateRecordIndexFiles(oss, time.Now().Add(-time.Hour * 24 * 10), time.Now()))
+	fmt.Println(stream1.CreateRecordIndexFiles(oss, time.Now().Add(-time.Hour*24*10), time.Now()))
 
-	fmt.Println(stream1.RecordContent(time.Now().Add(-time.Hour * 24 * 20), time.Now()))
+	fmt.Println(stream1.RecordContent(time.Now().Add(-time.Hour*24*20), time.Now()))
 
-	fmt.Println(stream1.RecordIndexFiles(time.Now().Add(-time.Hour * 24 * 20), time.Now()))
+	fmt.Println(stream1.RecordIndexFiles(time.Now().Add(-time.Hour*24*20), time.Now()))
 
 	fmt.Println(stream1.FrameRateAndBitRateData())
 }

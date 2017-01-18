@@ -16,11 +16,11 @@ func CreateRandomString() string {
 		// fail back to insecure rand
 		rand.Seed(time.Now().UnixNano())
 		for i := range b {
-			b[i] = dictionary[rand.Int() % l]
+			b[i] = dictionary[rand.Int()%l]
 		}
 	} else {
 		for i, v := range b {
-			b[i] = dictionary[v % byte(l)]
+			b[i] = dictionary[v%byte(l)]
 		}
 	}
 

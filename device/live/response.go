@@ -2,11 +2,11 @@ package live
 
 import "github.com/BPing/aliyun-live-go-sdk/client"
 
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 // 直播基本信息
 type LiveBase struct {
-	DomainName string //    加速域名
-	AppName    string //	应用名称
+	DomainName string `json:"DomainName" xml:"DomainName"` //    加速域名
+	AppName    string `json:"AppName" xml:"AppName"`       //	应用名称
 }
 
 // 流基本信息
@@ -16,7 +16,7 @@ type StreamBase struct {
 }
 
 // 在线
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 type OnlineInfoResponse struct {
 	client.Response
 	OnlineUserInfo  OnlineUserInfo
@@ -36,7 +36,7 @@ type LiveStreamOnlineInfo struct {
 }
 
 // 黑名单
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 type StreamListResponse struct {
 	client.Response
 	DomainName string     //流所属加速域名
@@ -47,7 +47,7 @@ type StreamUrls struct {
 	StreamUrl []string
 }
 
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 // 直播流的操作记录
 type LiveStreamControlInfo struct {
@@ -68,7 +68,7 @@ type LiveStreamOnlineUserNumInfo struct {
 	UserNumber int64  //	直播流的在线人数
 }
 
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 // 对象存储oss信息
 type OssInfo struct {
@@ -78,7 +78,7 @@ type OssInfo struct {
 	OssObjectPrefix string //	oss存储文件名，支持变量匹配，包含{AppName}、{StreamName}、{UnixTimestamp}、{Sequence}，如：record/live/{StreamName}/{UnixTimestamp}_{Sequence}
 }
 
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 // 录制配置
 type LiveAppRecord struct {
@@ -88,7 +88,7 @@ type LiveAppRecord struct {
 }
 
 // 录制
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 type FrameRateAndBitRateInfosResponse struct {
 	client.Response
@@ -107,7 +107,7 @@ type FrameRateAndBitRateInfo struct {
 	BitRate        int    // 直播流的码率
 }
 
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 // 录制配置列表
 type RecordIndexInfoListResponse struct {
@@ -162,10 +162,10 @@ type RecordInfo struct {
 // 录制配置信息
 type RecordIndexInfo struct {
 	StreamBase
-	OssInfo           //oss存储
-	RecordId   string //	索引文件Id
-	RecordUrl  string //	索引文件地址
-			  //OssObject  string //	oss存储的录制文件名 包含在OssInfo
+	OssInfo          //oss存储
+	RecordId  string //	索引文件Id
+	RecordUrl string //	索引文件地址
+	//OssObject  string //	oss存储的录制文件名 包含在OssInfo
 	Height     string //	视频高
 	Width      string //	视频宽
 	CreateTime string //    创建时间
@@ -174,7 +174,7 @@ type RecordIndexInfo struct {
 	Duration   string //	录制时长
 }
 
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 type RecordContentInfoListResponse struct {
 	client.Response
@@ -188,9 +188,39 @@ type RecordContentInfoList struct {
 
 type RecordContentInfo struct {
 	OssInfo
-	StartTime string //	开始时间，格式：2015-12-01T17:36:00Z
-	EndTime   string //	结束时间，格式：2015-12-01T17:36:00Z
-	Duration  string //	录制时长
+	StartTime string `json:"StartTime" xml:"StartTime"` //	开始时间，格式：2015-12-01T17:36:00Z
+	EndTime   string `json:"EndTime" xml:"EndTime"`     //	结束时间，格式：2015-12-01T17:36:00Z
+	Duration  string `json:"Duration" xml:"Duration"`   //	录制时长
 }
 
-// -------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+
+// 截图配置(参数)
+type SnapshotConfig struct {
+	OssInfo
+	TimeInterval       int    `json:"TimeInterval" xml:"TimeInterval"`             // 截图周期
+	OverwriteOssObject string `json:"OverwriteOssObject" xml:"OverwriteOssObject"` //oss存储文件名
+	SequenceOssObject  string `json:"SequenceOssObject" xml:"SequenceOssObject"`   //oss存储文件名
+}
+
+// 查询域名下的截图配置返回结构
+type LiveSnapshotConfigResponse struct {
+	client.Response
+	LiveSnapshotParam
+	LiveStreamSnapshotConfigList []LiveStreamSnapshotConfig `json:"LiveStreamSnapshotConfigList" xml:"LiveStreamSnapshotConfigList"` //	截图配置
+	TotalPage                    int                        `json:"TotalPage" xml:"TotalPage"`                                       //	总页数
+	TotalNum                     int                        `json:"TotalNum" xml:"TotalNum"`                                         //	符合条件的总个数
+}
+
+// 查询域名下的截图配置参数
+type LiveSnapshotParam struct {
+	PageNum  int    `json:"PageNum" xml:"PageNum"`   //    分页的页码
+	PageSize int    `json:"PageSize" xml:"PageSize"` //	每页大小
+	Order    string `json:"Order" xml:"Order"`
+}
+
+type LiveStreamSnapshotConfig struct {
+	LiveBase
+	SnapshotConfig
+	CreateTime string `json:"CreateTime" xml:"CreateTime"` //创建时间
+}

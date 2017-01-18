@@ -3,7 +3,7 @@ package client
 //Api请求凭证
 type Credentials struct {
 	//Access Key Id
-	AccessKeyId     string
+	AccessKeyId string
 	//Access Key Secret
 	AccessKeySecret string
 }
@@ -24,8 +24,7 @@ type Credentials struct {
 
 func NewCredentials(accessKeyId, accessKeySecret string) *Credentials {
 	return &Credentials{
-		AccessKeyId:accessKeyId,
-		AccessKeySecret:accessKeySecret,
+		AccessKeyId:     accessKeyId,
+		AccessKeySecret: accessKeySecret,
 	}
 }
-

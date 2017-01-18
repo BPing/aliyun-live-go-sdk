@@ -2,14 +2,14 @@ package util
 
 import (
 	"crypto/hmac"
+	"crypto/md5"
 	"crypto/sha1"
 	"encoding/base64"
+	"encoding/hex"
+	"fmt"
 	"net/url"
 	"strings"
 	"time"
-	"crypto/md5"
-	"fmt"
-	"encoding/hex"
 )
 
 //CreateSignature creates signature for string following Aliyun rules

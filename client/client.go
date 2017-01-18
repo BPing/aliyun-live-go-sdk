@@ -19,15 +19,15 @@
 package client
 
 import (
-	"net/http"
-	"errors"
-	"time"
 	"encoding/json"
-	"io/ioutil"
-	"net"
-	"strings"
 	"encoding/xml"
+	"errors"
+	"io/ioutil"
 	"log"
+	"net"
+	"net/http"
+	"strings"
+	"time"
 )
 
 //
@@ -37,11 +37,11 @@ type Client struct {
 	*Credentials
 	//ConnectTimeout小于或等于零时，
 	// 采用默认&http.Client{}
-	httpClient     *http.Client
+	httpClient *http.Client
 	//版本号
-	version        string
+	version string
 	//
-	debug          bool
+	debug bool
 
 	ConnectTimeout time.Duration
 }
@@ -52,9 +52,9 @@ func (c *Client) SetDebug(debug bool) {
 
 // 初始化
 func (c *Client) Init() *Client {
-	if (c.ConnectTimeout <= 0) {
+	if c.ConnectTimeout <= 0 {
 		c.httpClient = &http.Client{}
-	}else {
+	} else {
 		c.httpClient = &http.Client{
 			Transport: &http.Transport{
 				Proxy: http.ProxyFromEnvironment,
@@ -62,7 +62,7 @@ func (c *Client) Init() *Client {
 					Timeout:   c.ConnectTimeout,
 					KeepAlive: 30 * time.Second,
 				}).Dial,
-				DisableKeepAlives:false,
+				DisableKeepAlives: false,
 			},
 		}
 	}
@@ -72,43 +72,43 @@ func (c *Client) Init() *Client {
 type Unmarshal func(data []byte, v interface{}) error
 
 // 默认json解析
-func (c *Client)responseUnmarshal(req Request) (u Unmarshal) {
-	if (req.ResponseFormat() == XMLResponseFormat) {
+func (c *Client) responseUnmarshal(req Request) (u Unmarshal) {
+	if req.ResponseFormat() == XMLResponseFormat {
 		u = xml.Unmarshal
-	}else {
+	} else {
 		u = json.Unmarshal
 	}
 	return
 }
 
 // 处理请求
-func (c *Client)Query(req Request, resp interface{}) error {
-	if (nil == c.httpClient) {
+func (c *Client) Query(req Request, resp interface{}) error {
+	if nil == c.httpClient {
 		return clientError(errors.New("httpClient is nil"))
 	}
 
-	if (nil == req) {
+	if nil == req {
 		return clientError(errors.New("Request is nil"))
 	}
 
 	req.Sign(c.Credentials)
 	httpReq, err := req.HttpRequestInstance()
-	if (nil != err) {
+	if nil != err {
 		return clientError(err)
 	}
 
 	//必要头部信息设置
-	httpReq.Header.Set("X-SDK-Client", `AliyunLiveGoSDK/` + Version)
-	if (req.ResponseFormat() == XMLResponseFormat) {
-		httpReq.Header.Set("Content-Type", `application/` + strings.ToLower(XMLResponseFormat))
-	}else {
-		httpReq.Header.Set("Content-Type", `application/` + strings.ToLower(JSONResponseFormat))
+	httpReq.Header.Set("X-SDK-Client", `AliyunLiveGoSDK/`+Version)
+	if req.ResponseFormat() == XMLResponseFormat {
+		httpReq.Header.Set("Content-Type", `application/`+strings.ToLower(XMLResponseFormat))
+	} else {
+		httpReq.Header.Set("Content-Type", `application/`+strings.ToLower(JSONResponseFormat))
 	}
 
 	t0 := time.Now()
 	httpResp, err := c.httpClient.Do(httpReq)
 	t1 := time.Now()
-	if (nil != err) {
+	if nil != err {
 		return clientError(err)
 	}
 
@@ -182,10 +182,10 @@ func (c *Client)Query(req Request, resp interface{}) error {
 
 func NewClientTimeout(cert *Credentials, connectTimeout time.Duration) (c *Client) {
 	c = (&Client{
-		Credentials:cert,
-		ConnectTimeout:connectTimeout,
-		version:Version,
-		debug:false,
+		Credentials:    cert,
+		ConnectTimeout: connectTimeout,
+		version:        Version,
+		debug:          false,
 	}).Init()
 	return
 }
@@ -195,7 +195,7 @@ func NewClient(cert *Credentials) (c *Client) {
 }
 
 func clientError(err error) error {
-	if (nil == err) {
+	if nil == err {
 		return nil
 	}
 	return errors.New("AliyunLiveGoClientFailure:" + err.Error())
