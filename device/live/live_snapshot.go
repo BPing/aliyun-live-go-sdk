@@ -65,12 +65,12 @@ func (l *Live) DeleteLiveAppSnapshotConfig(resp interface{}) (err error) {
 	return
 }
 
-// DescribeLiveSnapshotConfigWithApp 查询域名截图配置
+// LiveSnapshotConfigWithApp 查询域名截图配置
 // pageNum	int	否	分页的页码，默认值：1
 // pageSize	int	否	每页大小，默认值：10，范围：5~30
 // order	string	否	排序，asc：升序，desc：降序，默认：asc
 // {@link https://help.aliyun.com/document_detail/44721.html?spm=5176.doc44719.6.694.QyVLo8}
-func (l *Live) DescribeLiveSnapshotConfigWithApp(appName string, param LiveSnapshotParam, resp interface{}) (err error) {
+func (l *Live) LiveSnapshotConfigWithApp(appName string, param LiveSnapshotParam, resp interface{}) (err error) {
 	param.Order = strings.ToLower(param.Order)
 	if param.Order != "asc" && param.Order != "desc" {
 		return errors.New("order:'asc' or 'desc'")
@@ -90,19 +90,19 @@ func (l *Live) DescribeLiveSnapshotConfigWithApp(appName string, param LiveSnaps
 	return
 }
 
-// @see DescribeLiveSnapshotConfigWithApp
-func (l *Live) DescribeLiveSnapshotConfig(pageNum, param LiveSnapshotParam, resp interface{}) (err error) {
-	err = l.DescribeLiveSnapshotConfigWithApp(l.liveReq.AppName, param, resp)
+// @see LiveSnapshotConfigWithApp
+func (l *Live) LiveSnapshotConfig(param LiveSnapshotParam, resp interface{}) (err error) {
+	err = l.LiveSnapshotConfigWithApp(l.liveReq.AppName, param, resp)
 	return
 }
 
-// DescribeLiveStreamSnapshotInfo 查询截图信息
+// LiveStreamSnapshotInfoWithApp 查询截图信息
 // streamName	string	是	直播流名称
 // startTime	time.Time	是	开始时间
 // endTime	time.Time	是	结束时间
 // limit	int	否	一次调用获取的数量，范围1~100，默认值：10
 // {@link https://help.aliyun.com/document_detail/44722.html?spm=5176.doc44721.6.696.Xcp6VD}
-func (l *Live) DescribeLiveStreamSnapshotInfoWithApp(appName string, streamName string, startTime, endTime time.Time, limit int, resp interface{}) (err error) {
+func (l *Live) LiveStreamSnapshotInfoWithApp(appName string, streamName string, startTime, endTime time.Time, limit int, resp interface{}) (err error) {
 	if limit < 1 || limit > 100 {
 		limit = 10
 	}
@@ -116,8 +116,8 @@ func (l *Live) DescribeLiveStreamSnapshotInfoWithApp(appName string, streamName 
 	return
 }
 
-// @see DescribeLiveStreamSnapshotInfoWithApp
-func (l *Live) DescribeLiveStreamSnapshotInfo(streamName string, startTime, endTime time.Time, limit int, resp interface{}) (err error) {
-	err = l.DescribeLiveStreamSnapshotInfoWithApp(l.liveReq.AppName, streamName, startTime, endTime, limit, resp)
+// @see LiveStreamSnapshotInfoWithApp
+func (l *Live) LiveStreamSnapshotInfo(streamName string, startTime, endTime time.Time, limit int, resp interface{}) (err error) {
+	err = l.LiveStreamSnapshotInfoWithApp(l.liveReq.AppName, streamName, startTime, endTime, limit, resp)
 	return
 }

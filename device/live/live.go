@@ -37,7 +37,7 @@ const (
 	ResumeLiveStreamAction                  = "ResumeLiveStream"
 	SetLiveStreamsNotifyUrlConfigAction     = "SetLiveStreamsNotifyUrlConfig"
 
-	// 录制
+	// 录制处理
 	AddLiveAppRecordConfigAction                     = "AddLiveAppRecordConfig"
 	CreateLiveStreamRecordIndexFilesAction           = "CreateLiveStreamRecordIndexFiles"
 	DeleteLiveAppRecordConfigAction                  = "DeleteLiveAppRecordConfig"
@@ -48,15 +48,17 @@ const (
 	DescribeLiveStreamRecordIndexFilesAction         = "DescribeLiveStreamRecordIndexFiles"
 	DescribeLiveStreamsFrameRateAndBitRateDataAction = "DescribeLiveStreamsFrameRateAndBitRateData"
 
-	// 截图和转码处理
-	AddLiveAppSnapshotConfigAction                   = "AddLiveAppSnapshotConfig"
-	UpdateLiveAppSnapshotConfigAction                = "UpdateLiveAppSnapshotConfig"
-	DeleteLiveAppSnapshotConfigAction                = "DeleteLiveAppSnapshotConfig"
-	AddLiveStreamTranscodeAction                     = "AddLiveStreamTranscode"
-	DeleteLiveStreamTranscodeAction                  = "DeleteLiveStreamTranscode"
-	DescribeLiveSnapshotConfigAction                 = "DescribeLiveSnapshotConfig"
-	DescribeLiveStreamSnapshotInfoAction             = "DescribeLiveStreamSnapshotInfo"
-	DescribeLiveStreamTranscodeInfoAction            = "DescribeLiveStreamTranscodeInfo"
+	// 截图处理
+	AddLiveAppSnapshotConfigAction       = "AddLiveAppSnapshotConfig"
+	UpdateLiveAppSnapshotConfigAction    = "UpdateLiveAppSnapshotConfig"
+	DeleteLiveAppSnapshotConfigAction    = "DeleteLiveAppSnapshotConfig"
+	DescribeLiveSnapshotConfigAction     = "DescribeLiveSnapshotConfig"
+	DescribeLiveStreamSnapshotInfoAction = "DescribeLiveStreamSnapshotInfo"
+
+	// 转码处理
+	AddLiveStreamTranscodeAction          = "AddLiveStreamTranscode"
+	DeleteLiveStreamTranscodeAction       = "DeleteLiveStreamTranscode"
+	DescribeLiveStreamTranscodeInfoAction = "DescribeLiveStreamTranscodeInfo"
 
 	// 混流处理
 	StartMixStreamsServiceAction = "StartMixStreamsService"
@@ -276,8 +278,6 @@ func (l *Live) SetStreamsNotifyUrlConfig(notifyUrl string, resp interface{}) (er
 	err = l.rpc.Query(req, resp)
 	return
 }
-
-
 
 // GET 和 SET
 // ---------------------------------------------------------------------------------------------------------------------

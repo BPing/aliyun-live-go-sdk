@@ -207,9 +207,11 @@ type SnapshotConfig struct {
 type LiveSnapshotConfigResponse struct {
 	client.Response
 	LiveSnapshotParam
-	LiveStreamSnapshotConfigList []LiveStreamSnapshotConfig `json:"LiveStreamSnapshotConfigList" xml:"LiveStreamSnapshotConfigList"` //	截图配置
-	TotalPage                    int                        `json:"TotalPage" xml:"TotalPage"`                                       //	总页数
-	TotalNum                     int                        `json:"TotalNum" xml:"TotalNum"`                                         //	符合条件的总个数
+	LiveStreamSnapshotConfigList struct {
+		LiveStreamSnapshotConfig []LiveStreamSnapshotConfig `json:"LiveStreamSnapshotConfig" xml:"LiveStreamSnapshotConfig"`
+	} `json:"LiveStreamSnapshotConfigList" xml:"LiveStreamSnapshotConfigList"` //	截图配置
+	TotalPage int `json:"TotalPage" xml:"TotalPage"` //	总页数
+	TotalNum  int `json:"TotalNum" xml:"TotalNum"`   //	符合条件的总个数
 }
 
 // 查询域名下的截图配置参数
@@ -223,4 +225,55 @@ type LiveStreamSnapshotConfig struct {
 	LiveBase
 	SnapshotConfig
 	CreateTime string `json:"CreateTime" xml:"CreateTime"` //创建时间
+}
+
+// 查询截图信息
+type StreamSnapshotInfoResponse struct {
+	client.Response
+	LiveStreamSnapshotInfoList struct {
+		StreamSnapshotInfo []StreamSnapshotInfo `json:"StreamSnapshotInfo" xml:"StreamSnapshotInfo"`
+	} `json:"LiveStreamSnapshotInfoList" xml:"LiveStreamSnapshotInfoList"` //截图内容列表，没有则返回空数组
+	NextStartTime string `json:"NextStartTime" xml:"NextStartTime"` //
+}
+
+// 单个截图数据类型
+type StreamSnapshotInfo struct {
+	OssInfo
+	CreateTime string `json:"CreateTime" xml:"CreateTime"` //截图产生时间，格式：2015-12-01T17:36:00Z
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// 转码配置信息返回结构体
+type StreamTranscodeInfoResponse struct {
+	client.Response
+	DomainTranscodeList struct {
+		DomainTranscodeInfo []DomainTranscodeInfo `json:"DomainTranscodeInfo" xml:"DomainTranscodeInfo"`
+	} `json:"DomainTranscodeList" xml:"DomainTranscodeList"` //转码配置信息
+}
+
+type DomainTranscodeInfo struct {
+	TranscodeName     string `json:"TranscodeName" xml:"TranscodeName"`         //	播放域名
+	TranscodeApp      string `json:"TranscodeApp" xml:"TranscodeApp"`           //	应用名称
+	TranscodeId       string `json:"TranscodeId" xml:"TranscodeId"`             //	数据库ID
+	TranscodeTemplate string `json:"TranscodeTemplate" xml:"TranscodeTemplate"` //	转码模版
+	TranscodeSnapshot string `json:"TranscodeSnapshot" xml:"TranscodeSnapshot"` //	是否实施截图
+	TranscodeRecord   string `json:"TranscodeRecord" xml:"TranscodeRecord"`     //	是否实施录制
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+// 混流信息返回结构体
+type MixStreamsInfoResponse struct {
+	client.Response
+	MixStreamsInfoList MixStreamsInfoList `json:"MixStreamsInfoList" xml:"MixStreamsInfoList"`
+}
+
+type MixStreamsInfoList struct {
+	MixStreamsInfo []MixStreamsInfo `json:"MixStreamsInfo" xml:"MixStreamsInfo"`
+}
+
+type MixStreamsInfo struct {
+	DomainName string `json:"DomainName" xml:"DomainName"` //混流所属加速域名
+	AppName    string `json:"AppName" xml:"AppName"`       //	混流所属应用名称
+	StreamName string `json:"StreamName" xml:"StreamName"` //	混流名称
 }

@@ -258,3 +258,11 @@ func (s *Stream) FrameRateAndBitRateData() (info FrameRateAndBitRateInfos, err e
 	}
 	return
 }
+
+// 截图 -----------------------------------------------------------------------------------------------------------------
+
+// 获取截图信息
+func (s *Stream) SnapshotInfo(startTime, endTime time.Time, limit int) (streamSnapshotInfo StreamSnapshotInfoResponse, err error) {
+	err = s.live.LiveStreamSnapshotInfoWithApp(s.appName, s.StreamName, startTime, endTime, limit, &streamSnapshotInfo)
+	return
+}
