@@ -108,8 +108,93 @@ go get github.com/BPing/aliyun-live-go-sdk
 
 ### 录制（请看文档）
 ### 截图（2017-01-18）
+
+* 添加截图配置
+```go
+	oss := live.OssInfo{
+		OssBucket:       OssBucket,
+		OssEndpoint:     OssEndpoint,
+		OssObject:       OssObject,
+		OssObjectPrefix: OssObjectPrefix,
+	}
+	config:=live.SnapshotConfig{
+		OssInfo:oss,
+		TimeInterval       : 5,
+		OverwriteOssObject  : "{AppName}/{StreamName}.jpg",
+	}
+  	resp := make(map[string]interface{})
+  	err:=liveM.AddLiveAppSnapshotConfig(config,&resp)
+  	fmt.Println(err, resp)
+```
+
+* 更新截图配置
+```go
+	config.SequenceOssObject="{AppName}/{StreamName}.jpg"
+	resp = make(map[string]interface{})
+	err=liveM.UpdateLiveAppSnapshotConfig(config,&resp)
+	fmt.Println(err, resp)
+```
+
+* 查询域名截图配置
+```go
+	param:=live.LiveSnapshotParam{
+    		PageNum:1,
+    		PageSize:10,
+    		Order:"asc",
+    	}
+    	resp = make(map[string]interface{})
+    	err=liveM.LiveSnapshotConfig(param,&resp)
+    	fmt.Println(err, resp)
+```
+
+* 查询截图信息
+```go
+	resp = make(map[string]interface{})
+	err=liveM.LiveStreamSnapshotInfo("test-video-name1",time.Now().Add(-time.Hour*24*20), time.Now(),10,&resp)
+	fmt.Println(err, resp)
+```
+
+* 删除截图配置
+```go
+	resp = make(map[string]interface{})
+	err=liveM.DeleteLiveAppSnapshotConfig(&resp)
+	fmt.Println(err, resp)
+```
+
+
 ### 转码（2017-01-19）
+* 添加转码配置
+```go
+	resp := make(map[string]interface{})
+	err:=liveM.AddLiveStreamTranscode("a","no","no",&resp)
+	fmt.Println(err, resp)
+```
+
+* 查询转码配置信息
+```go
+	resp = make(map[string]interface{})
+	err=liveM.LiveStreamTranscodeInfo(&resp)
+	fmt.Println(err, resp))
+```
+
+* 删除转码配置
+```go
+	resp = make(map[string]interface{})
+	err=liveM.DeleteLiveStreamTranscode("a",&resp)
+	fmt.Println(err, resp)
+```
+
 ### 混流（2017-01-19）
+
+* 开始混流操作
+```go
+	err=liveM.StartMixStreamsService(...)
+```
+
+* 结束混流操作
+```go
+	err=liveM.StopMixStreamsService(...)
+```
 
 ## 流(Stream)
 ```go
