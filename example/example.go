@@ -5,7 +5,7 @@ package example
 const (
 	AccessKeyId = ""
 	AccessKeySecret = ""
-
+  
 	DomainName = "cbping.live.com"
 	AppName = "dream_live"
 	PrivateKey = "dreamTT"
