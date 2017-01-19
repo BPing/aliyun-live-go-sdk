@@ -1,20 +1,20 @@
 package client
 
 import (
-	"net/http"
-	"time"
-	"github.com/BPing/aliyun-live-go-sdk/util"
-	"net/url"
 	"fmt"
+	"github.com/BPing/aliyun-live-go-sdk/util"
+	"net/http"
+	"net/url"
+	"time"
 )
 
 //常量
 const (
 	DefaultSignatureVersion = "1.0"
-	DefaultSignatureMethod = "HMAC-SHA1"
-	JSONResponseFormat = "JSON"
-	XMLResponseFormat = "XML"
-	ECSRequestMethod = "GET"
+	DefaultSignatureMethod  = "HMAC-SHA1"
+	JSONResponseFormat      = "JSON"
+	XMLResponseFormat       = "XML"
+	ECSRequestMethod        = "GET"
 )
 
 //
@@ -55,7 +55,6 @@ type Request interface {
 //	return 0
 //}
 
-
 //
 //  cdn 请求对象。实现 Request 接口
 //
@@ -78,17 +77,17 @@ type CDNRequest struct {
 	SignatureVersion string
 	SignatureNonce   string
 	// ResourceOwnerAccount string
-	Action           string
+	Action string
 
 	// http
-	Host             string
-	Method           string
-	Url              string
-	Args             url.Values
+	Host   string
+	Method string
+	Url    string
+	Args   url.Values
 }
 
 // CDNRequest的必要字段转成参数
-func (Cdn *CDNRequest)StructToArgs() {
+func (Cdn *CDNRequest) StructToArgs() {
 	Cdn.SignatureNonce = util.CreateRandomString()
 	//Cdn.Timestamp = util.NewISO6801Time(time.Now().UTC())
 	Cdn.Args.Set("Format", Cdn.Format)
@@ -102,70 +101,69 @@ func (Cdn *CDNRequest)StructToArgs() {
 }
 
 // 签名
-func (Cdn *CDNRequest)Sign(cert *Credentials) {
+func (Cdn *CDNRequest) Sign(cert *Credentials) {
 	Cdn.AccessKeyId = cert.AccessKeyId
 	Cdn.StructToArgs()
 	// 生成签名
-	Cdn.Signature = util.CreateSignatureForRequest(Cdn.Method, &Cdn.Args, cert.AccessKeySecret + "&")
+	Cdn.Signature = util.CreateSignatureForRequest(Cdn.Method, &Cdn.Args, cert.AccessKeySecret+"&")
 
 }
 
-func (Cdn *CDNRequest)HttpRequestInstance() (httpReq *http.Request, err error) {
+func (Cdn *CDNRequest) HttpRequestInstance() (httpReq *http.Request, err error) {
 	// 生成请求url
 	Cdn.Url = Cdn.Host + "?" + Cdn.Args.Encode() + "&Signature=" + url.QueryEscape(Cdn.Signature)
 	httpReq, err = http.NewRequest(Cdn.Method, Cdn.Url, nil)
 	return
 }
 
-func (Cdn *CDNRequest)ResponseFormat() string {
+func (Cdn *CDNRequest) ResponseFormat() string {
 	return Cdn.Format
 }
 
 // A Timeout of zero means no timeout.
-func (Cdn *CDNRequest)DeadLine() time.Duration {
+func (Cdn *CDNRequest) DeadLine() time.Duration {
 	return 0
 }
 
-func (Cdn *CDNRequest)String() string {
+func (Cdn *CDNRequest) String() string {
 	return fmt.Sprintf("Method:%s,Url:%s", Cdn.Method, Cdn.Url)
 }
 
 // 克隆
-func (l *CDNRequest)Clone() interface{} {
+func (l *CDNRequest) Clone() interface{} {
 	new_obj := (*l)
 	//清空数据
 	new_obj.Args = url.Values{}
 	return &new_obj
 }
 
-func (Cdn *CDNRequest)SetArgs(key, value string) {
+func (Cdn *CDNRequest) SetArgs(key, value string) {
 	Cdn.Args.Set(key, value)
 }
 
-func (Cdn *CDNRequest)DelArgs(key string) {
+func (Cdn *CDNRequest) DelArgs(key string) {
 	Cdn.Args.Del(key)
 }
 
 const (
 	ApiCDNVersion = "2014-11-11"
-	ApiCDNHost = "https://cdn.aliyuncs.com/"
+	ApiCDNHost    = "https://cdn.aliyuncs.com/"
 )
 
 // 生成CDNRequest
 func NewCDNRequest(action string) *CDNRequest {
 	return &CDNRequest{
-		Format:JSONResponseFormat,
-		Version:ApiCDNVersion,
-		SignatureNonce:util.CreateRandomString(),
-		SignatureMethod:DefaultSignatureMethod,
-		SignatureVersion:DefaultSignatureVersion,
-		Timestamp:util.NewISO6801Time(time.Now().UTC()),
+		Format:           JSONResponseFormat,
+		Version:          ApiCDNVersion,
+		SignatureNonce:   util.CreateRandomString(),
+		SignatureMethod:  DefaultSignatureMethod,
+		SignatureVersion: DefaultSignatureVersion,
+		Timestamp:        util.NewISO6801Time(time.Now().UTC()),
 
-		Action:action,
+		Action: action,
 
-		Host:ApiCDNHost,
-		Method:ECSRequestMethod,
-		Args:url.Values{},
-
+		Host:   ApiCDNHost,
+		Method: ECSRequestMethod,
+		Args:   url.Values{},
 	}
 }

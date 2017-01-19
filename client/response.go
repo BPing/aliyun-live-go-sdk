@@ -3,16 +3,16 @@ package client
 import "fmt"
 
 type Response struct {
-	RequestId string
+	RequestId string `json:"RequestId" xml:"RequestId"`
 }
 
 //错误信息结构体
 type ErrorResponse struct {
-	RequestId string
-	HostId    string
-	Code      string
-	Message   string
-	StatusCode int //Status Code of HTTP Response
+	RequestId  string `json:"RequestId" xml:"RequestId"`
+	HostId     string `json:"HostId" xml:"HostId"`
+	Code       string `json:"Code" xml:"Code"`
+	Message    string `json:"Message" xml:"Message"`
+	StatusCode int    `json:"StatusCode" xml:"StatusCode"` //Status Code of HTTP Response
 }
 
 func (e *ErrorResponse) Error() string {

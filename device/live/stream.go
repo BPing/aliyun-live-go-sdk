@@ -1,8 +1,8 @@
 package live
 
 import (
-	"github.com/BPing/aliyun-live-go-sdk/util"
 	"fmt"
+	"github.com/BPing/aliyun-live-go-sdk/util"
 	"time"
 )
 
@@ -12,8 +12,8 @@ const (
 
 // StreamCredentials 流的地址信息的签名凭证
 type StreamCredentials struct {
-	PrivateKey string //privatekey
-	Timeout    time.Duration
+	PrivateKey string        `json:"PrivateKey"` //privatekey
+	Timeout    time.Duration `json:"Timeout"`
 }
 
 func (s *StreamCredentials) Clone() *StreamCredentials {
@@ -42,14 +42,14 @@ func NewStreamCredentials(privateKey string, timeout time.Duration) *StreamCrede
 //
 // @author cbping
 type Stream struct {
-	live            *Live
-	domainName      string
-	videoCenterDns  string
-	appName         string //app-name
-	StreamName      string //video-name
+	live           *Live
+	domainName     string
+	videoCenterDns string
+	appName        string //app-name
+	StreamName     string //video-name
 
-	streamCert      *StreamCredentials
-	signOn          bool   //是否启用签名
+	streamCert *StreamCredentials
+	signOn     bool //是否启用签名
 
 	expireTimestamp int64  //过期时间戳
 	authKey         string //auth_key
@@ -85,14 +85,15 @@ func (s *Stream) OnlineUserNum() (num int64) {
 	num = resp.TotalUserNumber
 	return
 }
+
 // Blocked 是否在黑名单中
 // -------------------------------------------------------------------------------
-func (s *Stream) Blocked() (bool) {
+func (s *Stream) Blocked() bool {
 	resp := StreamListResponse{}
 	s.live.StreamsBlockList(&resp)
 	for _, val := range resp.StreamUrls.StreamUrl {
 		//遍历判断此流是否存在黑名单中
-		if (val == s.baseUrl()) {
+		if val == s.baseUrl() {
 			return true
 		}
 	}
@@ -126,7 +127,7 @@ func (s *Stream) basePushUrl() (url string) {
 
 // 启动鉴权才可以使用签名
 func (s *Stream) sign() {
-	s.authKey, s.expireTimestamp = util.CreateSignatureForStreamUrlWithA("/" + s.appName + "/" + s.StreamName, "0", "0", s.streamCert.PrivateKey, s.streamCert.Timeout)
+	s.authKey, s.expireTimestamp = util.CreateSignatureForStreamUrlWithA("/"+s.appName+"/"+s.StreamName, "0", "0", s.streamCert.PrivateKey, s.streamCert.Timeout)
 	return
 }
 
@@ -206,14 +207,13 @@ func (s *Stream) String() (str string) {
 	)
 }
 
-
 // 录制 ----------------------------------------------------------------------------------------------------------------
 
 // 创建直播流录制索引文件
 func (s *Stream) CreateRecordIndexFiles(ossInfo OssInfo, startTime, endTime time.Time) (info RecordInfo, err error) {
 	resp := &RecordInfoResponse{}
 	err = s.live.CreateLiveStreamRecordIndexFilesWithApp(s.appName, s.StreamName, ossInfo, startTime, endTime, resp)
-	if (err == nil) {
+	if err == nil {
 		info = resp.RecordInfo
 	}
 	return
@@ -223,7 +223,7 @@ func (s *Stream) CreateRecordIndexFiles(ossInfo OssInfo, startTime, endTime time
 func (s *Stream) RecordContent(startTime, endTime time.Time) (list RecordContentInfoList, err error) {
 	resp := &RecordContentInfoListResponse{}
 	err = s.live.DescribeLiveStreamRecordContentWithApp(s.appName, s.StreamName, startTime, endTime, resp)
-	if (err == nil) {
+	if err == nil {
 		list = resp.RecordContentInfoList
 	}
 	return
@@ -233,7 +233,7 @@ func (s *Stream) RecordContent(startTime, endTime time.Time) (list RecordContent
 func (s *Stream) RecordIndexFiles(startTime, endTime time.Time) (list RecordIndexInfoList, err error) {
 	resp := &RecordIndexInfoListResponse{}
 	err = s.live.DescribeLiveStreamRecordIndexFilesWithApp(s.appName, s.StreamName, startTime, endTime, resp)
-	if (err == nil) {
+	if err == nil {
 		list = resp.RecordIndexInfoList
 	}
 	return
@@ -243,7 +243,7 @@ func (s *Stream) RecordIndexFiles(startTime, endTime time.Time) (list RecordInde
 func (s *Stream) RecordIndexFile(recordId string) (info RecordIndexInfo, err error) {
 	resp := &RecordIndexInfoResponse{}
 	err = s.live.DescribeLiveStreamRecordIndexFileWithApp(s.appName, s.StreamName, recordId, resp)
-	if (err == nil) {
+	if err == nil {
 		info = resp.RecordIndexInfo
 	}
 	return
@@ -253,8 +253,16 @@ func (s *Stream) RecordIndexFile(recordId string) (info RecordIndexInfo, err err
 func (s *Stream) FrameRateAndBitRateData() (info FrameRateAndBitRateInfos, err error) {
 	resp := &FrameRateAndBitRateInfosResponse{}
 	err = s.live.DescribeLiveStreamsFrameRateAndBitRateDataWithApp(s.appName, s.StreamName, resp)
-	if (err == nil) {
+	if err == nil {
 		info = resp.FrameRateAndBitRateInfos
 	}
+	return
+}
+
+// 截图 -----------------------------------------------------------------------------------------------------------------
+
+// 获取截图信息
+func (s *Stream) SnapshotInfo(startTime, endTime time.Time, limit int) (streamSnapshotInfo StreamSnapshotInfoResponse, err error) {
+	err = s.live.LiveStreamSnapshotInfoWithApp(s.appName, s.StreamName, startTime, endTime, limit, &streamSnapshotInfo)
 	return
 }

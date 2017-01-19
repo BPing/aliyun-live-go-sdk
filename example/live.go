@@ -1,10 +1,10 @@
 package example
 
 import (
+	"fmt"
 	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
 	"time"
-	"fmt"
 )
 
 func LiveExample() {
@@ -12,7 +12,7 @@ func LiveExample() {
 	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 	resp := make(map[string]interface{})
-	err := liveM.StreamsPublishList(time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err := liveM.StreamsPublishList(time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
 	fmt.Println(resp)
 
 	resp1 := live.OnlineInfoResponse{}
@@ -24,7 +24,7 @@ func LiveExample() {
 	fmt.Println(err, resp2)
 
 	resp = make(map[string]interface{})
-	err = liveM.StreamsControlHistory(time.Now().Add(-time.Hour * 12), time.Now(), &resp)
+	err = liveM.StreamsControlHistory(time.Now().Add(-time.Hour*12), time.Now(), &resp)
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
@@ -42,10 +42,10 @@ func LiveExample() {
 	// 录制
 
 	oss := live.OssInfo{
-		OssBucket:OssBucket,
-		OssEndpoint:OssEndpoint,
-		OssObject:OssObject,
-		OssObjectPrefix:OssObjectPrefix,
+		OssBucket:       OssBucket,
+		OssEndpoint:     OssEndpoint,
+		OssObject:       OssObject,
+		OssObjectPrefix: OssObjectPrefix,
 	}
 
 	resp = make(map[string]interface{})
@@ -53,7 +53,7 @@ func LiveExample() {
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
-	err = liveM.CreateLiveStreamRecordIndexFiles("test-video-name", oss, time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err = liveM.CreateLiveStreamRecordIndexFiles("test-video-name", oss, time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
@@ -61,11 +61,11 @@ func LiveExample() {
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
-	err = liveM.DescribeLiveStreamRecordContent("test-video-name", time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err = liveM.DescribeLiveStreamRecordContent("test-video-name", time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
-	err = liveM.DescribeLiveStreamRecordIndexFiles("test-video-name", time.Now().Add(-time.Hour * 24 * 10), time.Now(), &resp)
+	err = liveM.DescribeLiveStreamRecordIndexFiles("test-video-name", time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
 	fmt.Println(err, resp)
 
 	resp = make(map[string]interface{})
@@ -73,6 +73,88 @@ func LiveExample() {
 	fmt.Println(err, resp)
 
 	StreamExample()
+}
+
+// 截图
+func LiveSnapshotExample(){
+	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	oss := live.OssInfo{
+		OssBucket:       OssBucket,
+		OssEndpoint:     OssEndpoint,
+		OssObject:       OssObject,
+		OssObjectPrefix: OssObjectPrefix,
+	}
+	config:=live.SnapshotConfig{
+		OssInfo:oss,
+		TimeInterval       : 5,
+		OverwriteOssObject  : "{AppName}/{StreamName}.jpg",
+	}
+
+	fmt.Println("添加截图配置：")
+	resp := make(map[string]interface{})
+	err:=liveM.AddLiveAppSnapshotConfig(config,&resp)
+	fmt.Println(err, resp)
+
+	config.SequenceOssObject="{AppName}/{StreamName}.jpg"
+
+	fmt.Println("更新截图配置：")
+	resp = make(map[string]interface{})
+	err=liveM.UpdateLiveAppSnapshotConfig(config,&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询域名截图配置：")
+	param:=live.LiveSnapshotParam{
+		PageNum:1,
+		PageSize:10,
+		Order:"asc",
+	}
+	resp = make(map[string]interface{})
+	err=liveM.LiveSnapshotConfig(param,&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询域名截图配置(2):")
+	respStruct:=&live.LiveSnapshotConfigResponse{}
+	err=liveM.LiveSnapshotConfig(param,respStruct)
+	fmt.Println(err, respStruct)
+
+	fmt.Println("查询截图信息")
+	resp = make(map[string]interface{})
+	err=liveM.LiveStreamSnapshotInfo("test-video-name1",time.Now().Add(-time.Hour*24*20), time.Now(),10,&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除截图配置：")
+	resp = make(map[string]interface{})
+	err=liveM.DeleteLiveAppSnapshotConfig(&resp)
+	fmt.Println(err, resp)
+}
+
+// 转码
+func LiveTranscodeExample(){
+	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+
+	fmt.Println("添加转码配置：")
+	resp := make(map[string]interface{})
+	err:=liveM.AddLiveStreamTranscode("a","no","no",&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询转码配置信息：")
+	resp = make(map[string]interface{})
+	err=liveM.LiveStreamTranscodeInfo(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询转码配置信息（2）：")
+	respStruct:=&live.StreamTranscodeInfoResponse{}
+	err=liveM.LiveStreamTranscodeInfo(respStruct)
+	fmt.Println(err, respStruct)
+
+	fmt.Println("删除转码配置：")
+	resp = make(map[string]interface{})
+	err=liveM.DeleteLiveStreamTranscode("a",&resp)
+	fmt.Println(err, resp)
 }
 
 func StreamExample() {
@@ -90,18 +172,22 @@ func StreamExample() {
 	fmt.Println("Blocked", stream1.Blocked())
 
 	oss := live.OssInfo{
-		OssBucket:OssBucket,
-		OssEndpoint:OssEndpoint,
-		OssObject:OssObject,
-		OssObjectPrefix:OssObjectPrefix,
+		OssBucket:       OssBucket,
+		OssEndpoint:     OssEndpoint,
+		OssObject:       OssObject,
+		OssObjectPrefix: OssObjectPrefix,
 	}
 
 	//录制
-	fmt.Println(stream1.CreateRecordIndexFiles(oss, time.Now().Add(-time.Hour * 24 * 10), time.Now()))
+	fmt.Println(stream1.CreateRecordIndexFiles(oss, time.Now().Add(-time.Hour*24*10), time.Now()))
 
-	fmt.Println(stream1.RecordContent(time.Now().Add(-time.Hour * 24 * 20), time.Now()))
+	fmt.Println(stream1.RecordContent(time.Now().Add(-time.Hour*24*20), time.Now()))
 
-	fmt.Println(stream1.RecordIndexFiles(time.Now().Add(-time.Hour * 24 * 20), time.Now()))
+	fmt.Println(stream1.RecordIndexFiles(time.Now().Add(-time.Hour*24*20), time.Now()))
 
 	fmt.Println(stream1.FrameRateAndBitRateData())
+
+	//截图
+	fmt.Println("查询截图信息：")
+	fmt.Println(stream1.SnapshotInfo(time.Now().Add(-time.Hour*24*20), time.Now(),10))
 }

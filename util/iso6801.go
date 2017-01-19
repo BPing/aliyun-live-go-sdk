@@ -65,7 +65,7 @@ func (it *ISO6801Time) UnmarshalJSON(data []byte) error {
 		var i int64
 		i, err = strconv.ParseInt(str, 10, 64)
 		if err == nil {
-			t = time.Unix(i / 1000, i % 1000)
+			t = time.Unix(i/1000, i%1000)
 		}
 	}
 	if err == nil {
@@ -73,6 +73,7 @@ func (it *ISO6801Time) UnmarshalJSON(data []byte) error {
 	}
 	return err
 }
+
 // String returns the time in ISO6801Time format
 func (it ISO6801Time) String() string {
 	return time.Time(it).Format(FormatISO8601)

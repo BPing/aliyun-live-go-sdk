@@ -106,6 +106,11 @@ go get github.com/BPing/aliyun-live-go-sdk
     fmt.Println(err, resp)
 ```
 
+### 录制（请看文档）
+### 截图（2017-01-18）
+### 转码（2017-01-19）
+### 混流（2017-01-19）
+
 ## 流(Stream)
 ```go
   //如果 streamCert 为空的话，则代表不开启直播流鉴权
@@ -155,7 +160,36 @@ go get github.com/BPing/aliyun-live-go-sdk
     isBlocked:=stream.Blocked()
 ```
 
-## 录制（请看文档）
+* 获取直播流的帧率和码率
+```go
+    // type FrameRateAndBitRateInfos struct {
+    //	FrameRateAndBitRateInfo []FrameRateAndBitRateInfo
+    //}
+    //
+    //// 各直播流的帧率/码率信息
+    //type FrameRateAndBitRateInfo struct {
+    //	StreamUrl      string // 直播流的URL
+    //	VideoFrameRate int    // 直播流的视频帧率
+    //	AudioFrameRate int    // 直播流的音频帧率
+    //	BitRate        int    // 直播流的码率
+    //}  
+    frameRateAndBitRateInfo,err:=stream.FrameRateAndBitRateData()
+```
+
+* 获取截图信息
+```go
+// 查询截图信息
+    // type StreamSnapshotInfoResponse struct {
+    //    client.Response
+    //	  LiveStreamSnapshotInfoList struct {
+    //		StreamSnapshotInfo []StreamSnapshotInfo `json:"StreamSnapshotInfo" xml:"StreamSnapshotInfo"`
+    //	 } `json:"LiveStreamSnapshotInfoList" xml:"LiveStreamSnapshotInfoList"` //截图内容列表，没有则返回空数组
+    //    NextStartTime              string                //
+    // }
+    streamSnapshotInfo,err:=stream.SnapshotInfo(time.Now().Add(-time.Hour * 12), time.Now(), 10)
+```
+
+
 
 # 贡献参与者
 * cbping(452775680@qq.com)
