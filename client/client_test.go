@@ -37,8 +37,8 @@ func (b *TestRequest) Clone() interface{} {
 }
 
 type youdao struct {
-	errorCode int    `xml:"errorCode"`
-	query     string `xml:"query"`
+	ErrorCode int    `xml:"errorCode"`
+	Query     string `xml:"query"`
 }
 
 func TestClient(t *testing.T) {
