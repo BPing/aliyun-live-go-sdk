@@ -205,7 +205,7 @@ func (c *CDN) ModifyCdnDomain(domainInfo DomainInfo, resp interface{}) (err erro
 	}
 
 	if 0 != domainInfo.SourcePort && 443 != domainInfo.SourcePort && 80 != domainInfo.SourcePort {
-		return errors.New("SourcePort  should  be 443 or 80 ; if it is zero, 80 defualt  ")
+		return errors.New("SourcePort  should  be 443 or 80 ; if it is zero, 80 default  ")
 	}
 
 	req := c.cdnReq.Clone().(*client.CDNRequest)
