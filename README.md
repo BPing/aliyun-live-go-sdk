@@ -1,4 +1,6 @@
-# aliyun-live-go-sdk [![Build Status](https://travis-ci.org/BPing/aliyun-live-go-sdk.svg?branch=master)](https://travis-ci.org/BPing/aliyun-live-go-sdk) [![Coverage Status](https://coveralls.io/repos/github/BPing/aliyun-live-go-sdk/badge.svg?branch=master)](https://coveralls.io/github/BPing/aliyun-live-go-sdk?branch=master)
+# aliyun-live-go-sdk
+[![Build Status](https://travis-ci.org/BPing/aliyun-live-go-sdk.svg?branch=master)](https://travis-ci.org/BPing/aliyun-live-go-sdk) [![Coverage Status](https://coveralls.io/repos/github/BPing/aliyun-live-go-sdk/badge.svg?branch=master)](https://coveralls.io/github/BPing/aliyun-live-go-sdk?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/BPing/aliyun-live-go-sdk)](https://goreportcard.com/report/github.com/BPing/aliyun-live-go-sdk)
+   
     阿里云直播 golang SDK
 
 # 快速开始
