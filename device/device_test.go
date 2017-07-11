@@ -40,7 +40,7 @@ func TestDevice(t *testing.T) {
 		t.Fatal("get live device fail", err, ok)
 	}
 
-	liveDev, err = GetDevice(LiveDevice,
+	_, err = GetDevice(LiveDevice,
 		Config{Credentials: cert,
 			StreamCert: streamCert,
 			DomainName: "",

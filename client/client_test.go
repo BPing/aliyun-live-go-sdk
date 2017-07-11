@@ -37,8 +37,8 @@ func (b *TestRequest) Clone() interface{} {
 }
 
 type youdao struct {
-	errorCode int    `xml:"errorCode"`
-	query     string `xml:"query"`
+	ErrorCode int    `xml:"errorCode"`
+	Query     string `xml:"query"`
 }
 
 func TestClient(t *testing.T) {
@@ -54,6 +54,7 @@ func TestClient(t *testing.T) {
 		}
 		end <- 1
 	}()
+	
 	respxml := youdao{}
 	req := &TestRequest{Format: XMLResponseFormat, RequestURL: "http://fanyi.youdao.com/openapi.do?keyfrom=cbping&key=1366735279&type=data&doctype=xml&version=1.1&q=%E8%A6%81%E7%BF%BB%E8%AF%91%E7%9A%84%E6%96%87%E6%9C%AC"}
 	err := client.Query(req, &respxml)
