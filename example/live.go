@@ -7,9 +7,10 @@ import (
 	"time"
 )
 
+// LiveExample live例子
 func LiveExample() {
 
-	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
+	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 	resp := make(map[string]interface{})
 	err := liveM.StreamsPublishList(time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
@@ -75,9 +76,9 @@ func LiveExample() {
 	StreamExample()
 }
 
-// 截图
-func LiveSnapshotExample(){
-	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
+// LiveSnapshotExample 截图例子
+func LiveSnapshotExample() {
+	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 
 	oss := live.OssInfo{
@@ -86,79 +87,79 @@ func LiveSnapshotExample(){
 		OssObject:       OssObject,
 		OssObjectPrefix: OssObjectPrefix,
 	}
-	config:=live.SnapshotConfig{
-		OssInfo:oss,
-		TimeInterval       : 5,
-		OverwriteOssObject  : "{AppName}/{StreamName}.jpg",
+	config := live.SnapshotConfig{
+		OssInfo:            oss,
+		TimeInterval:       5,
+		OverwriteOssObject: "{AppName}/{StreamName}.jpg",
 	}
 
 	fmt.Println("添加截图配置：")
 	resp := make(map[string]interface{})
-	err:=liveM.AddLiveAppSnapshotConfig(config,&resp)
+	err := liveM.AddLiveAppSnapshotConfig(config, &resp)
 	fmt.Println(err, resp)
 
-	config.SequenceOssObject="{AppName}/{StreamName}.jpg"
+	config.SequenceOssObject = "{AppName}/{StreamName}.jpg"
 
 	fmt.Println("更新截图配置：")
 	resp = make(map[string]interface{})
-	err=liveM.UpdateLiveAppSnapshotConfig(config,&resp)
+	err = liveM.UpdateLiveAppSnapshotConfig(config, &resp)
 	fmt.Println(err, resp)
 
 	fmt.Println("查询域名截图配置：")
-	param:=live.LiveSnapshotParam{
-		PageNum:1,
-		PageSize:10,
-		Order:"asc",
+	param := live.LiveSnapshotParam{
+		PageNum:  1,
+		PageSize: 10,
+		Order:    "asc",
 	}
 	resp = make(map[string]interface{})
-	err=liveM.LiveSnapshotConfig(param,&resp)
+	err = liveM.LiveSnapshotConfig(param, &resp)
 	fmt.Println(err, resp)
 
 	fmt.Println("查询域名截图配置(2):")
-	respStruct:=&live.LiveSnapshotConfigResponse{}
-	err=liveM.LiveSnapshotConfig(param,respStruct)
+	respStruct := &live.LiveSnapshotConfigResponse{}
+	err = liveM.LiveSnapshotConfig(param, respStruct)
 	fmt.Println(err, respStruct)
 
 	fmt.Println("查询截图信息")
 	resp = make(map[string]interface{})
-	err=liveM.LiveStreamSnapshotInfo("test-video-name1",time.Now().Add(-time.Hour*24*20), time.Now(),10,&resp)
+	err = liveM.LiveStreamSnapshotInfo("test-video-name1", time.Now().Add(-time.Hour*24*20), time.Now(), 10, &resp)
 	fmt.Println(err, resp)
 
 	fmt.Println("删除截图配置：")
 	resp = make(map[string]interface{})
-	err=liveM.DeleteLiveAppSnapshotConfig(&resp)
+	err = liveM.DeleteLiveAppSnapshotConfig(&resp)
 	fmt.Println(err, resp)
 }
 
-// 转码
-func LiveTranscodeExample(){
-	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
+// LiveTranscodeExample 转码
+func LiveTranscodeExample() {
+	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
-
 
 	fmt.Println("添加转码配置：")
 	resp := make(map[string]interface{})
-	err:=liveM.AddLiveStreamTranscode("a","no","no",&resp)
+	err := liveM.AddLiveStreamTranscode("a", "no", "no", &resp)
 	fmt.Println(err, resp)
 
 	fmt.Println("查询转码配置信息：")
 	resp = make(map[string]interface{})
-	err=liveM.LiveStreamTranscodeInfo(&resp)
+	err = liveM.LiveStreamTranscodeInfo(&resp)
 	fmt.Println(err, resp)
 
 	fmt.Println("查询转码配置信息（2）：")
-	respStruct:=&live.StreamTranscodeInfoResponse{}
-	err=liveM.LiveStreamTranscodeInfo(respStruct)
+	respStruct := &live.StreamTranscodeInfoResponse{}
+	err = liveM.LiveStreamTranscodeInfo(respStruct)
 	fmt.Println(err, respStruct)
 
 	fmt.Println("删除转码配置：")
 	resp = make(map[string]interface{})
-	err=liveM.DeleteLiveStreamTranscode("a",&resp)
+	err = liveM.DeleteLiveStreamTranscode("a", &resp)
 	fmt.Println(err, resp)
 }
 
+// StreamExample 流
 func StreamExample() {
-	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
+	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
 	streamCert := live.NewStreamCredentials(PrivateKey, live.DefualtStreamTimeout)
 	liveM := live.NewLive(cert, DomainName, AppName, streamCert).SetDebug(false)
 	stream := liveM.GetStream("test-video-name")
@@ -189,5 +190,5 @@ func StreamExample() {
 
 	//截图
 	fmt.Println("查询截图信息：")
-	fmt.Println(stream1.SnapshotInfo(time.Now().Add(-time.Hour*24*20), time.Now(),10))
+	fmt.Println(stream1.SnapshotInfo(time.Now().Add(-time.Hour*24*20), time.Now(), 10))
 }
