@@ -45,6 +45,8 @@ func (l *Live) DeleteLiveAppRecordConfigWithApp(appName string, resp interface{}
 
 }
 
+// DeleteLiveAppRecordConfig 解除录制配置
+//
 // @see DeleteLiveAppRecordConfigWithApp
 func (l *Live) DeleteLiveAppRecordConfig(resp interface{}) (err error) {
 	err = l.DeleteLiveAppRecordConfigWithApp(l.liveReq.AppName, resp)
@@ -62,6 +64,8 @@ func (l *Live) DescribeLiveAppRecordConfigWithApp(appName string, resp interface
 
 }
 
+// DescribeLiveAppRecordConfig 查询域名下指定App录制配置
+//
 // @see DescribeLiveAppRecordConfigWithApp
 func (l *Live) DescribeLiveAppRecordConfig(resp interface{}) (err error) {
 	err = l.DescribeLiveAppRecordConfigWithApp(l.liveReq.AppName, resp)
@@ -103,6 +107,8 @@ func (l *Live) CreateLiveStreamRecordIndexFilesWithApp(appName, streamName strin
 	return
 }
 
+// CreateLiveStreamRecordIndexFiles 创建录制索引文件
+//
 // @see CreateLiveStreamRecordIndexFilesWithApp
 func (l *Live) CreateLiveStreamRecordIndexFiles(streamName string, ossInfo OssInfo, startTime, endTime time.Time, resp interface{}) (err error) {
 	err = l.CreateLiveStreamRecordIndexFilesWithApp(l.liveReq.AppName, streamName, ossInfo, startTime, endTime, resp)
@@ -134,6 +140,8 @@ func (l *Live) DescribeLiveStreamRecordContentWithApp(appName, streamName string
 	return
 }
 
+// DescribeLiveStreamRecordContent 查询某路直播流录制内容
+//
 // @see DescribeLiveStreamRecordContentWithApp
 func (l *Live) DescribeLiveStreamRecordContent(streamName string, startTime, endTime time.Time, resp interface{}) (err error) {
 	err = l.DescribeLiveStreamRecordContentWithApp(l.liveReq.AppName, streamName, startTime, endTime, resp)
@@ -157,6 +165,8 @@ func (l *Live) DescribeLiveStreamRecordIndexFileWithApp(appName, streamName, rec
 	return
 }
 
+// DescribeLiveStreamRecordIndexFile 查询单个录制索引文件
+//
 // @see DescribeLiveStreamRecordIndexFileWithApp
 func (l *Live) DescribeLiveStreamRecordIndexFile(streamName, recordID string, resp interface{}) (err error) {
 	err = l.DescribeLiveStreamRecordIndexFileWithApp(l.liveReq.AppName, streamName, recordID, resp)
@@ -179,6 +189,8 @@ func (l *Live) DescribeLiveStreamRecordIndexFilesWithApp(appName, streamName str
 	return
 }
 
+// DescribeLiveStreamRecordIndexFiles 查询录制索引文件
+//
 // @see DescribeLiveStreamRecordIndexFilesWithApp
 func (l *Live) DescribeLiveStreamRecordIndexFiles(streamName string, startTime, endTime time.Time, resp interface{}) (err error) {
 	err = l.DescribeLiveStreamRecordIndexFilesWithApp(l.liveReq.AppName, streamName, startTime, endTime, resp)
@@ -199,7 +211,9 @@ func (l *Live) DescribeLiveStreamsFrameRateAndBitRateDataWithApp(appName, stream
 	return
 }
 
-// @see DescribeLiveStreamRecordIndexFilesWithApp
+// DescribeLiveStreamsFrameRateAndBitRateData 获取直播流的帧率和码率，支持基于域名和基于流的查询；
+//
+// @see DescribeLiveStreamsFrameRateAndBitRateDataWithApp
 func (l *Live) DescribeLiveStreamsFrameRateAndBitRateData(streamName string, resp interface{}) (err error) {
 	err = l.DescribeLiveStreamsFrameRateAndBitRateDataWithApp(l.liveReq.AppName, streamName, resp)
 	return
