@@ -7,11 +7,10 @@ import (
 	"time"
 )
 
-
 // 录制视频
 // -------------------------------------------------------------------------------
 
-// AddLiveAppRecordConfig 配置APP录制，输出内容保存到OSS中
+// AddLiveAppRecordConfigWithApp 配置APP录制，输出内容保存到OSS中
 //
 // https://help.aliyun.com/document_detail/35231.html?spm=5176.doc27193.6.221.xU2Kqb
 func (l *Live) AddLiveAppRecordConfigWithApp(appName string, ossInfo OssInfo, resp interface{}) (err error) {
@@ -27,6 +26,8 @@ func (l *Live) AddLiveAppRecordConfigWithApp(appName string, ossInfo OssInfo, re
 	return
 }
 
+// AddLiveAppRecordConfig 配置APP录制，输出内容保存到OSS中
+//
 // @see AddLiveAppRecordConfigWithApp
 func (l *Live) AddLiveAppRecordConfig(ossInfo OssInfo, resp interface{}) (err error) {
 	err = l.AddLiveAppRecordConfigWithApp(l.liveReq.AppName, ossInfo, resp)
@@ -142,23 +143,23 @@ func (l *Live) DescribeLiveStreamRecordContent(streamName string, startTime, end
 // DescribeLiveStreamRecordIndexFileWithApp 查询单个录制索引文件
 //
 // https://help.aliyun.com/document_detail/35237.html?spm=5176.doc35236.6.230.XnsJuD
-func (l *Live) DescribeLiveStreamRecordIndexFileWithApp(appName, streamName, recordId string, resp interface{}) (err error) {
+func (l *Live) DescribeLiveStreamRecordIndexFileWithApp(appName, streamName, recordID string, resp interface{}) (err error) {
 	if global.EmptyString == appName || global.EmptyString == streamName {
 		return errors.New(" appName|streamName should not to be empty")
 	}
 	req := l.cloneRequest(DescribeLiveStreamRecordIndexFileAction)
 	req.AppName = appName
 	req.SetArgs("StreamName", streamName)
-	if recordId != global.EmptyString {
-		req.SetArgs("RecordId", recordId)
+	if recordID != global.EmptyString {
+		req.SetArgs("RecordId", recordID)
 	}
 	err = l.rpc.Query(req, resp)
 	return
 }
 
 // @see DescribeLiveStreamRecordIndexFileWithApp
-func (l *Live) DescribeLiveStreamRecordIndexFile(streamName, recordId string, resp interface{}) (err error) {
-	err = l.DescribeLiveStreamRecordIndexFileWithApp(l.liveReq.AppName, streamName, recordId, resp)
+func (l *Live) DescribeLiveStreamRecordIndexFile(streamName, recordID string, resp interface{}) (err error) {
+	err = l.DescribeLiveStreamRecordIndexFileWithApp(l.liveReq.AppName, streamName, recordID, resp)
 	return
 }
 
