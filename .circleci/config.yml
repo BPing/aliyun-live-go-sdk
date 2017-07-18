@@ -34,4 +34,3 @@ jobs:
       - run: $HOME/gopath/bin/goveralls -coverprofile=clientcoverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
       - run: go test -v github.com/BPing/aliyun-live-go-sdk/util -covermode=count -coverprofile=utilcoverage.out
       - run: $HOME/gopath/bin/goveralls -coverprofile=utilcoverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
-.
