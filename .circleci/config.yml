@@ -24,7 +24,7 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go get golang.org/x/tools/cmd/cover
       - run: go get github.com/mattn/goveralls
-      - run: go build  /go/src/github.com/BPing/aliyun-live-go-sdk/client
+      - run: go build  github.com/BPing/aliyun-live-go-sdk/client
       - run: go build  github.com/BPing/aliyun-live-go-sdk/device
       - run: go build  github.com/BPing/aliyun-live-go-sdk/device/cdn
       - run: go build  github.com/BPing/aliyun-live-go-sdk/device/live
