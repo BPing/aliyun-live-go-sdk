@@ -210,8 +210,8 @@ type LiveSnapshotConfigResponse struct {
 	LiveStreamSnapshotConfigList struct {
 		LiveStreamSnapshotConfig []LiveStreamSnapshotConfig `json:"LiveStreamSnapshotConfig" xml:"LiveStreamSnapshotConfig"`
 	} `json:"LiveStreamSnapshotConfigList" xml:"LiveStreamSnapshotConfigList"` //	截图配置
-	TotalPage int `json:"TotalPage" xml:"TotalPage"` //	总页数
-	TotalNum  int `json:"TotalNum" xml:"TotalNum"`   //	符合条件的总个数
+	TotalPage int `json:"TotalPage" xml:"TotalPage"`                           //	总页数
+	TotalNum  int `json:"TotalNum" xml:"TotalNum"`                             //	符合条件的总个数
 }
 
 // 查询域名下的截图配置参数
@@ -233,7 +233,7 @@ type StreamSnapshotInfoResponse struct {
 	LiveStreamSnapshotInfoList struct {
 		StreamSnapshotInfo []StreamSnapshotInfo `json:"StreamSnapshotInfo" xml:"StreamSnapshotInfo"`
 	} `json:"LiveStreamSnapshotInfoList" xml:"LiveStreamSnapshotInfoList"` //截图内容列表，没有则返回空数组
-	NextStartTime string `json:"NextStartTime" xml:"NextStartTime"` //
+	NextStartTime string `json:"NextStartTime" xml:"NextStartTime"`        //
 }
 
 // 单个截图数据类型
@@ -273,7 +273,25 @@ type MixStreamsInfoList struct {
 }
 
 type MixStreamsInfo struct {
-	DomainName string `json:"DomainName" xml:"DomainName"` //混流所属加速域名
-	AppName    string `json:"AppName" xml:"AppName"`       //	混流所属应用名称
-	StreamName string `json:"StreamName" xml:"StreamName"` //	混流名称
+	StreamBase
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+// 拉流
+// https://help.aliyun.com/document_detail/57733.html?spm=5176.doc57735.6.658.58h5BX
+type PullStreamConfigResponse struct {
+	client.Response
+	LiveAppRecordList AppRecordList `json:"LiveAppRecordList" xml:"LiveAppRecordList"`
+}
+
+type AppRecordList struct {
+	LiveAppRecord []AppRecord `json:"LiveAppRecord" xml:"LiveAppRecord"`
+}
+
+type AppRecord struct {
+	StreamBase
+	SourceUrl string `json:"SourceUrl" xml:"SourceUrl"` // 	拉流源站
+	StartTime string `json:"StartTime" xml:"StartTime"`
+	EndTime   string `json:"EndTime" xml:"EndTime"`
 }

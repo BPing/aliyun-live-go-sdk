@@ -64,6 +64,11 @@ const (
 	StartMixStreamsServiceAction = "StartMixStreamsService"
 	StopMixStreamsServiceAction  = "StopMixStreamsService"
 
+	// 直播拉流
+	AddLivePullStreamInfoConfigcAction   = "AddLivePullStreamInfoConfig"
+	DeleteLivePullStreamInfoConfigAction = "DeleteLivePullStreamInfoConfig"
+	DescribeLivePullStreamConfigAction   = "DescribeLivePullStreamConfig"
+
 	//直播中心服务器域名
 	DefaultVideoCenter = "video-center.alivecdn.com"
 )
