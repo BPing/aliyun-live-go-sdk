@@ -65,7 +65,7 @@ const (
 	StopMixStreamsServiceAction  = "StopMixStreamsService"
 
 	// 直播拉流
-	AddLivePullStreamInfoConfigcAction   = "AddLivePullStreamInfoConfig"
+	AddLivePullStreamInfoConfigAction    = "AddLivePullStreamInfoConfig"
 	DeleteLivePullStreamInfoConfigAction = "DeleteLivePullStreamInfoConfig"
 	DescribeLivePullStreamConfigAction   = "DescribeLivePullStreamConfig"
 

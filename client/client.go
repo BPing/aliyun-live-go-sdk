@@ -104,7 +104,6 @@ func (c *Client) Query(req Request, resp interface{}) error {
 	} else {
 		httpReq.Header.Set("Content-Type", `application/`+strings.ToLower(JSONResponseFormat))
 	}
-
 	t0 := time.Now()
 	httpResp, err := c.httpClient.Do(httpReq)
 	t1 := time.Now()

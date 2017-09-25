@@ -8,15 +8,6 @@ import (
 	"time"
 )
 
-//常量
-const (
-	DefaultSignatureVersion = "1.0"
-	DefaultSignatureMethod  = "HMAC-SHA1"
-	JSONResponseFormat      = "JSON"
-	XMLResponseFormat       = "XML"
-	ECSRequestMethod        = "GET"
-)
-
 //
 //  请求接口
 //    所有请求对象继承的接口，也是Client接受处理的请求接口
@@ -144,11 +135,6 @@ func (Cdn *CDNRequest) SetArgs(key, value string) {
 func (Cdn *CDNRequest) DelArgs(key string) {
 	Cdn.Args.Del(key)
 }
-
-const (
-	ApiCDNVersion = "2014-11-11"
-	ApiCDNHost    = "https://cdn.aliyuncs.com/"
-)
 
 // 生成CDNRequest
 func NewCDNRequest(action string) *CDNRequest {

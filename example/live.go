@@ -157,6 +157,32 @@ func LiveTranscodeExample() {
 	fmt.Println(err, resp)
 }
 
+// 拉流
+func LivePullStreamInfo() {
+	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("添加拉流信息：")
+	resp := make(map[string]interface{})
+	err := liveM.AddLivePullStreamInfoConfig("test-video-name", "http://", time.Now().Add(-time.Hour*24*20), time.Now(), &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLivePullStreamConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除拉流信息：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLivePullStreamInfoConfig("test-video-name", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLivePullStreamConfig(&resp)
+	fmt.Println(err, resp)
+}
+
 // StreamExample 流
 func StreamExample() {
 	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)

@@ -2,7 +2,7 @@ package live
 
 import (
 	"time"
-	"github.com/Bping/aliyun-live-go-sdk/util"
+	"github.com/BPing/aliyun-live-go-sdk/util"
 )
 
 // 直播拉流
@@ -20,7 +20,7 @@ func (l *Live) AddLivePullStreamInfoConfig(streamName, sourceUrl string, startTi
 //
 // https://help.aliyun.com/document_detail/57734.html?spm=5176.doc57733.6.656.YS8uOK
 func (l *Live) AddLivePullStreamInfoConfigWithApp(appName, streamName, sourceUrl string, startTime, endTime time.Time, resp interface{}) (err error) {
-	req := l.cloneRequest(AddLivePullStreamInfoConfigcAction)
+	req := l.cloneRequest(AddLivePullStreamInfoConfigAction)
 	req.AppName = appName
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("SourceUrl", sourceUrl)
