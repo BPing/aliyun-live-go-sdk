@@ -214,6 +214,23 @@ go get github.com/BPing/aliyun-live-go-sdk
 	err=liveM.DescribeLivePullStreamConfig(...)
 ```
 
+### 状态通知（暂时不可用）
+
+* 设置回调链接
+```go
+	err=liveM.SetStreamsNotifyUrlConfig(...)
+```
+
+* 删除推流回调配置
+```go
+	err=liveM.DeleteLiveStreamsNotifyUrlConfig(...)
+```
+
+* 查询推流回调配置
+```go
+	err=liveM.StreamsNotifyUrlConfig(...)
+```
+
 
 ## 流(Stream)
 ```go

@@ -183,6 +183,32 @@ func LivePullStreamInfo() {
 	fmt.Println(err, resp)
 }
 
+// 状态通知
+func NotifyUrlConfig() {
+	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("设置回调链接：")
+	resp := make(map[string]interface{})
+	err := liveM.SetStreamsNotifyUrlConfig("http://1.1.1.1:8888", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看：")
+	resp = make(map[string]interface{})
+	err = liveM.StreamsNotifyUrlConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除推流回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveStreamsNotifyUrlConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看：")
+	resp = make(map[string]interface{})
+	err = liveM.StreamsNotifyUrlConfig(&resp)
+	fmt.Println(err, resp)
+}
+
 // StreamExample 流
 func StreamExample() {
 	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)

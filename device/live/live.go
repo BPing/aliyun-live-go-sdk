@@ -35,7 +35,7 @@ const (
 	DescribeLiveStreamOnlineUserNumAction   = "DescribeLiveStreamOnlineUserNum"
 	ForbidLiveStreamAction                  = "ForbidLiveStream"
 	ResumeLiveStreamAction                  = "ResumeLiveStream"
-	SetLiveStreamsNotifyUrlConfigAction     = "SetLiveStreamsNotifyUrlConfig"
+
 
 	// 录制处理
 	AddLiveAppRecordConfigAction                     = "AddLiveAppRecordConfig"
@@ -68,6 +68,11 @@ const (
 	AddLivePullStreamInfoConfigAction    = "AddLivePullStreamInfoConfig"
 	DeleteLivePullStreamInfoConfigAction = "DeleteLivePullStreamInfoConfig"
 	DescribeLivePullStreamConfigAction   = "DescribeLivePullStreamConfig"
+
+	// 状态通知
+	SetLiveStreamsNotifyUrlConfigAction      = "SetLiveStreamsNotifyUrlConfig"
+	DescribeLiveStreamsNotifyUrlConfigAction = "DescribeLiveStreamsNotifyUrlConfig"
+	DeleteLiveStreamsNotifyUrlConfigAction   = "DeleteLiveStreamsNotifyUrlConfig"
 
 	//直播中心服务器域名
 	DefaultVideoCenter = "video-center.alivecdn.com"
@@ -274,15 +279,6 @@ func (l *Live) ResumeLiveStreamWithPublisherWithApp(appName, streamName string, 
 	return l.ResumeLiveStream(appName, streamName, "publisher", resp)
 }
 
-// SetStreamsNotifyUrlConfig 设置回调链接
-// NotifyUrl	String	是	设置直播流信息推送到的URL地址，必须以http://开头；
-func (l *Live) SetStreamsNotifyUrlConfig(notifyUrl string, resp interface{}) (err error) {
-	req := l.cloneRequest(SetLiveStreamsNotifyUrlConfigAction)
-	req.AppName = ""
-	req.SetArgs("NotifyUrl", notifyUrl)
-	err = l.rpc.Query(req, resp)
-	return
-}
 
 // GET 和 SET
 // ---------------------------------------------------------------------------------------------------------------------

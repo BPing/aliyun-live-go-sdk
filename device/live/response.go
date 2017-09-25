@@ -295,3 +295,14 @@ type AppRecord struct {
 	StartTime string `json:"StartTime" xml:"StartTime"`
 	EndTime   string `json:"EndTime" xml:"EndTime"`
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+// 状态通知
+type NotifyUrlConfigResponse struct {
+	client.Response
+	NotifyUrlConfig struct {
+		DomainName string `json:"DomainName" xml:"DomainName"` //    加速域名
+		NotifyUrl  string `json:"NotifyUrl" xml:"NotifyUrl"`   //    回调地址
+	}
+}
