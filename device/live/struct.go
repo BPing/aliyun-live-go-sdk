@@ -306,3 +306,10 @@ type NotifyUrlConfigResponse struct {
 		NotifyUrl  string `json:"NotifyUrl" xml:"NotifyUrl"`   //    回调地址
 	}
 }
+
+// ---------------------------------------------------------------------------------------------------------------------
+
+type MixNotifyConfigResponse struct {
+	client.Response
+	NotifyUrl string `json:"NotifyUrl" xml:"NotifyUrl"` //    当前域名下连麦回调通知URL
+}

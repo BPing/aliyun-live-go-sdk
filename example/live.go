@@ -209,6 +209,84 @@ func NotifyUrlConfig() {
 	fmt.Println(err, resp)
 }
 
+// 状态通知
+func MixStream() {
+	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("添加连麦配置：")
+	resp := make(map[string]interface{})
+	err := liveM.AddLiveMixConfig("mhd ", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除连麦配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveMixConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("开启多人连麦服务：")
+	resp = make(map[string]interface{})
+	err = liveM.StartMultipleStreamMixService("test-video-name", "pip4a", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("停止多人连麦服务：")
+	resp = make(map[string]interface{})
+	err = liveM.StopMultipleStreamMixService("test-video-name", &resp)
+	fmt.Println(err, resp)
+
+	config := live.MixStreamParam{MainStreamName: "test-video-name", MixDomainName: DomainName, MixAppName: AppName, MixStreamName: "test-video-name-mix"}
+	fmt.Println("往主流添加一路流：")
+	resp = make(map[string]interface{})
+	err = liveM.AddMultipleStreamMixService(config, &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("从主流移除一路流：")
+	resp = make(map[string]interface{})
+	err = liveM.RemoveMultipleStreamMixService(config, &resp)
+	fmt.Println(err, resp)
+
+
+	fmt.Println("添加连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.AddLiveMixNotifyConfig("http://1.1.1.1:8888", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixNotifyConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("更新连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.UpdateLiveMixNotifyConfig("http://1.1.1.1:8889", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixNotifyConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("添加连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveMixNotifyConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixNotifyConfig(&resp)
+	fmt.Println(err, resp)
+}
+
 // StreamExample 流
 func StreamExample() {
 	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)

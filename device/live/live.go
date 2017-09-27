@@ -36,7 +36,6 @@ const (
 	ForbidLiveStreamAction                  = "ForbidLiveStream"
 	ResumeLiveStreamAction                  = "ResumeLiveStream"
 
-
 	// 录制处理
 	AddLiveAppRecordConfigAction                     = "AddLiveAppRecordConfig"
 	CreateLiveStreamRecordIndexFilesAction           = "CreateLiveStreamRecordIndexFiles"
@@ -63,6 +62,19 @@ const (
 	// 混流处理
 	StartMixStreamsServiceAction = "StartMixStreamsService"
 	StopMixStreamsServiceAction  = "StopMixStreamsService"
+
+	// 直播连麦
+	AddLiveMixConfigAction               = "AddLiveMixConfig"
+	DescribeLiveMixConfigAction          = "DescribeLiveMixConfig"
+	DeleteLiveMixConfigAction            = "DeleteLiveMixConfig"
+	StartMultipleStreamMixServiceAction  = "StartMultipleStreamMixService"
+	StopMultipleStreamMixServiceAction   = "StopMultipleStreamMixService"
+	AddMultipleStreamMixServiceAction    = "AddMultipleStreamMixService"
+	RemoveMultipleStreamMixServiceAction = "RemoveMultipleStreamMixService"
+	AddLiveMixNotifyConfigAction         = "AddLiveMixNotifyConfig"
+	DescribeLiveMixNotifyConfigAction    = "DescribeLiveMixNotifyConfig"
+	UpdateLiveMixNotifyConfigAction      = "UpdateLiveMixNotifyConfig"
+	DeleteLiveMixNotifyConfigAction      = "DeleteLiveMixNotifyConfig"
 
 	// 直播拉流
 	AddLivePullStreamInfoConfigAction    = "AddLivePullStreamInfoConfig"
@@ -278,7 +290,6 @@ func (l *Live) ResumeLiveStreamWithPublisher(streamName string, resp interface{}
 func (l *Live) ResumeLiveStreamWithPublisherWithApp(appName, streamName string, resp interface{}) (err error) {
 	return l.ResumeLiveStream(appName, streamName, "publisher", resp)
 }
-
 
 // GET 和 SET
 // ---------------------------------------------------------------------------------------------------------------------
