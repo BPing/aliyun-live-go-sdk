@@ -4,6 +4,7 @@ go:
   - 1.6
 
 install:
+  - go get github.com/BPing/go-toolkit/http-client/core
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/mattn/goveralls
 
