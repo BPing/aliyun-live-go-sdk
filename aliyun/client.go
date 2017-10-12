@@ -22,7 +22,6 @@ func (c *Client) responseUnmarshal(req Request, respInfo *core.Response, resp in
 	} else {
 		return respInfo.ToJSON(resp)
 	}
-	return nil
 }
 
 // 处理请求

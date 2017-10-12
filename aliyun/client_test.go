@@ -1,11 +1,11 @@
 package aliyun
 
 import (
+	"fmt"
 	"net/http"
 	"testing"
-	"github.com/BPing/go-toolkit/http-client/hook"
 	"time"
-	"fmt"
+	"github.com/BPing/go-toolkit/http-client/hook"
 )
 
 type TestRequest struct {

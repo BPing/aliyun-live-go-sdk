@@ -147,7 +147,7 @@ func (l *Live) GetStream(streamName string) *Stream {
 		StreamName:     streamName,
 		videoCenterDns: l.videoCenterDns,
 		streamCert:     credentials,
-		signOn:         (nil != l.streamCert),
+		signOn:         nil != l.streamCert,
 		live:           l,
 	}
 }

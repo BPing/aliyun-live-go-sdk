@@ -19,8 +19,8 @@ package cdn
 import (
 	"errors"
 	"fmt"
-	"github.com/BPing/aliyun-live-go-sdk/util/global"
 	"github.com/BPing/aliyun-live-go-sdk/aliyun"
+	"github.com/BPing/aliyun-live-go-sdk/util/global"
 )
 
 const (

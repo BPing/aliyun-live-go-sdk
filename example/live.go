@@ -255,7 +255,6 @@ func MixStream() {
 	err = liveM.RemoveMultipleStreamMixService(config, &resp)
 	fmt.Println(err, resp)
 
-
 	fmt.Println("添加连麦回调配置：")
 	resp = make(map[string]interface{})
 	err = liveM.AddLiveMixNotifyConfig("http://1.1.1.1:8888", &resp)

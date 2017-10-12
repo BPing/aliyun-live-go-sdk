@@ -1,10 +1,10 @@
 package device
 
 import (
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/device/cdn"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
 	"testing"
-	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 )
 
 const (

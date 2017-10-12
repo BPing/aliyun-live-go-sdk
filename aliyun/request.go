@@ -1,13 +1,13 @@
 package aliyun
 
 import (
-	"github.com/BPing/go-toolkit/http-client/core"
 	"fmt"
-	"net/url"
-	"net/http"
-	"time"
 	"github.com/BPing/aliyun-live-go-sdk/util"
+	"github.com/BPing/go-toolkit/http-client/core"
+	"net/http"
+	"net/url"
 	"strings"
+	"time"
 )
 
 type Request interface {
@@ -28,7 +28,7 @@ type Request interface {
 // SignatureVersion	String	是	签名算法版本，目前版本是1.0 \n
 // SignatureNonce	String	是	唯一随机数，用于防止网络重放攻击。用户在不同请求间要使用不同的随机数值 \n
 type BaseRequest struct {
-	*core.BaseRequest
+	core.BaseRequest
 	Format           string
 	Version          string
 	AccessKeyId      string
@@ -117,6 +117,5 @@ func NewBaseRequest(action string) *BaseRequest {
 		Host:        ApiCDNHost,
 		Method:      ECSRequestMethod,
 		Args:        url.Values{},
-		BaseRequest: &core.BaseRequest{},
 	}
 }

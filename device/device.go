@@ -2,9 +2,9 @@ package device
 
 import (
 	"errors"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/device/cdn"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
-	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 )
 
 type DevType string

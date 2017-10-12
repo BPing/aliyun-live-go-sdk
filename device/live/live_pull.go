@@ -1,8 +1,8 @@
 package live
 
 import (
-	"time"
 	"github.com/BPing/aliyun-live-go-sdk/util"
+	"time"
 )
 
 // 直播拉流

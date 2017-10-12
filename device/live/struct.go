@@ -210,8 +210,8 @@ type LiveSnapshotConfigResponse struct {
 	LiveStreamSnapshotConfigList struct {
 		LiveStreamSnapshotConfig []LiveStreamSnapshotConfig `json:"LiveStreamSnapshotConfig" xml:"LiveStreamSnapshotConfig"`
 	} `json:"LiveStreamSnapshotConfigList" xml:"LiveStreamSnapshotConfigList"` //	截图配置
-	TotalPage int `json:"TotalPage" xml:"TotalPage"`                           //	总页数
-	TotalNum  int `json:"TotalNum" xml:"TotalNum"`                             //	符合条件的总个数
+	TotalPage int `json:"TotalPage" xml:"TotalPage"` //	总页数
+	TotalNum  int `json:"TotalNum" xml:"TotalNum"`   //	符合条件的总个数
 }
 
 // 查询域名下的截图配置参数
@@ -233,7 +233,7 @@ type StreamSnapshotInfoResponse struct {
 	LiveStreamSnapshotInfoList struct {
 		StreamSnapshotInfo []StreamSnapshotInfo `json:"StreamSnapshotInfo" xml:"StreamSnapshotInfo"`
 	} `json:"LiveStreamSnapshotInfoList" xml:"LiveStreamSnapshotInfoList"` //截图内容列表，没有则返回空数组
-	NextStartTime string `json:"NextStartTime" xml:"NextStartTime"`        //
+	NextStartTime string `json:"NextStartTime" xml:"NextStartTime"` //
 }
 
 // 单个截图数据类型
