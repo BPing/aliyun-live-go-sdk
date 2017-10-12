@@ -1,6 +1,6 @@
 package live
 
-import "github.com/BPing/aliyun-live-go-sdk/client"
+import "github.com/BPing/aliyun-live-go-sdk/aliyun"
 
 // ---------------------------------------------------------------------------------------------------------------------
 // 直播基本信息
@@ -18,7 +18,7 @@ type StreamBase struct {
 // 在线
 // ---------------------------------------------------------------------------------------------------------------------
 type OnlineInfoResponse struct {
-	client.Response
+	aliyun.Response
 	OnlineUserInfo  OnlineUserInfo
 	TotalUserNumber int64
 }
@@ -38,7 +38,7 @@ type LiveStreamOnlineInfo struct {
 // 黑名单
 // ---------------------------------------------------------------------------------------------------------------------
 type StreamListResponse struct {
-	client.Response
+	aliyun.Response
 	DomainName string     //流所属加速域名
 	StreamUrls StreamUrls //	流完整URL地址
 }
@@ -91,7 +91,7 @@ type LiveAppRecord struct {
 // ---------------------------------------------------------------------------------------------------------------------
 
 type FrameRateAndBitRateInfosResponse struct {
-	client.Response
+	aliyun.Response
 	FrameRateAndBitRateInfos FrameRateAndBitRateInfos
 }
 
@@ -111,23 +111,23 @@ type FrameRateAndBitRateInfo struct {
 
 // 录制配置列表
 type RecordIndexInfoListResponse struct {
-	client.Response
+	aliyun.Response
 	RecordIndexInfoList RecordIndexInfoList
 }
 
 type RecordInfoListResponse struct {
-	client.Response
+	aliyun.Response
 	RecordInfoList RecordInfoList
 }
 
 // 录制配置单个
 type RecordIndexInfoResponse struct {
-	client.Response
+	aliyun.Response
 	RecordIndexInfo RecordIndexInfo
 }
 
 type RecordInfoResponse struct {
-	client.Response
+	aliyun.Response
 	RecordInfo RecordInfo
 }
 
@@ -177,7 +177,7 @@ type RecordIndexInfo struct {
 // ---------------------------------------------------------------------------------------------------------------------
 
 type RecordContentInfoListResponse struct {
-	client.Response
+	aliyun.Response
 	RecordContentInfoList RecordContentInfoList
 }
 
@@ -205,7 +205,7 @@ type SnapshotConfig struct {
 
 // 查询域名下的截图配置返回结构
 type LiveSnapshotConfigResponse struct {
-	client.Response
+	aliyun.Response
 	LiveSnapshotParam
 	LiveStreamSnapshotConfigList struct {
 		LiveStreamSnapshotConfig []LiveStreamSnapshotConfig `json:"LiveStreamSnapshotConfig" xml:"LiveStreamSnapshotConfig"`
@@ -229,7 +229,7 @@ type LiveStreamSnapshotConfig struct {
 
 // 查询截图信息
 type StreamSnapshotInfoResponse struct {
-	client.Response
+	aliyun.Response
 	LiveStreamSnapshotInfoList struct {
 		StreamSnapshotInfo []StreamSnapshotInfo `json:"StreamSnapshotInfo" xml:"StreamSnapshotInfo"`
 	} `json:"LiveStreamSnapshotInfoList" xml:"LiveStreamSnapshotInfoList"` //截图内容列表，没有则返回空数组
@@ -245,7 +245,7 @@ type StreamSnapshotInfo struct {
 // ---------------------------------------------------------------------------------------------------------------------
 // 转码配置信息返回结构体
 type StreamTranscodeInfoResponse struct {
-	client.Response
+	aliyun.Response
 	DomainTranscodeList struct {
 		DomainTranscodeInfo []DomainTranscodeInfo `json:"DomainTranscodeInfo" xml:"DomainTranscodeInfo"`
 	} `json:"DomainTranscodeList" xml:"DomainTranscodeList"` //转码配置信息
@@ -264,7 +264,7 @@ type DomainTranscodeInfo struct {
 
 // 混流信息返回结构体
 type MixStreamsInfoResponse struct {
-	client.Response
+	aliyun.Response
 	MixStreamsInfoList MixStreamsInfoList `json:"MixStreamsInfoList" xml:"MixStreamsInfoList"`
 }
 
@@ -281,7 +281,7 @@ type MixStreamsInfo struct {
 // 拉流
 // https://help.aliyun.com/document_detail/57733.html?spm=5176.doc57735.6.658.58h5BX
 type PullStreamConfigResponse struct {
-	client.Response
+	aliyun.Response
 	LiveAppRecordList AppRecordList `json:"LiveAppRecordList" xml:"LiveAppRecordList"`
 }
 
@@ -300,7 +300,7 @@ type AppRecord struct {
 
 // 状态通知
 type NotifyUrlConfigResponse struct {
-	client.Response
+	aliyun.Response
 	NotifyUrlConfig struct {
 		DomainName string `json:"DomainName" xml:"DomainName"` //    加速域名
 		NotifyUrl  string `json:"NotifyUrl" xml:"NotifyUrl"`   //    回调地址
@@ -310,6 +310,6 @@ type NotifyUrlConfigResponse struct {
 // ---------------------------------------------------------------------------------------------------------------------
 
 type MixNotifyConfigResponse struct {
-	client.Response
+	aliyun.Response
 	NotifyUrl string `json:"NotifyUrl" xml:"NotifyUrl"` //    当前域名下连麦回调通知URL
 }

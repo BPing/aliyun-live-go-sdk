@@ -2,9 +2,9 @@ package device
 
 import (
 	"errors"
-	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/device/cdn"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 )
 
 type DevType string
@@ -16,7 +16,7 @@ const (
 
 // 初始配置项
 type Config struct {
-	Credentials *client.Credentials
+	Credentials *aliyun.Credentials
 	StreamCert  *live.StreamCredentials
 	DomainName  string
 	AppName     string

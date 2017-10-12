@@ -19,8 +19,8 @@ package cdn
 import (
 	"errors"
 	"fmt"
-	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 )
 
 const (
@@ -70,18 +70,18 @@ const (
 // CDN接口控制器
 // 记住，很多操作需先开通CDN服务才可执行。
 type CDN struct {
-	rpc    *client.Client
-	cdnReq *client.CDNRequest
+	rpc    *aliyun.Client
+	cdnReq *Request
 
 	debug bool
 }
 
 // 新建"CDN接口控制器"
 // @param cert  请求凭证
-func NewCDN(cert *client.Credentials) *CDN {
+func NewCDN(cert *aliyun.Credentials) *CDN {
 	return &CDN{
-		rpc:    client.NewClient(cert),
-		cdnReq: client.NewCDNRequest(""),
+		rpc:    aliyun.NewClient(cert),
+		cdnReq: NewCDNRequest(""),
 		debug:  false,
 	}
 }
@@ -111,7 +111,7 @@ func (c *CDN) AddCdnDomain(domainInfo DomainInfo, resp interface{}) (err error) 
 	//if (domainInfo.CdnType == HttpsDeliveryStreamCdnType&&(global.EmptyString == domainInfo.ServerCertificate)&&(global.EmptyString == domainInfo.PrivateKey)) {
 	//	//如果是HttpsDelivery，需要上传的安全证书和私钥。
 	//}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = AddCdnDomainAction
 	req.SetArgs("DomainName", domainInfo.DomainName)
 	req.SetArgs("CdnType", string(domainInfo.CdnType))
@@ -144,7 +144,7 @@ func (c *CDN) AddCdnDomain(domainInfo DomainInfo, resp interface{}) (err error) 
 //
 //  @link https://help.aliyun.com/document_detail/27167.html?spm=0.0.0.0.SyHloH
 func (c *CDN) DeleteCdnDomain(domainName string, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DeleteCdnDomainAction
 	req.SetArgs("DomainName", domainName)
 
@@ -159,7 +159,7 @@ func (c *CDN) DeleteCdnDomain(domainName string, resp interface{}) (err error) {
 // @param domainName 域名模糊匹配过滤。为空时，忽略此参数
 // @link https://help.aliyun.com/document_detail/27162.html?spm=0.0.0.0.COpoXo
 func (c *CDN) ReadUserDomains(domainName string, pageSize, pageNumber int64, domainStatus DomainStatus, domainSearchType DomainSearchType, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DescribeUserDomainsAction
 	if global.EmptyString != domainName {
 		req.SetArgs("DomainName", domainName)
@@ -188,7 +188,7 @@ func (c *CDN) ReadUserDomains(domainName string, pageSize, pageNumber int64, dom
 //
 // @link https://help.aliyun.com/document_detail/27162.html?spm=0.0.0.0.COpoXo
 func (c *CDN) CdnDomainDetail(domainName string, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DescribeCdnDomainDetailAction
 	req.SetArgs("DomainName", domainName)
 
@@ -208,7 +208,7 @@ func (c *CDN) ModifyCdnDomain(domainInfo DomainInfo, resp interface{}) (err erro
 		return errors.New("SourcePort  should  be 443 or 80 ; if it is zero, 80 default  ")
 	}
 
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = ModifyCdnDomainAction
 	req.SetArgs("DomainName", domainInfo.DomainName)
 	req.SetArgs("SourceType", string(domainInfo.SourceType))
@@ -229,7 +229,7 @@ func (c *CDN) ModifyCdnDomain(domainInfo DomainInfo, resp interface{}) (err erro
 //
 //  @link https://help.aliyun.com/document_detail/27165.html?spm=0.0.0.0.8cQhXd
 func (c *CDN) StartCdnDomain(domainName string, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = StartCdnDomainAction
 	req.SetArgs("DomainName", domainName)
 	err = c.rpc.Query(req, resp)
@@ -240,7 +240,7 @@ func (c *CDN) StartCdnDomain(domainName string, resp interface{}) (err error) {
 //
 //  @link https://help.aliyun.com/document_detail/27166.html?spm=0.0.0.0.JcQVpK
 func (c *CDN) StopCdnDomain(domainName string, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = StopCdnDomainAction
 	req.SetArgs("DomainName", domainName)
 	err = c.rpc.Query(req, resp)

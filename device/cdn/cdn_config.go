@@ -3,7 +3,6 @@ package cdn
 import (
 	"errors"
 	"fmt"
-	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
 	"strings"
 )
@@ -24,7 +23,7 @@ func (c *CDN) DomainConfigs(domainName string, resp interface{}, configList ...C
 }
 
 func (c *CDN) domainConfigs(domainName string, resp interface{}, configList ...string) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DescribeDomainConfigsAction
 	req.SetArgs("DomainName", domainName)
 	if len(configList) > 0 {
@@ -40,7 +39,7 @@ func (c *CDN) enabledConfig(action, domainName string, enable bool, resp interfa
 	if global.EmptyString == domainName {
 		return errors.New("domainName should not be empty")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = action
 	req.SetArgs("DomainName", domainName)
 	enableConfig := "Off"
@@ -107,7 +106,7 @@ func (c *CDN) SetCcConfig(domainName, allowIps, blockIps string, enable bool, re
 	if global.EmptyString == domainName {
 		return errors.New("domainName should not be empty")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetCcConfigAction
 	req.SetArgs("DomainName", domainName)
 	enableConfig := "Off"
@@ -132,7 +131,7 @@ func (c *CDN) SetSourceHostConfig(domainName, backSrcDomain string, resp interfa
 	if global.EmptyString == domainName || global.EmptyString == backSrcDomain {
 		return errors.New("domainName or backSrcDomain should not be empty")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetSourceHostConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("BackSrcDomain", backSrcDomain)
@@ -152,7 +151,7 @@ func (c *CDN) SetErrorPageConfig(domainName, customPageUrl string, pageType Page
 		return errors.New("'customPageUrl' should not be empty when the value of 'pageType' is 'other'")
 	}
 
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetErrorPageConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("PageType", string(pageType))
@@ -170,7 +169,7 @@ func (c *CDN) SetForceRedirectConfig(domainName string, redirectType RedirectTyp
 	if global.EmptyString == domainName || global.EmptyString == redirectType {
 		return errors.New("domainName or redirectType should not be empty")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetForceRedirectConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("RedirectType", string(redirectType))
@@ -185,7 +184,7 @@ func (c *CDN) SetReferConfig(domainName, referList string, referType ReferType, 
 	if global.EmptyString == domainName || global.EmptyString == referType {
 		return errors.New("domainName or referType should not be empty")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetReferConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("ReferType", string(referType))
@@ -211,7 +210,7 @@ func (c *CDN) SetFileCacheExpiredConfig(domainName, cacheContent string, ttl, we
 	if weight < 1 || weight > 99 {
 		return errors.New("the number of weight should between 1 to 99")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetFileCacheExpiredConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("CacheContent", cacheContent)
@@ -231,7 +230,7 @@ func (c *CDN) SetPathCacheExpiredConfig(domainName, cacheContent string, ttl, we
 	if weight < 1 || weight > 99 {
 		return errors.New("the number of weight should between 1 to 99")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetPathCacheExpiredConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("CacheContent", cacheContent)
@@ -251,7 +250,7 @@ func (c *CDN) ModifyFileCacheExpiredConfig(domainName, configID, cacheContent st
 	if weight < 1 || weight > 99 {
 		return errors.New("the number of weight should between 1 to 99")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = ModifyFileCacheExpiredConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("ConfigID", configID)
@@ -272,7 +271,7 @@ func (c *CDN) ModifyPathCacheExpiredConfig(domainName, configID, cacheContent st
 	if weight < 1 || weight > 99 {
 		return errors.New("the number of weight should between 1 to 99")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = ModifyPathCacheExpiredConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("ConfigID", configID)
@@ -290,7 +289,7 @@ func (c *CDN) DeleteCacheExpiredConfig(domainName, configID string, cacheType Ca
 	if global.EmptyString == domainName || global.EmptyString == cacheType || global.EmptyString == configID {
 		return errors.New("'domainName' 、 'cacheType' and 'configID' should not be empty ")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DeleteCacheExpiredConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("ConfigID", configID)
@@ -306,7 +305,7 @@ func (c *CDN) SetReqAuthConfig(domainName, key1, key2 string, authType AuthType,
 	if global.EmptyString == domainName || global.EmptyString == authType {
 		return errors.New("'domainName' or 'authType' should not be empty ")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetReqAuthConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("AuthType", string(authType))
@@ -330,7 +329,7 @@ func (c *CDN) SetHttpHeaderConfig(domainName, headerKey, headerValue string, res
 	if global.EmptyString == domainName {
 		return errors.New("'domainName'should not be empty ")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = SetHttpHeaderConfigAction
 	req.SetArgs("DomainName", domainName)
 	if global.EmptyString != headerKey {
@@ -350,7 +349,7 @@ func (c *CDN) ModifyHttpHeaderConfig(domainName, configID, headerKey, headerValu
 	if global.EmptyString == domainName || global.EmptyString == configID {
 		return errors.New("'domainName'or 'configID' should not be empty ")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = ModifyHttpHeaderConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("ConfigID", configID)
@@ -371,7 +370,7 @@ func (c *CDN) DeleteHttpHeaderConfig(domainName, configID string, resp interface
 	if global.EmptyString == domainName || global.EmptyString == configID {
 		return errors.New("'domainName'or 'configID' should not be empty ")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DeleteHttpHeaderConfigAction
 	req.SetArgs("DomainName", domainName)
 	req.SetArgs("ConfigID", configID)

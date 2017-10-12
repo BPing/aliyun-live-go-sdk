@@ -20,7 +20,7 @@ package live
 
 import (
 	"errors"
-	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/util"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
 	"time"
@@ -97,8 +97,8 @@ const (
 //      如果为空，代表忽略参数AppName
 // @author cbping
 type Live struct {
-	rpc     *client.Client
-	liveReq *LiveRequest
+	rpc     *aliyun.Client
+	liveReq *Request
 
 	//鉴权凭证
 	//如果为nil，则代表不开启直播流推流鉴权
@@ -118,9 +118,9 @@ type Live struct {
 // @param domainName 加速域名
 // @param appname    应用名字
 // @param streamCert  直播流推流凭证
-func NewLive(cert *client.Credentials, domainName, appName string, streamCert *StreamCredentials) *Live {
+func NewLive(cert *aliyun.Credentials, domainName, appName string, streamCert *StreamCredentials) *Live {
 	return &Live{
-		rpc:            client.NewClient(cert),
+		rpc:            aliyun.NewClient(cert),
 		liveReq:        NewLiveRequest("", domainName, appName),
 		debug:          false,
 		streamCert:     streamCert,
@@ -152,8 +152,8 @@ func (l *Live) GetStream(streamName string) *Stream {
 	}
 }
 
-func (l *Live) cloneRequest(action string) (req *LiveRequest) {
-	req = l.SetAction(action).liveReq.Clone().(*LiveRequest)
+func (l *Live) cloneRequest(action string) (req *Request) {
+	req = l.SetAction(action).liveReq.Clone().(*Request)
 	return
 }
 

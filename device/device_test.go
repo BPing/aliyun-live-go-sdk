@@ -1,10 +1,10 @@
 package device
 
 import (
-	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/device/cdn"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
 	"testing"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 )
 
 const (
@@ -18,8 +18,8 @@ const (
 //
 func TestDevice(t *testing.T) {
 
-	cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
-	streamCert := live.NewStreamCredentials(PrivateKey, live.DefualtStreamTimeout)
+	cert := aliyun.NewCredentials(AccessKeyId, AccessKeySecret)
+	streamCert := live.NewStreamCredentials(PrivateKey, live.DefaultStreamTimeout)
 
 	cdnDev, err := GetDevice(CdnDevice, Config{Credentials: cert})
 	if _, ok := cdnDev.(*cdn.CDN); err != nil || !ok {

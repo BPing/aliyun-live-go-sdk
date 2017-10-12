@@ -1,39 +1,39 @@
 package live
 
 import (
-	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 )
 
-// LiveRequest 直播请求信息
-type LiveRequest struct {
-	*client.CDNRequest
+// Request 直播请求信息
+type Request struct {
+	*aliyun.BaseRequest
 	DomainName string
 	AppName    string
 }
 
-func (l *LiveRequest) StructToArgs() {
+func (l *Request) ToArgs() {
 	l.Args.Set("DomainName", l.DomainName)
 	if "" != l.AppName {
 		l.Args.Set("AppName", l.AppName)
 	}
 }
 
-func (l *LiveRequest) Sign(cert *client.Credentials) {
-	l.StructToArgs()
-	l.CDNRequest.Sign(cert)
+func (l *Request) Sign(cert *aliyun.Credentials) {
+	l.ToArgs()
+	l.BaseRequest.Sign(cert)
 }
 
-func (l *LiveRequest) Clone() interface{} {
-	new_obj := (*l)
-	new_obj.CDNRequest = l.CDNRequest.Clone().(*client.CDNRequest)
+func (l *Request) Clone() interface{} {
+	new_obj := *l
+	new_obj.BaseRequest = l.BaseRequest.Clone().(*aliyun.BaseRequest)
 	return &new_obj
 }
 
-func NewLiveRequest(action, domainName, appname string) (l *LiveRequest) {
-	l = &LiveRequest{
-		CDNRequest: client.NewCDNRequest(action),
-		DomainName: domainName,
-		AppName:    appname,
+func NewLiveRequest(action, domainName, appname string) (l *Request) {
+	l = &Request{
+		BaseRequest: aliyun.NewBaseRequest(action),
+		DomainName:  domainName,
+		AppName:     appname,
 	}
 	return
 }

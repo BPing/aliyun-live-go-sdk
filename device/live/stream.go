@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	DefualtStreamTimeout = time.Hour * 2
+	DefaultStreamTimeout = time.Hour * 2
 )
 
 // StreamCredentials 流的地址信息的签名凭证
@@ -17,7 +17,7 @@ type StreamCredentials struct {
 }
 
 func (s *StreamCredentials) Clone() *StreamCredentials {
-	new_obj := (*s)
+	new_obj := *s
 	return &new_obj
 }
 

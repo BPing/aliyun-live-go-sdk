@@ -1,7 +1,7 @@
 package cdn
 
 import (
-	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
 )
 
@@ -145,6 +145,6 @@ type DomainInfo struct {
 }
 
 type DomainInfoResponse struct {
-	client.Response
+	aliyun.Response
 	GetDomainDetailModel DomainInfo
 }

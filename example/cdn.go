@@ -2,13 +2,13 @@ package example
 
 import (
 	"fmt"
-	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/device/cdn"
 )
 
 // CDNExample cdn例子
 func CDNExample() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	cdnM := cdn.NewCDN(cert).SetDebug(false)
 	resp := make(map[string]interface{})
 	cdnM.ReadUserDomains(DomainName, 0, 0, "", "", &resp)

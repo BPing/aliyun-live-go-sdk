@@ -1,39 +1,29 @@
-package client
+package aliyun
 
 import (
 	"net/http"
 	"testing"
+	"github.com/BPing/go-toolkit/http-client/hook"
 	"time"
+	"fmt"
 )
 
 type TestRequest struct {
+	BaseRequest
 	Format     string
 	RequestURL string
-}
-
-func (b *TestRequest) Sign(cert *Credentials) {
-}
-
-func (b *TestRequest) HttpRequestInstance() (*http.Request, error) {
-	httpReq, err := http.NewRequest("GET", b.RequestURL, nil)
-	return httpReq, err
 }
 
 func (b *TestRequest) ResponseFormat() string {
 	return b.Format
 }
 
-// A Timeout of zero means no timeout.
-func (b *TestRequest) DeadLine() time.Duration {
-	return 0
-}
-func (b *TestRequest) String() string {
-	return ""
+func (b *TestRequest) Sign(cert *Credentials) {
 }
 
-func (b *TestRequest) Clone() interface{} {
-
-	return nil
+func (b *TestRequest) HttpRequest() (*http.Request, error) {
+	httpReq, err := http.NewRequest("GET", b.RequestURL, nil)
+	return httpReq, err
 }
 
 type youdao struct {
@@ -43,8 +33,12 @@ type youdao struct {
 
 func TestClient(t *testing.T) {
 	end := make(chan int)
-	client := NewClient(&Credentials{"214564", "46546"})
+	cert := NewCredentials("214564", "46546")
+	client := NewClient(cert)
 	client.SetDebug(true)
+	client.AppendHook(hook.NewLogHook(time.Second*3, func(tag, msg string) {
+		fmt.Println(tag, msg)
+	}))
 	go func() {
 		resp := make(map[string]interface{})
 		req := &TestRequest{Format: JSONResponseFormat, RequestURL: "http://www.weather.com.cn/data/cityinfo/101190408.html"}

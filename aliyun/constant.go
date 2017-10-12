@@ -1,4 +1,4 @@
-package client
+package aliyun
 
 const (
 	ApiCDNVersion = "2014-11-11" //2014-11-11

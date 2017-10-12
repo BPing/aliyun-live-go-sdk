@@ -3,13 +3,15 @@
    
     阿里云直播 golang SDK
 
+[阿里云视频直播接口文档](https://help.aliyun.com/product/29949.html?spm=5176.750001.2.12.Xa4wT1)
+
 # 快速开始
 
 ```go
 package main
 
 import (
-    "github.com/BPing/aliyun-live-go-sdk/client"
+    "github.com/BPing/aliyun-live-go-sdk/aliyun"
     "github.com/BPing/aliyun-live-go-sdk/device/live"
     "github.com/BPing/aliyun-live-go-sdk/util"
     "time"
@@ -22,7 +24,7 @@ const (
 )
 
 func main() {
-    cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
+    cert := aliyun.NewCredentials(AccessKeyId, AccessKeySecret)
     live := live.NewLive(cert, "<Yours' CDN>", "app-name",nil).SetDebug(true)
     resp := make(map[string]interface{})
     live.StreamsPublishList(time.Now().Add(-time.Hour * 12), time.Now(), &resp)
@@ -118,7 +120,7 @@ go get github.com/BPing/aliyun-live-go-sdk
 		OssEndpoint:     OssEndpoint,
 		OssObject:       OssObject,
 		OssObjectPrefix: OssObjectPrefix,
-	}
+	} 
 	config:=live.SnapshotConfig{
 		OssInfo:oss,
 		TimeInterval       : 5,
@@ -236,7 +238,7 @@ go get github.com/BPing/aliyun-live-go-sdk
 ```go
   //如果 streamCert 为空的话，则代表不开启直播流鉴权
    cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
-   streamCert := live.NewStreamCredentials(PrivateKey, live.DefualtStreamTimeout)
+   streamCert := live.NewStreamCredentials(PrivateKey, live.DefaultStreamTimeout)
    liveM := live.NewLive(cert, DomainName, AppName, streamCert)
   // GetStream 获取直播流
   // @describe 每一次都生成新的流实例，不检查流名的唯一性，并且同一个名字会生成不同的实例的，

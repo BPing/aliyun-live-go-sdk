@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
 	"time"
 )
@@ -10,7 +10,7 @@ import (
 // LiveExample live例子
 func LiveExample() {
 
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 	resp := make(map[string]interface{})
 	err := liveM.StreamsPublishList(time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
@@ -78,7 +78,7 @@ func LiveExample() {
 
 // LiveSnapshotExample 截图例子
 func LiveSnapshotExample() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 
 	oss := live.OssInfo{
@@ -133,7 +133,7 @@ func LiveSnapshotExample() {
 
 // LiveTranscodeExample 转码
 func LiveTranscodeExample() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 
 	fmt.Println("添加转码配置：")
@@ -159,7 +159,7 @@ func LiveTranscodeExample() {
 
 // 拉流
 func LivePullStreamInfo() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 
 	fmt.Println("添加拉流信息：")
@@ -185,7 +185,7 @@ func LivePullStreamInfo() {
 
 // 状态通知
 func NotifyUrlConfig() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 
 	fmt.Println("设置回调链接：")
@@ -211,7 +211,7 @@ func NotifyUrlConfig() {
 
 // 状态通知
 func MixStream() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 
 	fmt.Println("添加连麦配置：")
@@ -289,8 +289,8 @@ func MixStream() {
 
 // StreamExample 流
 func StreamExample() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
-	streamCert := live.NewStreamCredentials(PrivateKey, live.DefualtStreamTimeout)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
+	streamCert := live.NewStreamCredentials(PrivateKey, live.DefaultStreamTimeout)
 	liveM := live.NewLive(cert, DomainName, AppName, streamCert).SetDebug(false)
 	stream := liveM.GetStream("test-video-name")
 	stream.RtmpPublishUrl()
