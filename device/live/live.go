@@ -20,7 +20,7 @@ package live
 
 import (
 	"errors"
-	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/util"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
 	"time"
@@ -35,7 +35,6 @@ const (
 	DescribeLiveStreamOnlineUserNumAction   = "DescribeLiveStreamOnlineUserNum"
 	ForbidLiveStreamAction                  = "ForbidLiveStream"
 	ResumeLiveStreamAction                  = "ResumeLiveStream"
-	SetLiveStreamsNotifyUrlConfigAction     = "SetLiveStreamsNotifyUrlConfig"
 
 	// 录制处理
 	AddLiveAppRecordConfigAction                     = "AddLiveAppRecordConfig"
@@ -64,6 +63,29 @@ const (
 	StartMixStreamsServiceAction = "StartMixStreamsService"
 	StopMixStreamsServiceAction  = "StopMixStreamsService"
 
+	// 直播连麦
+	AddLiveMixConfigAction               = "AddLiveMixConfig"
+	DescribeLiveMixConfigAction          = "DescribeLiveMixConfig"
+	DeleteLiveMixConfigAction            = "DeleteLiveMixConfig"
+	StartMultipleStreamMixServiceAction  = "StartMultipleStreamMixService"
+	StopMultipleStreamMixServiceAction   = "StopMultipleStreamMixService"
+	AddMultipleStreamMixServiceAction    = "AddMultipleStreamMixService"
+	RemoveMultipleStreamMixServiceAction = "RemoveMultipleStreamMixService"
+	AddLiveMixNotifyConfigAction         = "AddLiveMixNotifyConfig"
+	DescribeLiveMixNotifyConfigAction    = "DescribeLiveMixNotifyConfig"
+	UpdateLiveMixNotifyConfigAction      = "UpdateLiveMixNotifyConfig"
+	DeleteLiveMixNotifyConfigAction      = "DeleteLiveMixNotifyConfig"
+
+	// 直播拉流
+	AddLivePullStreamInfoConfigAction    = "AddLivePullStreamInfoConfig"
+	DeleteLivePullStreamInfoConfigAction = "DeleteLivePullStreamInfoConfig"
+	DescribeLivePullStreamConfigAction   = "DescribeLivePullStreamConfig"
+
+	// 状态通知
+	SetLiveStreamsNotifyUrlConfigAction      = "SetLiveStreamsNotifyUrlConfig"
+	DescribeLiveStreamsNotifyUrlConfigAction = "DescribeLiveStreamsNotifyUrlConfig"
+	DeleteLiveStreamsNotifyUrlConfigAction   = "DeleteLiveStreamsNotifyUrlConfig"
+
 	//直播中心服务器域名
 	DefaultVideoCenter = "video-center.alivecdn.com"
 )
@@ -75,8 +97,8 @@ const (
 //      如果为空，代表忽略参数AppName
 // @author cbping
 type Live struct {
-	rpc     *client.Client
-	liveReq *LiveRequest
+	rpc     *aliyun.Client
+	liveReq *Request
 
 	//鉴权凭证
 	//如果为nil，则代表不开启直播流推流鉴权
@@ -96,9 +118,9 @@ type Live struct {
 // @param domainName 加速域名
 // @param appname    应用名字
 // @param streamCert  直播流推流凭证
-func NewLive(cert *client.Credentials, domainName, appName string, streamCert *StreamCredentials) *Live {
+func NewLive(cert *aliyun.Credentials, domainName, appName string, streamCert *StreamCredentials) *Live {
 	return &Live{
-		rpc:            client.NewClient(cert),
+		rpc:            aliyun.NewClient(cert),
 		liveReq:        NewLiveRequest("", domainName, appName),
 		debug:          false,
 		streamCert:     streamCert,
@@ -125,13 +147,13 @@ func (l *Live) GetStream(streamName string) *Stream {
 		StreamName:     streamName,
 		videoCenterDns: l.videoCenterDns,
 		streamCert:     credentials,
-		signOn:         (nil != l.streamCert),
+		signOn:         nil != l.streamCert,
 		live:           l,
 	}
 }
 
-func (l *Live) cloneRequest(action string) (req *LiveRequest) {
-	req = l.SetAction(action).liveReq.Clone().(*LiveRequest)
+func (l *Live) cloneRequest(action string) (req *Request) {
+	req = l.SetAction(action).liveReq.Clone().(*Request)
 	return
 }
 
@@ -267,16 +289,6 @@ func (l *Live) ResumeLiveStreamWithPublisher(streamName string, resp interface{}
 // @see ResumeLiveStream
 func (l *Live) ResumeLiveStreamWithPublisherWithApp(appName, streamName string, resp interface{}) (err error) {
 	return l.ResumeLiveStream(appName, streamName, "publisher", resp)
-}
-
-// SetStreamsNotifyUrlConfig 设置回调链接
-// NotifyUrl	String	是	设置直播流信息推送到的URL地址，必须以http://开头；
-func (l *Live) SetStreamsNotifyUrlConfig(notifyUrl string, resp interface{}) (err error) {
-	req := l.cloneRequest(SetLiveStreamsNotifyUrlConfigAction)
-	req.AppName = ""
-	req.SetArgs("NotifyUrl", notifyUrl)
-	err = l.rpc.Query(req, resp)
-	return
 }
 
 // GET 和 SET

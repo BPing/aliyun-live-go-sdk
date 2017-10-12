@@ -2,7 +2,6 @@ package cdn
 
 import (
 	"errors"
-	"github.com/BPing/aliyun-live-go-sdk/client"
 )
 
 // 服务操作接口
@@ -13,7 +12,7 @@ import (
 //                            常量  PayByTrafficType(PayByTraffic)和PayByBandwidthType(PayByBandwidth)
 // @link https://help.aliyun.com/document_detail/27157.html?spm=0.0.0.0.t6wFRF
 func (c *CDN) OpenCdnService(internetChargeType CdnPayType, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = OpenCdnServiceAction
 	if PayNullType == internetChargeType {
 		internetChargeType = PayByTrafficType
@@ -27,7 +26,7 @@ func (c *CDN) OpenCdnService(internetChargeType CdnPayType, resp interface{}) (e
 //
 // @link https://help.aliyun.com/document_detail/27158.html?spm=0.0.0.0.2RRuSQ
 func (c *CDN) ScanCdnService(resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DescribeCdnServiceAction
 	err = c.rpc.Query(req, resp)
 	return
@@ -38,7 +37,7 @@ func (c *CDN) ScanCdnService(resp interface{}) (err error) {
 //                            常量  PayByTrafficType(PayByTraffic)和PayByBandwidthType(PayByBandwidth)
 // @link https://help.aliyun.com/document_detail/27159.html?spm=0.0.0.0.AuPm7B
 func (c *CDN) ModifyCdnServicePayType(internetChargeType CdnPayType, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = ModifyCdnServiceAction
 	if PayNullType == internetChargeType {
 		err = errors.New("internetChargeType should not be empty")

@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/BPing/aliyun-live-go-sdk/client"
+	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/device/live"
 	"time"
 )
@@ -10,7 +10,7 @@ import (
 // LiveExample live例子
 func LiveExample() {
 
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 	resp := make(map[string]interface{})
 	err := liveM.StreamsPublishList(time.Now().Add(-time.Hour*24*10), time.Now(), &resp)
@@ -78,7 +78,7 @@ func LiveExample() {
 
 // LiveSnapshotExample 截图例子
 func LiveSnapshotExample() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 
 	oss := live.OssInfo{
@@ -133,7 +133,7 @@ func LiveSnapshotExample() {
 
 // LiveTranscodeExample 转码
 func LiveTranscodeExample() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
 	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
 
 	fmt.Println("添加转码配置：")
@@ -157,10 +157,153 @@ func LiveTranscodeExample() {
 	fmt.Println(err, resp)
 }
 
+// 拉流
+func LivePullStreamInfo() {
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("添加拉流信息：")
+	resp := make(map[string]interface{})
+	err := liveM.AddLivePullStreamInfoConfig("test-video-name", "http://", time.Now().Add(-time.Hour*24*20), time.Now(), &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLivePullStreamConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除拉流信息：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLivePullStreamInfoConfig("test-video-name", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLivePullStreamConfig(&resp)
+	fmt.Println(err, resp)
+}
+
+// 状态通知
+func NotifyUrlConfig() {
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("设置回调链接：")
+	resp := make(map[string]interface{})
+	err := liveM.SetStreamsNotifyUrlConfig("http://1.1.1.1:8888", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看：")
+	resp = make(map[string]interface{})
+	err = liveM.StreamsNotifyUrlConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除推流回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveStreamsNotifyUrlConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看：")
+	resp = make(map[string]interface{})
+	err = liveM.StreamsNotifyUrlConfig(&resp)
+	fmt.Println(err, resp)
+}
+
+// 状态通知
+func MixStream() {
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("添加连麦配置：")
+	resp := make(map[string]interface{})
+	err := liveM.AddLiveMixConfig("mhd ", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除连麦配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveMixConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("开启多人连麦服务：")
+	resp = make(map[string]interface{})
+	err = liveM.StartMultipleStreamMixService("test-video-name", "pip4a", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("停止多人连麦服务：")
+	resp = make(map[string]interface{})
+	err = liveM.StopMultipleStreamMixService("test-video-name", &resp)
+	fmt.Println(err, resp)
+
+	config := live.MixStreamParam{
+		Mix: live.StreamBase{
+			LiveBase: live.LiveBase{
+				DomainName: DomainName,
+				AppName:    AppName,
+			},
+			StreamName: "test-video-name-mix",
+		},
+		Main: live.StreamBase{
+			LiveBase: live.LiveBase{
+				DomainName: DomainName,
+				AppName:    AppName,
+			},
+			StreamName: "test-video-name",
+		},}
+	fmt.Println("往主流添加一路流：")
+	resp = make(map[string]interface{})
+	err = liveM.AddMultipleStreamMixService(config, &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("从主流移除一路流：")
+	resp = make(map[string]interface{})
+	err = liveM.RemoveMultipleStreamMixService(config, &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("添加连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.AddLiveMixNotifyConfig("http://1.1.1.1:8888", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixNotifyConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("更新连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.UpdateLiveMixNotifyConfig("http://1.1.1.1:8889", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixNotifyConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("添加连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveMixNotifyConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询连麦回调配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveMixNotifyConfig(&resp)
+	fmt.Println(err, resp)
+}
+
 // StreamExample 流
 func StreamExample() {
-	cert := client.NewCredentials(AccessKeyID, AccessKeySecret)
-	streamCert := live.NewStreamCredentials(PrivateKey, live.DefualtStreamTimeout)
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
+	streamCert := live.NewStreamCredentials(PrivateKey, live.DefaultStreamTimeout)
 	liveM := live.NewLive(cert, DomainName, AppName, streamCert).SetDebug(false)
 	stream := liveM.GetStream("test-video-name")
 	stream.RtmpPublishUrl()
@@ -191,4 +334,28 @@ func StreamExample() {
 	//截图
 	fmt.Println("查询截图信息：")
 	fmt.Println(stream1.SnapshotInfo(time.Now().Add(-time.Hour*24*20), time.Now(), 10))
+
+	fmt.Println(stream1.StartMultipleStreamMixService("pip4a"))
+
+	fmt.Println(stream1.StopMultipleStreamMixService())
+
+	fmt.Println(stream1.AddMultipleStream(
+		live.StreamBase{
+			LiveBase: live.LiveBase{
+				DomainName: DomainName,
+				AppName:    AppName,
+			},
+			StreamName: "test-video-name-mix",
+		},
+	))
+
+	fmt.Println(stream1.RemoveMultipleStream(
+		live.StreamBase{
+			LiveBase: live.LiveBase{
+				DomainName: DomainName,
+				AppName:    AppName,
+			},
+			StreamName: "test-video-name-mix",
+		},
+	))
 }

@@ -1,15 +1,14 @@
 package util
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 )
 
 // GetISO8601TimeStamp gets timestamp string in ISO8601 format
 func GetISO8601TimeStamp(ts time.Time) string {
-	t := ts.UTC()
-	return fmt.Sprintf("%04d-%02d-%02dT%02d:%02d:%02dZ", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
+	return NewISO6801Time(ts).String()
+	//return fmt.Sprintf("%04d-%02d-%02dT%02d:%02d:%02dZ", t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second())
 }
 
 const FormatISO8601 = "2006-01-02T15:04:05Z"

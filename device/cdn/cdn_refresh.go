@@ -3,7 +3,6 @@ package cdn
 import (
 	"errors"
 	"fmt"
-	"github.com/BPing/aliyun-live-go-sdk/client"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
 )
 
@@ -17,7 +16,7 @@ func (c *CDN) RefreshObjectCaches(objectPath string, objectType RefreshObjectTyp
 	if objectPath == global.EmptyString {
 		return errors.New("objectPath should not be empty")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = RefreshObjectCachesAction
 	req.SetArgs("ObjectPath", objectPath)
 	if global.EmptyString != objectType {
@@ -34,7 +33,7 @@ func (c *CDN) PushObjectCache(objectPath string, resp interface{}) (err error) {
 	if objectPath == global.EmptyString {
 		return errors.New("objectPath should not be empty")
 	}
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = PushObjectCacheAction
 	req.SetArgs("ObjectPath", objectPath)
 	err = c.rpc.Query(req, resp)
@@ -45,7 +44,7 @@ func (c *CDN) PushObjectCache(objectPath string, resp interface{}) (err error) {
 //
 //  @link https://help.aliyun.com/document_detail/27202.html?spm=0.0.0.0.Otm79O
 func (c *CDN) GetRefreshTasks(taskId, objectPath string, pageSize, pageNumber int64, resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DescribeRefreshTasksAction
 	if global.EmptyString != objectPath {
 		req.SetArgs("ObjectPath", objectPath)
@@ -69,7 +68,7 @@ func (c *CDN) GetRefreshTasks(taskId, objectPath string, pageSize, pageNumber in
 //
 //  @link https://help.aliyun.com/document_detail/27203.html?spm=0.0.0.0.qSO8re
 func (c *CDN) GetRefreshQuota(resp interface{}) (err error) {
-	req := c.cdnReq.Clone().(*client.CDNRequest)
+	req := c.cdnReq.Clone().(*Request)
 	req.Action = DescribeRefreshQuotaAction
 	err = c.rpc.Query(req, resp)
 	return
