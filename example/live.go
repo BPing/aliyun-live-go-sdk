@@ -244,7 +244,21 @@ func MixStream() {
 	err = liveM.StopMultipleStreamMixService("test-video-name", &resp)
 	fmt.Println(err, resp)
 
-	config := live.MixStreamParam{MainStreamName: "test-video-name", MixDomainName: DomainName, MixAppName: AppName, MixStreamName: "test-video-name-mix"}
+	config := live.MixStreamParam{
+		Mix: live.StreamBase{
+			LiveBase: live.LiveBase{
+				DomainName: DomainName,
+				AppName:    AppName,
+			},
+			StreamName: "test-video-name-mix",
+		},
+		Main: live.StreamBase{
+			LiveBase: live.LiveBase{
+				DomainName: DomainName,
+				AppName:    AppName,
+			},
+			StreamName: "test-video-name",
+		},}
 	fmt.Println("往主流添加一路流：")
 	resp = make(map[string]interface{})
 	err = liveM.AddMultipleStreamMixService(config, &resp)
@@ -320,4 +334,28 @@ func StreamExample() {
 	//截图
 	fmt.Println("查询截图信息：")
 	fmt.Println(stream1.SnapshotInfo(time.Now().Add(-time.Hour*24*20), time.Now(), 10))
+
+	fmt.Println(stream1.StartMultipleStreamMixService("pip4a"))
+
+	fmt.Println(stream1.StopMultipleStreamMixService())
+
+	fmt.Println(stream1.AddMultipleStream(
+		live.StreamBase{
+			LiveBase: live.LiveBase{
+				DomainName: DomainName,
+				AppName:    AppName,
+			},
+			StreamName: "test-video-name-mix",
+		},
+	))
+
+	fmt.Println(stream1.RemoveMultipleStream(
+		live.StreamBase{
+			LiveBase: live.LiveBase{
+				DomainName: DomainName,
+				AppName:    AppName,
+			},
+			StreamName: "test-video-name-mix",
+		},
+	))
 }

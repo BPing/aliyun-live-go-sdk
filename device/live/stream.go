@@ -266,3 +266,47 @@ func (s *Stream) SnapshotInfo(startTime, endTime time.Time, limit int) (streamSn
 	err = s.live.LiveStreamSnapshotInfoWithApp(s.appName, s.StreamName, startTime, endTime, limit, &streamSnapshotInfo)
 	return
 }
+
+// 连麦 ----------------------------------------------------------------------------------------------------------------
+
+// 开启多人连麦服务
+func (s *Stream) StartMultipleStreamMixService(mixTemplate string) (err error) {
+	err = s.live.StartMultipleStreamMixServiceWithApp(s.appName, s.StreamName, mixTemplate, make(map[string]interface{}))
+	return
+}
+
+// 停止多人连麦服务
+func (s *Stream) StopMultipleStreamMixService() (err error) {
+	err = s.live.StopMultipleStreamMixServiceWithApp(s.appName, s.StreamName, make(map[string]interface{}))
+	return
+}
+
+// 添加一路流
+func (s *Stream) AddMultipleStream(mix StreamBase) (err error) {
+	err = s.live.AddMultipleStreamMixService(MixStreamParam{
+		Mix: mix,
+		Main: StreamBase{
+			LiveBase: LiveBase{
+				DomainName: s.domainName,
+				AppName:    s.domainName,
+			},
+			StreamName: s.domainName,
+		},
+	}, make(map[string]interface{}))
+	return
+}
+
+// 移除一路流
+func (s *Stream) RemoveMultipleStream(mix StreamBase) (err error) {
+	err = s.live.RemoveMultipleStreamMixService(MixStreamParam{
+		Mix: mix,
+		Main: StreamBase{
+			LiveBase: LiveBase{
+				DomainName: s.domainName,
+				AppName:    s.domainName,
+			},
+			StreamName: s.domainName,
+		},
+	}, make(map[string]interface{}))
+	return
+}

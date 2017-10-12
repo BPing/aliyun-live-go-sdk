@@ -4,14 +4,17 @@ package live
 // -------------------------------------------------------------------------------
 
 type MixStreamParam struct {
-	MainDomainName string //	主混流域名
-	MainAppName    string //	主混流应用名称
-	MainStreamName string //	主混流直播流名称
-	MixDomainName  string //	副混流域名
-	MixAppName     string //	副混流应用名称
-	MixStreamName  string //	副混流直播流名称
-	MixTemplate    string //	混流模版，支持 picture_in_picture 、side_by_side
-	MixType        string //	混流类型， 支持 channel 和 stream （都是指的副流，主流必须是 channel）
+	Main StreamBase //主混流
+	Mix  StreamBase //副混流
+
+	//MainDomainName string //	主混流域名
+	//MainAppName    string //	主混流应用名称
+	//MainStreamName string //	主混流直播流名称
+	//MixDomainName  string //	副混流域名
+	//MixAppName     string //	副混流应用名称
+	//MixStreamName  string //	副混流直播流名称
+	MixTemplate string //	混流模版，支持 picture_in_picture 、side_by_side
+	MixType     string //	混流类型， 支持 channel 和 stream （都是指的副流，主流必须是 channel）
 }
 
 // StartMixStreamsService 开始混流操作
@@ -20,12 +23,12 @@ func (l *Live) StartMixStreamsService(mixStream MixStreamParam, resp interface{}
 	req := l.cloneRequest(StartMixStreamsServiceAction)
 	req.AppName = ""
 	req.DomainName = ""
-	req.SetArgs("MainDomainName", mixStream.MainDomainName)
-	req.SetArgs("MainAppName", mixStream.MainAppName)
-	req.SetArgs("MainStreamName", mixStream.MainStreamName)
-	req.SetArgs("MixDomainName", mixStream.MixDomainName)
-	req.SetArgs("MixAppName", mixStream.MixAppName)
-	req.SetArgs("MixStreamName", mixStream.MixStreamName)
+	req.SetArgs("MainDomainName", mixStream.Main.DomainName)
+	req.SetArgs("MainAppName", mixStream.Main.AppName)
+	req.SetArgs("MainStreamName", mixStream.Main.StreamName)
+	req.SetArgs("MixDomainName", mixStream.Mix.DomainName)
+	req.SetArgs("MixAppName", mixStream.Mix.AppName)
+	req.SetArgs("MixStreamName", mixStream.Mix.StreamName)
 	req.SetArgs("MixTemplate", mixStream.MixTemplate)
 	req.SetArgs("MixType", mixStream.MixType)
 	err = l.rpc.Query(req, resp)
@@ -38,12 +41,12 @@ func (l *Live) StopMixStreamsService(mixStream MixStreamParam, resp interface{})
 	req := l.cloneRequest(StopMixStreamsServiceAction)
 	req.AppName = ""
 	req.DomainName = ""
-	req.SetArgs("MainDomainName", mixStream.MainDomainName)
-	req.SetArgs("MainAppName", mixStream.MainAppName)
-	req.SetArgs("MainStreamName", mixStream.MainStreamName)
-	req.SetArgs("MixDomainName", mixStream.MixDomainName)
-	req.SetArgs("MixAppName", mixStream.MixAppName)
-	req.SetArgs("MixStreamName", mixStream.MixStreamName)
+	req.SetArgs("MainDomainName", mixStream.Main.DomainName)
+	req.SetArgs("MainAppName", mixStream.Main.AppName)
+	req.SetArgs("MainStreamName", mixStream.Main.StreamName)
+	req.SetArgs("MixDomainName", mixStream.Mix.DomainName)
+	req.SetArgs("MixAppName", mixStream.Mix.AppName)
+	req.SetArgs("MixStreamName", mixStream.Mix.StreamName)
 	err = l.rpc.Query(req, resp)
 	return
 }
@@ -128,16 +131,16 @@ func (l *Live) StopMultipleStreamMixService(streamName string, resp interface{})
 // {@link https://help.aliyun.com/document_detail/51315.html?spm=5176.doc51314.6.684.e6WbAe}
 func (l *Live) AddMultipleStreamMixService(mixStream MixStreamParam, resp interface{}) (err error) {
 	req := l.cloneRequest(AddMultipleStreamMixServiceAction)
-	if mixStream.MainDomainName != "" {
-		req.DomainName = mixStream.MainDomainName
+	if mixStream.Main.DomainName != "" {
+		req.DomainName = mixStream.Main.DomainName
 	}
-	if mixStream.MainAppName != "" {
-		req.AppName = mixStream.MainAppName
+	if mixStream.Main.AppName != "" {
+		req.AppName = mixStream.Main.AppName
 	}
-	req.SetArgs("StreamName", mixStream.MainStreamName)
-	req.SetArgs("MixDomainName", mixStream.MixDomainName)
-	req.SetArgs("MixAppName", mixStream.MixAppName)
-	req.SetArgs("MixStreamName", mixStream.MixStreamName)
+	req.SetArgs("StreamName", mixStream.Main.StreamName)
+	req.SetArgs("MixDomainName", mixStream.Mix.DomainName)
+	req.SetArgs("MixAppName", mixStream.Mix.AppName)
+	req.SetArgs("MixStreamName", mixStream.Mix.StreamName)
 	err = l.rpc.Query(req, resp)
 	return
 }
@@ -146,16 +149,16 @@ func (l *Live) AddMultipleStreamMixService(mixStream MixStreamParam, resp interf
 // {@link https://help.aliyun.com/document_detail/51316.html?spm=5176.doc51315.6.685.9SN11d}
 func (l *Live) RemoveMultipleStreamMixService(mixStream MixStreamParam, resp interface{}) (err error) {
 	req := l.cloneRequest(RemoveMultipleStreamMixServiceAction)
-	if mixStream.MainDomainName != "" {
-		req.DomainName = mixStream.MainDomainName
+	if mixStream.Main.DomainName != "" {
+		req.DomainName = mixStream.Main.DomainName
 	}
-	if mixStream.MainAppName != "" {
-		req.AppName = mixStream.MainAppName
+	if mixStream.Main.AppName != "" {
+		req.AppName = mixStream.Main.AppName
 	}
-	req.SetArgs("StreamName", mixStream.MainStreamName)
-	req.SetArgs("MixDomainName", mixStream.MixDomainName)
-	req.SetArgs("MixAppName", mixStream.MixAppName)
-	req.SetArgs("MixStreamName", mixStream.MixStreamName)
+	req.SetArgs("StreamName", mixStream.Main.StreamName)
+	req.SetArgs("MixDomainName", mixStream.Mix.DomainName)
+	req.SetArgs("MixAppName", mixStream.Mix.AppName)
+	req.SetArgs("MixStreamName", mixStream.Mix.StreamName)
 	err = l.rpc.Query(req, resp)
 	return
 }
