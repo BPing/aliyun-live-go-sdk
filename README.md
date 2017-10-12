@@ -199,7 +199,7 @@ go get github.com/BPing/aliyun-live-go-sdk
 ```go
 	err=liveM.StopMixStreamsService(...)
 ```
-### 拉流（暂时不可用）
+### 拉流（2017-10-12）
 
 * 添加拉流信息
 ```go
@@ -216,7 +216,65 @@ go get github.com/BPing/aliyun-live-go-sdk
 	err=liveM.DescribeLivePullStreamConfig(...)
 ```
 
-### 状态通知（暂时不可用）
+### 连麦（（2017-10-12）
+
+* 添加连麦配置
+```go
+	err=liveM.AddLiveMixConfig(...)
+```
+
+* 查询连麦配置
+```go
+	err=liveM.DescribeLiveMixConfig(...)
+```
+
+* 删除连麦配置
+```go
+	err=liveM.DeleteLiveMixConfig(...)
+```
+
+* 开启多人连麦服务
+```go
+	err=liveM.StartMultipleStreamMixService(...)
+```
+
+* 停止多人连麦服务
+```go
+	err=liveM.StopMultipleStreamMixService(...)
+```
+
+* 往主流添加一路流
+```go
+	err=liveM.AddMultipleStreamMixService(...)
+```
+
+* 从主流移除一路流
+```go
+	err=liveM.RemoveMultipleStreamMixService(...)
+```
+
+* 添加连麦回调配置
+```go
+	err=liveM.AddLiveMixNotifyConfig(...)
+```
+
+* 查询连麦回调配置
+```go
+	err=liveM.DescribeLiveMixNotifyConfig(...)
+```
+
+* 删除连麦回调配置
+```go
+	err=liveM.DeleteLiveMixNotifyConfig(...)
+```
+
+* 更新连麦回调配置
+```go
+	err=liveM.UpdateLiveMixNotifyConfig(...)
+```
+
+
+### 状态通知（（2017-10-12）
 
 * 设置回调链接
 ```go

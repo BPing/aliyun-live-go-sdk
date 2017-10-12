@@ -76,7 +76,7 @@ func (l *Live) DescribeLiveMixConfig(resp interface{}) (err error) {
 	return
 }
 
-// DeleteLiveMixConfigWithApp 在指定的域名下查询所有的连麦配置。
+// DeleteLiveMixConfigWithApp 删除连麦配置
 // {@link https://help.aliyun.com/document_detail/52720.html?spm=5176.doc52722.6.681.F9sNc1}
 func (l *Live) DeleteLiveMixConfigWithApp(appName string, resp interface{}) (err error) {
 	req := l.cloneRequest(DeleteLiveMixConfigAction)
@@ -85,7 +85,7 @@ func (l *Live) DeleteLiveMixConfigWithApp(appName string, resp interface{}) (err
 	return
 }
 
-// DeleteLiveMixConfig 在指定的域名下查询所有的连麦配置。
+// DeleteLiveMixConfig 删除连麦配置
 // @see DeleteLiveMixConfigWithApp
 func (l *Live) DeleteLiveMixConfig(resp interface{}) (err error) {
 	return l.DeleteLiveMixConfigWithApp(l.liveReq.AppName, resp)
