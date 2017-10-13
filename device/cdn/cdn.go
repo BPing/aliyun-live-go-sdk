@@ -187,7 +187,7 @@ func (c *CDN) ReadUserDomains(domainName string, pageSize, pageNumber int64, dom
 // CdnDomainDetail 获取指定加速域名配置的基本信息
 //
 // @link https://help.aliyun.com/document_detail/27162.html?spm=0.0.0.0.COpoXo
-func (c *CDN) CdnDomainDetail(domainName string, resp interface{}) (err error) {
+func (c *CDN) DomainDetail(domainName string, resp interface{}) (err error) {
 	req := c.cdnReq.Clone().(*Request)
 	req.Action = DescribeCdnDomainDetailAction
 	req.SetArgs("DomainName", domainName)

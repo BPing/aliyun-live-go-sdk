@@ -32,11 +32,11 @@ func CDNExample() {
 	fmt.Println(err, resp)
 
 	resp1 := cdn.DomainInfoResponse{}
-	err = cdnM.CdnDomainDetail(DomainName, &resp1)
+	err = cdnM.DomainDetail(DomainName, &resp1)
 	fmt.Println(err, resp1)
 
 	resp = make(map[string]interface{})
-	err = cdnM.CdnDomainDetail(DomainName, &resp)
+	err = cdnM.DomainDetail(DomainName, &resp)
 	fmt.Println(err, resp)
 
 	//config
