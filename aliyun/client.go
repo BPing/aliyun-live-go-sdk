@@ -9,22 +9,25 @@ import (
 	"time"
 )
 
+// Client 统一处理器。
+//        底层使用core包的client来处理请求内容。
+//   Credentials API请求凭证
+//   Client      core.Client
+//   debug       是否开启调试
 type Client struct {
 	*Credentials
 	*core.Client
-	//
 	debug bool
 }
 
 func (c *Client) responseUnmarshal(req Request, respInfo *core.Response, resp interface{}) error {
 	if req.ResponseFormat() == XMLResponseFormat {
 		return respInfo.ToXML(resp)
-	} else {
-		return respInfo.ToJSON(resp)
 	}
+	return respInfo.ToJSON(resp)
 }
 
-// 处理请求
+// Query 处理请求
 func (c *Client) Query(req Request, resp interface{}) error {
 	if nil == req {
 		return clientError(errors.New("request is nil"))
@@ -58,6 +61,7 @@ func clientError(err error) error {
 	return errors.New("AliyunLiveGoClientFailure:" + err.Error())
 }
 
+// NewClientTimeout 新建client实例，可设置超时时间
 func NewClientTimeout(cert *Credentials, connectTimeout time.Duration) *Client {
 	c := &Client{
 		Credentials: cert,
@@ -80,6 +84,7 @@ func NewClientTimeout(cert *Credentials, connectTimeout time.Duration) *Client {
 	return c
 }
 
+// NewClient 新建client实例。
 func NewClient(cert *Credentials) (c *Client) {
 	return NewClientTimeout(cert, time.Duration(0))
 }
