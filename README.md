@@ -370,7 +370,9 @@ go get github.com/BPing/aliyun-live-go-sdk
     streamSnapshotInfo,err:=stream.SnapshotInfo(time.Now().Add(-time.Hour * 12), time.Now(), 10)
 ```
 
+# 依赖
 
+  `github.com/BPing/go-toolkit/http-client`
 
 # 贡献参与者
 * cbping(452775680@qq.com)
