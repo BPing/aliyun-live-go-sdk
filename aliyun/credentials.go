@@ -1,16 +1,16 @@
 package aliyun
 
-//Api请求凭证
+//Credentials API请求凭证
 type Credentials struct {
 	//Access Key Id
-	AccessKeyId string
+	AccessKeyID string
 	//Access Key Secret
 	AccessKeySecret string
 }
 
-func NewCredentials(accessKeyId, accessKeySecret string) *Credentials {
+func NewCredentials(accessKeyID, accessKeySecret string) *Credentials {
 	return &Credentials{
-		AccessKeyId:     accessKeyId,
+		AccessKeyID:     accessKeyID,
 		AccessKeySecret: accessKeySecret,
 	}
 }

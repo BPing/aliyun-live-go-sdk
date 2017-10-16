@@ -6,7 +6,7 @@ type Response struct {
 	RequestId string `json:"RequestId" xml:"RequestId"`
 }
 
-//错误信息结构体
+//ErrorResponse 错误信息结构体
 type ErrorResponse struct {
 	RequestId  string `json:"RequestId" xml:"RequestId"`
 	HostId     string `json:"HostId" xml:"HostId"`

@@ -18,6 +18,7 @@ type Request interface {
 	ResponseFormat() string
 }
 
+// BaseRequest 基础请求结构
 // 名称	类型	是否必须	描述
 // Format	String	否	返回值的类型，支持JSON与XML。默认为XML \n
 // Version	String	是	API版本号，为日期形式：YYYY-MM-DD，本版本对应为2014-11-11 \n
@@ -63,7 +64,7 @@ func (base *BaseRequest) ToArgs() {
 
 // 签名
 func (base *BaseRequest) Sign(cert *Credentials) {
-	base.AccessKeyId = cert.AccessKeyId
+	base.AccessKeyId = cert.AccessKeyID
 	base.ToArgs()
 	// 生成签名
 	base.Signature = util.CreateSignatureForRequest(base.Method, &base.Args, cert.AccessKeySecret+"&")
@@ -88,10 +89,10 @@ func (base *BaseRequest) String() string {
 
 // 克隆
 func (base *BaseRequest) Clone() interface{} {
-	new_obj := *base
+	newObj := *base
 	//清空数据
-	new_obj.Args = url.Values{}
-	return &new_obj
+	newObj.Args = url.Values{}
+	return &newObj
 }
 
 func (base *BaseRequest) SetArgs(key, value string) {
@@ -106,7 +107,7 @@ func (base *BaseRequest) DelArgs(key string) {
 func NewBaseRequest(action string) *BaseRequest {
 	return &BaseRequest{
 		Format:           JSONResponseFormat,
-		Version:          ApiCDNVersion,
+		Version:          APICDNVersion,
 		SignatureNonce:   util.CreateRandomString(),
 		SignatureMethod:  DefaultSignatureMethod,
 		SignatureVersion: DefaultSignatureVersion,
@@ -114,7 +115,7 @@ func NewBaseRequest(action string) *BaseRequest {
 
 		Action: action,
 
-		Host:   ApiCDNHost,
+		Host:   APICDNHost,
 		Method: ECSRequestMethod,
 		Args:   url.Values{},
 	}
