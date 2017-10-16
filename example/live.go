@@ -258,7 +258,7 @@ func MixStream() {
 				AppName:    AppName,
 			},
 			StreamName: "test-video-name",
-		},}
+		}}
 	fmt.Println("往主流添加一路流：")
 	resp = make(map[string]interface{})
 	err = liveM.AddMultipleStreamMixService(config, &resp)

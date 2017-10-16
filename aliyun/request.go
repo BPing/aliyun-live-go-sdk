@@ -114,8 +114,8 @@ func NewBaseRequest(action string) *BaseRequest {
 
 		Action: action,
 
-		Host:        ApiCDNHost,
-		Method:      ECSRequestMethod,
-		Args:        url.Values{},
+		Host:   ApiCDNHost,
+		Method: ECSRequestMethod,
+		Args:   url.Values{},
 	}
 }
