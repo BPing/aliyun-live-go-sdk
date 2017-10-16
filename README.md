@@ -372,7 +372,7 @@ go get github.com/BPing/aliyun-live-go-sdk
 
 # 依赖
 
-1.`github.com/BPing/go-toolkit/http-client`
+  `github.com/BPing/go-toolkit/http-client`
 
 # 贡献参与者
 * cbping(452775680@qq.com)
