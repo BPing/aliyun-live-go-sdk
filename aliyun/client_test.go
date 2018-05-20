@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"testing"
 	"time"
+	"github.com/BPing/go-toolkit/http-client/core"
 )
 
 type TestRequest struct {
@@ -34,7 +35,7 @@ type youdao struct {
 func TestClient(t *testing.T) {
 	end := make(chan int)
 	cert := NewCredentials("214564", "46546")
-	client := NewClient(cert)
+	client := NewClientCtx(core.BackgroundContext(),cert)
 	client.SetDebug(true)
 	client.AppendHook(hook.NewLogHook(time.Second*3, func(tag, msg string) {
 		fmt.Println(tag, msg)

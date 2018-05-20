@@ -50,9 +50,12 @@ go get github.com/BPing/aliyun-live-go-sdk
 
 ## 直播(Live)
 
+   （v0.5,v0.5-）
         方法名以"WithApp"结尾代表可以更改请求中  "应用名字（AppName）"，
         否则按默认的(初始化时设置的AppName)。
         如果为空，代表忽略参数AppName
+   （v0.6+）
+        移除以"WithApp"为后缀方法。
 
 ```go
     cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
@@ -82,7 +85,7 @@ go get github.com/BPing/aliyun-live-go-sdk
     resp1 := live.OnlineInfoResponse{}
     err := liveM.StreamOnlineUserNum("video-name", &resp1)
     fmt.Println(err, resp1)  
-   // @appname 应用名 为空时，忽略此参数
+   // @appname 应用名 为空时，忽略此参数   （v0.5,v0.5-）
     resp1 := live.OnlineInfoResponse{}
     err := liveM.StreamOnlineUserNumWithApp(AppName,"video-name", &resp1)
     fmt.Println(err, resp1)  
@@ -92,6 +95,7 @@ go get github.com/BPing/aliyun-live-go-sdk
 ```go
     resp = make(map[string]interface{})
     err = liveM.StreamsControlHistory(time.Now().Add(-time.Hour * 12), time.Now(), &resp)
+    // （v0.5,v0.5-）
     //err = liveM.StreamsControlHistoryWithApp(AppName,time.Now().Add(-time.Hour * 12), time.Now(), &resp)
     fmt.Println(err, resp)
 ```
@@ -290,6 +294,101 @@ go get github.com/BPing/aliyun-live-go-sdk
 ```go
 	err=liveM.StreamsNotifyUrlConfig(...)
 ```
+
+### 直播转点播（（2018-05-20）
+
+* 增加直播录制转点播配置
+```go
+	err=liveM.AddLiveRecordVodConfig(...)
+```
+
+* 删除直播录制转点播配置
+```go
+	err=liveM.DeleteLiveRecordVodConfig(...)
+```
+
+* 查询直转点配置列表
+```go
+	err=liveM.DescribeLiveRecordVodConfigs(...)
+```
+
+
+### 资源监控（（2018-05-20）
+
+* 查询直播域名的网络带宽监控数据
+```go
+	err=liveM.DescribeLiveDomainBpsData(...)
+```
+
+* 查询直播域名录制时长数据
+```go
+	err=liveM.DescribeLiveDomainRecordData(...)
+```
+
+* 查询直播域名截图张数数据
+```go
+	err=liveM.DescribeLiveDomainSnapshotData(...)
+```
+
+* 查询直播域名网络流量监控数据
+```go
+	err=liveM.DescribeLiveDomainTrafficData(...)
+```
+
+* 查询直播域名转码时长数据
+```go
+	err=liveM.DescribeLiveDomainTranscodeData(...)
+```
+
+* 查询直播流历史在线人数
+```go
+	err=liveM.DescribeLiveStreamHistoryUserNum(...)
+```
+
+### 直播审核（（2018-05-20）
+
+* 查询审核配置
+```go
+	err=liveM.DescribeLiveSnapshotDetectPornConfig(...)
+```
+
+* 添加审核配置
+```go
+	err=liveM.AddLiveSnapshotDetectPornConfig(...)
+```
+
+* 更新审核回调
+```go
+	err=liveM.UpdateLiveSnapshotDetectPornConfig(...)
+```
+
+* 删除审核回调
+```go
+	err=liveM.DeleteLiveSnapshotDetectPornConfig(...)
+```
+
+* 查询审核回调
+```go
+	err=liveM.DescribeLiveDetectNotifyConfig(...)
+```
+
+* 添加回调通知
+```go
+	err=liveM.AddLiveDetectNotifyConfig(...)
+```
+
+
+* 更新回调通知
+```go
+	err=liveM.UpdateLiveDetectNotifyConfig(...)
+```
+
+
+* 删除审核回调
+```go
+	err=liveM.DeleteLiveDetectNotifyConfig(...)
+```
+
 
 
 ## 流(Stream)

@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"github.com/BPing/aliyun-live-go-sdk/aliyun"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
+	"github.com/BPing/go-toolkit/http-client/core"
 )
 
 const (
@@ -80,7 +81,15 @@ type CDN struct {
 // @param cert  请求凭证
 func NewCDN(cert *aliyun.Credentials) *CDN {
 	return &CDN{
-		rpc:    aliyun.NewClient(cert),
+		rpc:    aliyun.NewClientCtx(core.BackgroundContext(), cert),
+		cdnReq: NewCDNRequest(""),
+		debug:  false,
+	}
+}
+
+func NewCDNCtx(ctx core.Context, cert *aliyun.Credentials) *CDN {
+	return &CDN{
+		rpc:    aliyun.NewClientCtx(ctx, cert),
 		cdnReq: NewCDNRequest(""),
 		debug:  false,
 	}

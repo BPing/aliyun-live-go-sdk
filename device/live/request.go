@@ -35,5 +35,7 @@ func NewLiveRequest(action, domainName, appname string) (l *Request) {
 		DomainName:  domainName,
 		AppName:     appname,
 	}
+	l.Host = aliyun.APILiveHost
+	l.Version = aliyun.APILiveVersion
 	return
 }
