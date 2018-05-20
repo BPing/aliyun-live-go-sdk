@@ -209,6 +209,132 @@ func NotifyUrlConfig() {
 	fmt.Println(err, resp)
 }
 
+//
+// 直播转点播
+func RecordVodExample() {
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("增加直播录制转点播配置：")
+	resp := make(map[string]interface{})
+	err := liveM.AddLiveRecordVodConfig("A", 300, &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询直转点配置列表：")
+	params := live.DescribeVodParam{
+		StreamName: "test-video-name",
+	}
+	vodResp := live.RecordVodConfigsResponse{}
+	err = liveM.DescribeLiveRecordVodConfigs(params, &vodResp)
+	fmt.Println(err, vodResp)
+
+	fmt.Println("删除直播录制转点播配置：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveRecordVodConfig("test-video-name", &resp)
+	fmt.Println(err, resp)
+}
+
+// 直播审核
+func VerifyExample() {
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("添加审核配置：")
+	params := live.AddSnapshotDetectPornParam{
+		OssBucket:   OssBucket,
+		OssEndpoint: OssEndpoint,
+		OssObject:   OssObject,
+	}
+	resp := make(map[string]interface{})
+	err := liveM.AddLiveSnapshotDetectPornConfig(params, &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查询审核配置：")
+	sdppcResp := live.SnapshotDetectPornConfigResponse{}
+	err = liveM.DescribeLiveSnapshotDetectPornConfig(live.SnapshotDetectPornParam{
+		Order: live.DescOrderType,
+	}, &sdppcResp)
+	fmt.Println(err, sdppcResp)
+
+	fmt.Println("更新审核回调：")
+	uParams := live.AddSnapshotDetectPornParam{
+		OssBucket:   OssBucket,
+		OssEndpoint: OssEndpoint,
+		OssObject:   OssObject,
+		SceneN:      live.TerrorismSceneN,
+	}
+	resp = make(map[string]interface{})
+	err = liveM.UpdateLiveSnapshotDetectPornConfig(uParams, &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除审核回调：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveSnapshotDetectPornConfig(live.LiveBase{}, &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("添加回调通知：")
+	resp = make(map[string]interface{})
+	err = liveM.AddLiveDetectNotifyConfig("http://www.yourdomain.cn/examplecallback.action", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看回调通知：")
+	resp = make(map[string]interface{})
+	dncResp := live.DetectNotifyConfigResponse{}
+	err = liveM.DescribeLiveDetectNotifyConfig(&dncResp)
+	fmt.Println(err, dncResp)
+
+	fmt.Println("更新回调通知：")
+	resp = make(map[string]interface{})
+	err = liveM.UpdateLiveDetectNotifyConfig("http://www.yourdomain.cn/examplecallback", &resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("删除审核回调：")
+	resp = make(map[string]interface{})
+	err = liveM.DeleteLiveDetectNotifyConfig(&resp)
+	fmt.Println(err, resp)
+
+	fmt.Println("查看回调通知：")
+	resp = make(map[string]interface{})
+	err = liveM.DescribeLiveDetectNotifyConfig(&dncResp)
+	fmt.Println(err, dncResp)
+}
+
+// 资源监控
+func MonitorExample() {
+	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)
+	liveM := live.NewLive(cert, DomainName, AppName, nil).SetDebug(false)
+
+	fmt.Println("查询直播域名的网络带宽监控数据：")
+	dbdEesp := live.DomainBpsDataResponse{}
+	err := liveM.DescribeLiveDomainBpsData(time.Now().Add(-time.Hour*24*10), time.Now().Add(time.Hour), &dbdEesp)
+	fmt.Println(err, dbdEesp)
+
+	fmt.Println("查询直播域名录制时长数据：")
+	rdEesp := live.RecordDataInfoResponse{}
+	err = liveM.DescribeLiveDomainRecordData(time.Now().Add(-time.Hour*24), time.Now().Add(-time.Hour*8), live.NilRecordType, &rdEesp)
+	fmt.Println(err, rdEesp)
+
+	fmt.Println("查询直播域名截图张数数据：")
+	sdEesp := live.SnapshotDataInfoResponse{}
+	err = liveM.DescribeLiveDomainSnapshotData(time.Now().Add(-time.Hour*24), time.Now().Add(-time.Hour*8), &sdEesp)
+	fmt.Println(err, sdEesp)
+
+	fmt.Println("查询直播域名网络流量监控数据：")
+	dtdEesp := live.DomainTrafficDataResponse{}
+	err = liveM.DescribeLiveDomainTrafficData(time.Now().Add(-time.Hour*24), time.Now().Add(-time.Hour), &dtdEesp)
+	fmt.Println(err, dtdEesp)
+
+	fmt.Println("查询直播域名转码时长数据：")
+	tdIEesp := live.TranscodeDataInfoResponse{}
+	err = liveM.DescribeLiveDomainTranscodeData(time.Now().Add(-time.Hour*24), time.Now().Add(-time.Hour*8), &tdIEesp)
+	fmt.Println(err, tdIEesp)
+
+	fmt.Println("查询直播流历史在线人数：")
+	sunResp := live.StreamUserNumInfoResponse{}
+	err = liveM.DescribeLiveStreamHistoryUserNum("test-video-name", time.Now().Add(-time.Hour*24),  time.Now().Add(-time.Hour*8), &sunResp)
+	fmt.Println(err, sunResp)
+}
+
 // 状态通知
 func MixStream() {
 	cert := aliyun.NewCredentials(AccessKeyID, AccessKeySecret)

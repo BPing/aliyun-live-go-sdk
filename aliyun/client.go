@@ -27,6 +27,12 @@ func (c *Client) responseUnmarshal(req Request, respInfo *core.Response, resp in
 	return respInfo.ToJSON(resp)
 }
 
+func (c *Client) SetDebug(debug bool) *Client {
+	c.debug = debug
+	c.Client.SetDebug(debug)
+	return c
+}
+
 // Query 处理请求
 func (c *Client) Query(req Request, resp interface{}) error {
 	if nil == req {
@@ -42,10 +48,10 @@ func (c *Client) Query(req Request, resp interface{}) error {
 	}
 	//失败响应处理
 	if respInfo.StatusCode >= 400 && respInfo.StatusCode <= 599 {
-		errorResponse := ErrorResponse{}
+		errorResponse := &ErrorResponse{}
 		err = c.responseUnmarshal(req, respInfo, errorResponse)
 		errorResponse.StatusCode = respInfo.StatusCode
-		return &errorResponse
+		return errorResponse
 	}
 	err = c.responseUnmarshal(req, respInfo, resp)
 	if err != nil {
@@ -62,15 +68,14 @@ func clientError(err error) error {
 }
 
 // NewClientTimeout 新建client实例，可设置超时时间
-func NewClientTimeout(cert *Credentials, connectTimeout time.Duration) *Client {
+func NewClientTimeoutCtx(ctx core.Context, cert *Credentials, connectTimeout time.Duration) *Client {
 	c := &Client{
 		Credentials: cert,
-		debug:       false,
 	}
 	if connectTimeout <= 0 {
-		c.Client = core.NewClient("aliyun-client", &http.Client{})
+		c.Client = core.NewClientCtx(ctx, "aliyun-client", &http.Client{})
 	} else {
-		c.Client = core.NewClient("aliyun-client", &http.Client{
+		c.Client = core.NewClientCtx(ctx, "aliyun-client", &http.Client{
 			Transport: &http.Transport{
 				Proxy: http.ProxyFromEnvironment,
 				Dial: (&net.Dialer{
@@ -81,10 +86,11 @@ func NewClientTimeout(cert *Credentials, connectTimeout time.Duration) *Client {
 			},
 		})
 	}
+	c.SetDebug(false)
 	return c
 }
 
 // NewClient 新建client实例。
-func NewClient(cert *Credentials) (c *Client) {
-	return NewClientTimeout(cert, time.Duration(0))
+func NewClientCtx(ctx core.Context, cert *Credentials) (c *Client) {
+	return NewClientTimeoutCtx(ctx, cert, time.Duration(0))
 }

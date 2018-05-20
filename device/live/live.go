@@ -24,75 +24,7 @@ import (
 	"github.com/BPing/aliyun-live-go-sdk/util"
 	"github.com/BPing/aliyun-live-go-sdk/util/global"
 	"time"
-)
-
-const (
-	//action
-	DescribeLiveStreamsPublishListAction    = "DescribeLiveStreamsPublishList"
-	DescribeLiveStreamsOnlineListAction     = "DescribeLiveStreamsOnlineList"
-	DescribeLiveStreamsBlockListAction      = "DescribeLiveStreamsBlockList"
-	DescribeLiveStreamsControlHistoryAction = "DescribeLiveStreamsControlHistory"
-	DescribeLiveStreamOnlineUserNumAction   = "DescribeLiveStreamOnlineUserNum"
-	ForbidLiveStreamAction                  = "ForbidLiveStream"
-	ResumeLiveStreamAction                  = "ResumeLiveStream"
-
-	// 录制处理
-	AddLiveAppRecordConfigAction                     = "AddLiveAppRecordConfig"
-	CreateLiveStreamRecordIndexFilesAction           = "CreateLiveStreamRecordIndexFiles"
-	DeleteLiveAppRecordConfigAction                  = "DeleteLiveAppRecordConfig"
-	DescribeLiveAppRecordConfigAction                = "DescribeLiveAppRecordConfig"
-	DescribeLiveRecordConfigAction                   = "DescribeLiveRecordConfig"
-	DescribeLiveStreamRecordContentAction            = "DescribeLiveStreamRecordContent"
-	DescribeLiveStreamRecordIndexFileAction          = "DescribeLiveStreamRecordIndexFile"
-	DescribeLiveStreamRecordIndexFilesAction         = "DescribeLiveStreamRecordIndexFiles"
-	DescribeLiveStreamsFrameRateAndBitRateDataAction = "DescribeLiveStreamsFrameRateAndBitRateData"
-
-	// 截图处理
-	AddLiveAppSnapshotConfigAction       = "AddLiveAppSnapshotConfig"
-	UpdateLiveAppSnapshotConfigAction    = "UpdateLiveAppSnapshotConfig"
-	DeleteLiveAppSnapshotConfigAction    = "DeleteLiveAppSnapshotConfig"
-	DescribeLiveSnapshotConfigAction     = "DescribeLiveSnapshotConfig"
-	DescribeLiveStreamSnapshotInfoAction = "DescribeLiveStreamSnapshotInfo"
-
-	// 转码处理
-	AddLiveStreamTranscodeAction          = "AddLiveStreamTranscode"
-	DeleteLiveStreamTranscodeAction       = "DeleteLiveStreamTranscode"
-	DescribeLiveStreamTranscodeInfoAction = "DescribeLiveStreamTranscodeInfo"
-
-	// 混流处理
-	StartMixStreamsServiceAction = "StartMixStreamsService"
-	StopMixStreamsServiceAction  = "StopMixStreamsService"
-
-	// 直播连麦
-	AddLiveMixConfigAction               = "AddLiveMixConfig"
-	DescribeLiveMixConfigAction          = "DescribeLiveMixConfig"
-	DeleteLiveMixConfigAction            = "DeleteLiveMixConfig"
-	StartMultipleStreamMixServiceAction  = "StartMultipleStreamMixService"
-	StopMultipleStreamMixServiceAction   = "StopMultipleStreamMixService"
-	AddMultipleStreamMixServiceAction    = "AddMultipleStreamMixService"
-	RemoveMultipleStreamMixServiceAction = "RemoveMultipleStreamMixService"
-	AddLiveMixNotifyConfigAction         = "AddLiveMixNotifyConfig"
-	DescribeLiveMixNotifyConfigAction    = "DescribeLiveMixNotifyConfig"
-	UpdateLiveMixNotifyConfigAction      = "UpdateLiveMixNotifyConfig"
-	DeleteLiveMixNotifyConfigAction      = "DeleteLiveMixNotifyConfig"
-
-	// 直播拉流
-	AddLivePullStreamInfoConfigAction    = "AddLivePullStreamInfoConfig"
-	DeleteLivePullStreamInfoConfigAction = "DeleteLivePullStreamInfoConfig"
-	DescribeLivePullStreamConfigAction   = "DescribeLivePullStreamConfig"
-
-	// 状态通知
-	SetLiveStreamsNotifyUrlConfigAction      = "SetLiveStreamsNotifyUrlConfig"
-	DescribeLiveStreamsNotifyUrlConfigAction = "DescribeLiveStreamsNotifyUrlConfig"
-	DeleteLiveStreamsNotifyUrlConfigAction   = "DeleteLiveStreamsNotifyUrlConfig"
-
-	// 直播转点播
-	AddLiveRecordVodConfigAction      = "AddLiveRecordVodConfig"
-	DeleteLiveRecordVodConfigAction   = "DeleteLiveRecordVodConfig"
-	DescribeLiveRecordVodConfigAction = "DescribeLiveRecordVodConfig"
-
-	//直播中心服务器域名
-	DefaultVideoCenter = "video-center.alivecdn.com"
+	"github.com/BPing/go-toolkit/http-client/core"
 )
 
 // Live 直播接口控制器
@@ -114,8 +46,6 @@ type Live struct {
 	// 例如您的域名是live.yourcompany.com，可以设置DNS，将您的域名CNAME指向video-center.alivecdn.com即可；
 	// 直播中心服务器或者自定义域名
 	videoCenterDns string
-
-	debug bool
 }
 
 // 新建"直播接口控制器"
@@ -124,10 +54,13 @@ type Live struct {
 // @param appname    应用名字
 // @param streamCert  直播流推流凭证
 func NewLive(cert *aliyun.Credentials, domainName, appName string, streamCert *StreamCredentials) *Live {
+	return NewLiveWithCtx(core.BackgroundContext(), cert, domainName, appName, streamCert)
+}
+
+func NewLiveWithCtx(ctx core.Context, cert *aliyun.Credentials, domainName, appName string, streamCert *StreamCredentials) *Live {
 	return &Live{
-		rpc:            aliyun.NewClient(cert),
+		rpc:            aliyun.NewClientCtx(ctx, cert),
 		liveReq:        NewLiveRequest("", domainName, appName),
-		debug:          false,
 		streamCert:     streamCert,
 		videoCenterDns: DefaultVideoCenter, //默认
 	}
@@ -200,18 +133,6 @@ func (l *Live) StreamsControlHistory(startTime, endTime time.Time, resp interfac
 	req := l.cloneRequest(DescribeLiveStreamsControlHistoryAction)
 	req.SetArgs("StartTime", util.GetISO8601TimeStamp(startTime))
 	req.SetArgs("EndTime", util.GetISO8601TimeStamp(endTime))
-	err = l.rpc.Query(req, resp)
-	return
-}
-
-// StreamOnlineUserNum 获取在线人数
-// @appname 应用名 为空时，忽略此参数
-// @link https://help.aliyun.com/document_detail/27195.html?spm=0.0.0.0.n6eAJJ
-func (l *Live) StreamOnlineUserNum(streamName string, resp interface{}) (err error) {
-	req := l.cloneRequest(DescribeLiveStreamOnlineUserNumAction)
-	if "" != streamName {
-		req.SetArgs("StreamName", streamName)
-	}
 	err = l.rpc.Query(req, resp)
 	return
 }
@@ -295,7 +216,6 @@ func (l *Live) SetAction(action string) *Live {
 	return l
 }
 func (l *Live) SetDebug(debug bool) *Live {
-	l.debug = debug
 	l.rpc.SetDebug(debug)
 	return l
 }
