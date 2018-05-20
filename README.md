@@ -50,12 +50,12 @@ go get github.com/BPing/aliyun-live-go-sdk
 
 ## 直播(Live)
 
-   （v0.5,v0.5-）
-        方法名以"WithApp"结尾代表可以更改请求中  "应用名字（AppName）"，
-        否则按默认的(初始化时设置的AppName)。
-        如果为空，代表忽略参数AppName
-   （v0.6+）
-        移除以"WithApp"为后缀方法。
+       （v0.5,v0.5-）
+            方法名以"WithApp"结尾代表可以更改请求中  "应用名字（AppName）"，
+            否则按默认的(初始化时设置的AppName)。
+            如果为空，代表忽略参数AppName
+       （v0.6+）
+            移除以"WithApp"为后缀方法。
 
 ```go
     cert := client.NewCredentials(AccessKeyId, AccessKeySecret)
