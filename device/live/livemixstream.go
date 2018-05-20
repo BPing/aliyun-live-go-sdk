@@ -54,21 +54,14 @@ func (l *Live) StopMixStreamsService(mixStream MixStreamParam, resp interface{})
 // 连麦
 // -------------------------------------------------------------------------------
 
-// AddLiveMixConfigWithApp 添加连麦配置
+// AddLiveMixConfig 添加连麦配置
 // @param  template  你所需要配置的连麦转码模板，取值: mhd 或者 msd
 // {@link https://help.aliyun.com/document_detail/52718.html?spm=5176.doc52726.6.679.SzBcKQ}
-func (l *Live) AddLiveMixConfigWithApp(appName, template string, resp interface{}) (err error) {
+func (l *Live) AddLiveMixConfig(template string, resp interface{}) (err error) {
 	req := l.cloneRequest(AddLiveMixConfigAction)
-	req.SetArgs("AppName", appName)
 	req.SetArgs("Template", template)
 	err = l.rpc.Query(req, resp)
 	return
-}
-
-// AddLiveMixConfig 添加连麦配置
-// @see AddLiveMixConfigWithApp
-func (l *Live) AddLiveMixConfig(template string, resp interface{}) (err error) {
-	return l.AddLiveMixConfigWithApp(l.liveReq.AppName, template, resp)
 }
 
 // DescribeLiveMixConfig 在指定的域名下查询所有的连麦配置。
@@ -79,52 +72,31 @@ func (l *Live) DescribeLiveMixConfig(resp interface{}) (err error) {
 	return
 }
 
-// DeleteLiveMixConfigWithApp 删除连麦配置
+// DeleteLiveMixConfig 删除连麦配置
 // {@link https://help.aliyun.com/document_detail/52720.html?spm=5176.doc52722.6.681.F9sNc1}
-func (l *Live) DeleteLiveMixConfigWithApp(appName string, resp interface{}) (err error) {
+func (l *Live) DeleteLiveMixConfig(resp interface{}) (err error) {
 	req := l.cloneRequest(DeleteLiveMixConfigAction)
-	req.SetArgs("AppName", appName)
 	err = l.rpc.Query(req, resp)
 	return
 }
 
-// DeleteLiveMixConfig 删除连麦配置
-// @see DeleteLiveMixConfigWithApp
-func (l *Live) DeleteLiveMixConfig(resp interface{}) (err error) {
-	return l.DeleteLiveMixConfigWithApp(l.liveReq.AppName, resp)
-}
-
-// StartMultipleStreamMixServiceWithApp 开启多人连麦服务
+// StartMultipleStreamMixService 开启多人连麦服务
 // {@link https://help.aliyun.com/document_detail/51313.html?spm=5176.doc52720.6.682.0eSfxw}
-func (l *Live) StartMultipleStreamMixServiceWithApp(appName, streamName, mixTemplate string, resp interface{}) (err error) {
+func (l *Live) StartMultipleStreamMixService(streamName, mixTemplate string, resp interface{}) (err error) {
 	req := l.cloneRequest(StartMultipleStreamMixServiceAction)
-	req.SetArgs("AppName", appName)
 	req.SetArgs("StreamName", streamName)
 	req.SetArgs("MixTemplate", mixTemplate)
 	err = l.rpc.Query(req, resp)
 	return
 }
 
-// StartMultipleStreamMixService 开启多人连麦服务
-// @see StartMultipleStreamMixServiceWithApp
-func (l *Live) StartMultipleStreamMixService(streamName, mixTemplate string, resp interface{}) (err error) {
-	return l.StartMultipleStreamMixServiceWithApp(l.liveReq.AppName, streamName, mixTemplate, resp)
-}
-
-// StopMultipleStreamMixServiceWithApp 停止多人连麦服务
+// StopMultipleStreamMixService 停止多人连麦服务
 // {@link https://help.aliyun.com/document_detail/51314.html?spm=5176.doc51313.6.683.mdMFhc}
-func (l *Live) StopMultipleStreamMixServiceWithApp(appName, streamName string, resp interface{}) (err error) {
+func (l *Live) StopMultipleStreamMixService(streamName string, resp interface{}) (err error) {
 	req := l.cloneRequest(StopMultipleStreamMixServiceAction)
-	req.SetArgs("AppName", appName)
 	req.SetArgs("StreamName", streamName)
 	err = l.rpc.Query(req, resp)
 	return
-}
-
-// StopMultipleStreamMixService 停止多人连麦服务
-// @see StopMultipleStreamMixServiceWithApp
-func (l *Live) StopMultipleStreamMixService(streamName string, resp interface{}) (err error) {
-	return l.StopMultipleStreamMixServiceWithApp(l.liveReq.AppName, streamName, resp)
 }
 
 // AddMultipleStreamMixService 往主流添加一路流

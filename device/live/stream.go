@@ -69,7 +69,7 @@ func (s *Stream) InitOrUpdate() {
 // -------------------------------------------------------------------------------
 func (s *Stream) Online() bool {
 	resp := OnlineInfoResponse{}
-	s.live.StreamOnlineUserNumWithApp(s.appName, s.StreamName, &resp)
+	s.live.StreamOnlineUserNum(s.StreamName, &resp)
 	if len(resp.OnlineUserInfo.LiveStreamOnlineUserNumInfo) > 0 {
 		return true
 	}
@@ -81,7 +81,7 @@ func (s *Stream) Online() bool {
 // -------------------------------------------------------------------------------
 func (s *Stream) OnlineUserNum() (num int64) {
 	resp := OnlineInfoResponse{}
-	s.live.StreamOnlineUserNumWithApp(s.appName, s.StreamName, &resp)
+	s.live.StreamOnlineUserNum(s.StreamName, &resp)
 	num = resp.TotalUserNumber
 	return
 }
@@ -103,14 +103,14 @@ func (s *Stream) Blocked() bool {
 // ForbidPush 禁止推流
 // -------------------------------------------------------------------------------
 func (s *Stream) ForbidPush() (err error) {
-	err = s.live.ForbidLiveStreamWithPublisherWithApp(s.appName, s.StreamName, nil, nil)
+	err = s.live.ForbidLiveStreamWithPublisher(s.StreamName, nil, nil)
 	return
 }
 
 // ResumePush 恢复推流
 // -------------------------------------------------------------------------------
 func (s *Stream) ResumePush() (err error) {
-	err = s.live.ResumeLiveStreamWithPublisherWithApp(s.appName, s.StreamName, nil)
+	err = s.live.ResumeLiveStreamWithPublisher(s.StreamName, nil)
 	return
 }
 
@@ -212,7 +212,7 @@ func (s *Stream) String() (str string) {
 // 创建直播流录制索引文件
 func (s *Stream) CreateRecordIndexFiles(ossInfo OssInfo, startTime, endTime time.Time) (info RecordInfo, err error) {
 	resp := &RecordInfoResponse{}
-	err = s.live.CreateLiveStreamRecordIndexFilesWithApp(s.appName, s.StreamName, ossInfo, startTime, endTime, resp)
+	err = s.live.CreateLiveStreamRecordIndexFiles(s.StreamName, ossInfo, startTime, endTime, resp)
 	if err == nil {
 		info = resp.RecordInfo
 	}
@@ -222,7 +222,7 @@ func (s *Stream) CreateRecordIndexFiles(ossInfo OssInfo, startTime, endTime time
 // 查询某路直播流录制内容
 func (s *Stream) RecordContent(startTime, endTime time.Time) (list RecordContentInfoList, err error) {
 	resp := &RecordContentInfoListResponse{}
-	err = s.live.DescribeLiveStreamRecordContentWithApp(s.appName, s.StreamName, startTime, endTime, resp)
+	err = s.live.DescribeLiveStreamRecordContent(s.StreamName, startTime, endTime, resp)
 	if err == nil {
 		list = resp.RecordContentInfoList
 	}
@@ -232,7 +232,7 @@ func (s *Stream) RecordContent(startTime, endTime time.Time) (list RecordContent
 // 查询直播流录制索引文件
 func (s *Stream) RecordIndexFiles(startTime, endTime time.Time) (list RecordIndexInfoList, err error) {
 	resp := &RecordIndexInfoListResponse{}
-	err = s.live.DescribeLiveStreamRecordIndexFilesWithApp(s.appName, s.StreamName, startTime, endTime, resp)
+	err = s.live.DescribeLiveStreamRecordIndexFiles(s.StreamName, startTime, endTime, resp)
 	if err == nil {
 		list = resp.RecordIndexInfoList
 	}
@@ -242,7 +242,7 @@ func (s *Stream) RecordIndexFiles(startTime, endTime time.Time) (list RecordInde
 // 查询直播流单个录制索引文件
 func (s *Stream) RecordIndexFile(recordId string) (info RecordIndexInfo, err error) {
 	resp := &RecordIndexInfoResponse{}
-	err = s.live.DescribeLiveStreamRecordIndexFileWithApp(s.appName, s.StreamName, recordId, resp)
+	err = s.live.DescribeLiveStreamRecordIndexFile(s.StreamName, recordId, resp)
 	if err == nil {
 		info = resp.RecordIndexInfo
 	}
@@ -252,7 +252,7 @@ func (s *Stream) RecordIndexFile(recordId string) (info RecordIndexInfo, err err
 // 获取直播流的帧率和码率
 func (s *Stream) FrameRateAndBitRateData() (info FrameRateAndBitRateInfos, err error) {
 	resp := &FrameRateAndBitRateInfosResponse{}
-	err = s.live.DescribeLiveStreamsFrameRateAndBitRateDataWithApp(s.appName, s.StreamName, resp)
+	err = s.live.DescribeLiveStreamsFrameRateAndBitRateData(s.StreamName, resp)
 	if err == nil {
 		info = resp.FrameRateAndBitRateInfos
 	}
@@ -263,7 +263,7 @@ func (s *Stream) FrameRateAndBitRateData() (info FrameRateAndBitRateInfos, err e
 
 // 获取截图信息
 func (s *Stream) SnapshotInfo(startTime, endTime time.Time, limit int) (streamSnapshotInfo StreamSnapshotInfoResponse, err error) {
-	err = s.live.LiveStreamSnapshotInfoWithApp(s.appName, s.StreamName, startTime, endTime, limit, &streamSnapshotInfo)
+	err = s.live.LiveStreamSnapshotInfo(s.StreamName, startTime, endTime, limit, &streamSnapshotInfo)
 	return
 }
 
@@ -271,13 +271,13 @@ func (s *Stream) SnapshotInfo(startTime, endTime time.Time, limit int) (streamSn
 
 // 开启多人连麦服务
 func (s *Stream) StartMultipleStreamMixService(mixTemplate string) (err error) {
-	err = s.live.StartMultipleStreamMixServiceWithApp(s.appName, s.StreamName, mixTemplate, make(map[string]interface{}))
+	err = s.live.StartMultipleStreamMixService(s.StreamName, mixTemplate, make(map[string]interface{}))
 	return
 }
 
 // 停止多人连麦服务
 func (s *Stream) StopMultipleStreamMixService() (err error) {
-	err = s.live.StopMultipleStreamMixServiceWithApp(s.appName, s.StreamName, make(map[string]interface{}))
+	err = s.live.StopMultipleStreamMixService(s.StreamName, make(map[string]interface{}))
 	return
 }
 
