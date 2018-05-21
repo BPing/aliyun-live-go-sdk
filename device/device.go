@@ -25,7 +25,7 @@ type Config struct {
 // 生产实例（工厂模式）
 func GetDevice(devType DevType, config Config) (instance interface{}, err error) {
 	if config.Credentials == nil {
-		err = errors.New("Credentials should be nil ")
+		err = errors.New("Credentials should not be nil ")
 		return
 	}
 	switch devType {
