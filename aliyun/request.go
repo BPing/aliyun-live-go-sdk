@@ -95,19 +95,35 @@ func (base *BaseRequest) Clone() interface{} {
 	return &newObj
 }
 
-func (base *BaseRequest) SetArgs(key, value string) {
+func (base *BaseRequest) SetArgs(key, value string) *BaseRequest {
 	base.Args.Set(key, value)
+	return base
 }
 
 func (base *BaseRequest) DelArgs(key string) {
 	base.Args.Del(key)
 }
 
+func (base *BaseRequest) SetVersion(value string) *BaseRequest {
+	base.Version = value
+	return base
+}
+
+func (base *BaseRequest) SetAPIHost(value string) *BaseRequest {
+	base.Host = value
+	return base
+}
+
+func (base *BaseRequest) SetAPIMethod(value string) *BaseRequest {
+	base.Method = value
+	return base
+}
+
 //
-func NewBaseRequest(action string) *BaseRequest {
+func NewBaseRequest(action, apiHost, version string) *BaseRequest {
 	return &BaseRequest{
 		Format:           JSONResponseFormat,
-		Version:          APICDNVersion,
+		Version:          version,
 		SignatureNonce:   util.CreateRandomString(),
 		SignatureMethod:  DefaultSignatureMethod,
 		SignatureVersion: DefaultSignatureVersion,
@@ -115,8 +131,8 @@ func NewBaseRequest(action string) *BaseRequest {
 
 		Action: action,
 
-		Host:   APICDNHost,
-		Method: ECSRequestMethod,
+		Host:   apiHost,
+		Method: CommonRequestMethod,
 		Args:   url.Values{},
 	}
 }

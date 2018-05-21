@@ -65,6 +65,9 @@ const (
 	DeleteHttpHeaderConfigAction       = "DeleteHttpHeaderConfig"
 	SetCcConfigAction                  = "SetCcConfig"
 	SetWafConfigAction                 = "SetWafConfig"
+
+	APICDNVersion = "2014-11-11" //2014-11-11
+	APICDNHost    = "https://cdn.aliyuncs.com/"
 )
 
 //

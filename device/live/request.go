@@ -31,11 +31,9 @@ func (l *Request) Clone() interface{} {
 
 func NewLiveRequest(action, domainName, appname string) (l *Request) {
 	l = &Request{
-		BaseRequest: aliyun.NewBaseRequest(action),
+		BaseRequest: aliyun.NewBaseRequest(action, APILiveHost, APILiveVersion),
 		DomainName:  domainName,
 		AppName:     appname,
 	}
-	l.Host = aliyun.APILiveHost
-	l.Version = aliyun.APILiveVersion
 	return
 }

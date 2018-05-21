@@ -85,6 +85,9 @@ const (
 
 	//直播中心服务器域名
 	DefaultVideoCenter = "video-center.alivecdn.com"
+
+	APILiveVersion = "2016-11-01" //2016-11-01
+	APILiveHost    = "https://live.aliyuncs.com"
 )
 
 type RecordType string

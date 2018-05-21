@@ -16,6 +16,6 @@ func (c *Request) Clone() interface{} {
 // 生成CDNRequest
 func NewCDNRequest(action string) *Request {
 	return &Request{
-		BaseRequest: aliyun.NewBaseRequest(action),
+		BaseRequest: aliyun.NewBaseRequest(action, APICDNHost, APICDNVersion),
 	}
 }

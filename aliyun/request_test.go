@@ -3,7 +3,7 @@ package aliyun
 import "testing"
 
 func TestNewBaseRequest(t *testing.T) {
-	req := NewBaseRequest("test")
+	req := NewBaseRequest("test", "", "")
 	req.ToArgs()
 	if req.Args.Get("Format") != JSONResponseFormat {
 		t.Fatal("ToArgs")

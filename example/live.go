@@ -294,7 +294,7 @@ func VerifyExample() {
 	fmt.Println(err, resp)
 
 	fmt.Println("查看回调通知：")
-	resp = make(map[string]interface{})
+	dncResp = live.DetectNotifyConfigResponse{}
 	err = liveM.DescribeLiveDetectNotifyConfig(&dncResp)
 	fmt.Println(err, dncResp)
 }
@@ -331,7 +331,7 @@ func MonitorExample() {
 
 	fmt.Println("查询直播流历史在线人数：")
 	sunResp := live.StreamUserNumInfoResponse{}
-	err = liveM.DescribeLiveStreamHistoryUserNum("test-video-name", time.Now().Add(-time.Hour*24),  time.Now().Add(-time.Hour*8), &sunResp)
+	err = liveM.DescribeLiveStreamHistoryUserNum("test-video-name", time.Now().Add(-time.Hour*24), time.Now().Add(-time.Hour*8), &sunResp)
 	fmt.Println(err, sunResp)
 }
 
